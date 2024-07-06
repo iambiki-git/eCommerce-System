@@ -1,0 +1,38 @@
+{% extends "main.html" %}
+{% load static %}
+{% block title %}Login|SignIn{% endblock %}
+
+{% block navbar %}{% endblock %}
+{% block mainSection %}{% endblock %}
+{% block featuredProducts %}{% endblock %}
+{% block category %}{% endblock %}
+{% block newArrivals %}{% endblock %}
+{% block watches %}{% endblock %}
+
+{% block signIn %}
+    <div class="signin-container">
+        <div class="signInImage">
+            <img src="{% static 'myeSite/images/image.png' %}" alt="">
+        </div> 
+        <div class="signin-module">
+            <form class="login-form">
+                {% csrf_token %}
+                <h2>Login</h2>
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <i class='bx bxs-envelope' id="emailIcon"></i>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <i class='bx bxs-lock' id="passIcon"></i>
+                    <input type="password" id="password" name="password" required>
+                    <i class='bx bxs-hide' id="togglePass" onclick="togglePassword()"></i>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+                <p class="signup-text">Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}eCommerce | main{% endblock %}</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'myeSite/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'myeSite/css/style.css' %}">
+
+</head>
+<body>
+
+    <div class="whole-container">
+        {% block navbar %} {% include "myeSite/navbar.html" %} {% endblock %}
+
+        {% if type == "contact" %}
+        {% block contactUs %} {% include "myeSite/contact-us.html" %}{% endblock %}
+        {% else %}
+
+        {% block mainSection %} {% include "myeSite/mainSection.html" %} {% endblock %}
+        {% block featuredProducts %} {% include "myeSite/featuredProducts.html" %}{% endblock %}
+        {% block category %} {% include "myeSite/category.html" %}{% endblock %}
+        {% block newArrivals %} {% include "myeSite/newArrivals.html" %}{% endblock %}
+        {% block watches %} {% include "myeSite/watches.html" %}{% endblock %}
+        {% endif %}
+        
+
+        {% block footer %} {% include "myeSite/footer.html" %}{% endblock %}
+
+       
+
+        {% block signIn %}{% endblock %}
+        {% block fashion-container %} {% endblock %}
+    </div>
+
+
+
+
+
+
+  
+
+    <script src="{% static 'myeSite/js/script.js' %}"></script>
+    <script src="{% static 'myeSite/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'myeSite/js/all.min.js' %}"></script>
+    <script src="{% static 'myeSite/js/popper.js' %}"></script>
+
+
+    
+</body>
+</html>
