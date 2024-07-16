@@ -1,35 +1,59 @@
 {% load static %}
+
 <header>
-    {% comment %} <a href="#" class="logo"><img src="{% static 'myeSite/images/boutique-logo.jpg' %}" alt=""></a> {% endcomment %}
-    <a href="/" class="logo"><h2>LuxMarket</h2></a>
+    <a href="/" class="logo"><h2>FashionMart</h2></a>
     <ul class="navmenu">
         <li><a href="/">Home</a></li>
-
-
         <div class="dropdown">
-            <li><a href="#">Categories</a></li>
+            <li><a href="#">Women's Wear</a></li>
             <div class="category-dropdownlist">
-                <li><a href="{% url 'fashionPage' %}">Fashion<i class='bx bx-right-arrow-alt' id="right-arrow"></i></a></li>
-                {% comment %} <div class="subcategory-dropdownlist">
-                    <li><a href="#">For Men</a></li>
-                    <li><a href="#">For Women</a></li>
-                </div> {% endcomment %}
-                <li><a href="#">Electronic<i class='bx bx-right-arrow-alt'id="right-arrow" ></i></a></li>
-                <li><a href="#">Beauty Products<i class='bx bx-right-arrow-alt' id="right-arrow"></i></a></li>
-                <li><a href="#">Handicrafts<i class='bx bx-right-arrow-alt' id="right-arrow"></i></a></li>
-                <li><a href="#">Watches<i class='bx bx-right-arrow-alt' id="right-arrow"></i></a></li>
+                <div class="mycatcontainer">
+                    <div class="categories">
+                        <h6 id="cat-head">Top Wear</h6>
+                        <p><a href="{% url 'tshirt' %}">T-Shirts</a></p>
+                        <p>Shirts</p>
+                        <p>Sweaters & Cardigans</p>
+                        <p>Hoodies & Sweatshirts</p>
+                        <p>Jackets & Coats</p>
+                    </div>
+                    <div class="categories">
+                        <h6 id="cat-head">Bottom Wear</h6>
+                        <p>Jeans</p>
+                        <p>Trousers</p>
+                        <p>Shorts</p>
+                        <p>Swimwear</p>
+                        <p>Activewear Bottoms</p>
+                    </div>
+                    <div class="categories">
+                        <h6 id="cat-head">Foot Wear</h6>
+                        <p>Sneakers</p>
+                        <p>Casual Shoes</p>
+                        <p>Dress Shoes</p>
+                        <p>Boots</p>
+                        <p>Sandals & Flip Flops</p>
+                    </div>
+                    <div class="categories">
+                        <h6 id="cat-head">Accessories</h6>
+                        <p>Watches</p>
+                        <p>Belts</p>
+                        <p>Wallets</p>
+                        <p>Sunglasses</p>
+                        <p>Bags & Backpacks</p>
+                    </div>
+                </div>
+             
             </div>
         </div>
 
 
-        <li><a href="#">Products</a></li>
-        <li><a href="#">Page</a></li>
-        <li><a href="#">Docs</a></li>
+        <li><a href="#">Men's Wear</a></li>
+        <li><a href="#">Kid's Wear</a></li>
+        <li><a href="#">Blog</a></li>
     </ul>
     <div class="nav-icon">
         <form action="#" method="post">
             {% csrf_token %}
-            <input type="text" name="search" id="search" placeholder="Search">
+            <input type="text" name="search" id="searchBar" placeholder="Search">
         </form>
         <a href="#"><i class='bx bx-search' id="searchIcon"></i></a>
         <a href="#"><i class='bx bx-heart'></i></a>

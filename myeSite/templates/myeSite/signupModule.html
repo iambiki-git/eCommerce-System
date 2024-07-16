@@ -2,22 +2,17 @@
 {% load static %}
 {% block title %}Login|SignIn{% endblock %}
 
-{% block navbar %}{% endblock %}
-{% block mainSection %}{% endblock %}
-{% block featuredProducts %}{% endblock %}
-{% block category %}{% endblock %}
-{% block newArrivals %}{% endblock %}
-{% block watches %}{% endblock %}
 
-{% block signIn %}
-    <div class="signin-container">
-        <div class="signInImage">
+
+{% block signUp %}
+    <div class="signup-container">
+        <div class="signUpImage">
             <img src="{% static 'myeSite/images/image.png' %}" alt="">
         </div> 
-        <div class="signin-module">
+        <div class="signup-module">
             <form class="login-form">
                 {% csrf_token %}
-                <h2>Signup</h2>
+                <h2>Sign Up</h2>
                 <div class="input-group">
                     <label for="fname">First Name</label>
                     <input type="text" id="fname" name="fname" required>

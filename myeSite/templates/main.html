@@ -16,24 +16,25 @@
     <div class="whole-container">
         {% block navbar %} {% include "myeSite/navbar.html" %} {% endblock %}
 
-        {% if type == "contact" %}
-        {% block contactUs %} {% include "myeSite/contact-us.html" %}{% endblock %}
-        {% else %}
+        {% block mainSection %}{% endblock %}
+        {% block featureProductsSection %}{% endblock %}
+        {% block categorySection %}{% endblock %}
+        {% block newArrivalSection %}{% endblock %}
+        {% block watchesSection %}{% endblock %}
+        {% block contactus %}{% endblock %}
+        {% block aboutus %}{% endblock %}
 
-        {% block mainSection %} {% include "myeSite/mainSection.html" %} {% endblock %}
-        {% block featuredProducts %} {% include "myeSite/featuredProducts.html" %}{% endblock %}
-        {% block category %} {% include "myeSite/category.html" %}{% endblock %}
-        {% block newArrivals %} {% include "myeSite/newArrivals.html" %}{% endblock %}
-        {% block watches %} {% include "myeSite/watches.html" %}{% endblock %}
-        {% endif %}
-        
 
-        {% block footer %} {% include "myeSite/footer.html" %}{% endblock %}
-
-       
+        {% block tShirt %}{% endblock %}
 
         {% block signIn %}{% endblock %}
-        {% block fashion-container %} {% endblock %}
+        {% block signUp %}{% endblock %}
+
+
+
+
+        {% block footer %} {% include "myeSite/footer.html" %}{% endblock %}
+       
     </div>
 
 
@@ -41,7 +42,6 @@
 
 
 
-  
 
     <script src="{% static 'myeSite/js/script.js' %}"></script>
     <script src="{% static 'myeSite/js/bootstrap.min.js' %}"></script>

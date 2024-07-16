@@ -2,12 +2,6 @@
 {% load static %}
 {% block title %}Login|SignIn{% endblock %}
 
-{% block navbar %}{% endblock %}
-{% block mainSection %}{% endblock %}
-{% block featuredProducts %}{% endblock %}
-{% block category %}{% endblock %}
-{% block newArrivals %}{% endblock %}
-{% block watches %}{% endblock %}
 
 {% block signIn %}
     <div class="signin-container">
@@ -17,7 +11,7 @@
         <div class="signin-module">
             <form class="login-form">
                 {% csrf_token %}
-                <h2>Login</h2>
+                <h2>Sign In</h2>
                 <div class="input-group">
                     <label for="email">Email</label>
                     <i class='bx bxs-envelope' id="emailIcon"></i>
@@ -30,7 +24,7 @@
                     <i class='bx bxs-hide' id="togglePass" onclick="togglePassword()"></i>
                 </div>
                 <button type="submit" class="login-btn">Login</button>
-                <p class="signup-text">Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+                <p class="signin-text">Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
             </form>
         </div>
     </div>

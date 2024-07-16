@@ -1,7 +1,7 @@
 {% load static %}
 <div class="aboutSystem">
-    <img src="{% static 'myeSite/images/about-us-image.png' %}" alt="aboutus-img">
-    <a href="/?type=contact"><img id="contact-image" src="{% static 'myeSite/images/contact-us-img.png' %}" alt="contactus-img" onclick="showContactform()"></a>
+    <a href="{% url 'aboutus' %}"><img src="{% static 'myeSite/images/about-us-image.png' %}" alt="aboutus-img"></a>
+    <a href="{% url 'contactus' %}"><img id="contact-image" src="{% static 'myeSite/images/contact-us-img.png' %}" alt="contactus-img"></a>
     <img src="{% static 'myeSite/images/faq-img.png' %}" alt="faq-img">
 </div>
 

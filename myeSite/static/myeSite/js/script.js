@@ -51,34 +51,6 @@ document.getElementById('heart-icon').addEventListener("click", function () {
 });
 
 
-// timer 
- // Set the date we're counting down to
- var countDownDate = new Date().getTime() + (12 * 60 * 60 * 1000); // 1 hour from now
-
- // Update the count down every 1 second
- var countdownFunction = setInterval(function() {
-
-     // Get today's date and time
-     var now = new Date().getTime();
-
-     // Find the distance between now and the count down date
-     var distance = countDownDate - now;
-
-     // Time calculations for hours, minutes and seconds
-     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-     // Output the result in an element with id="countdown"
-     document.getElementById("countdown").innerHTML = hours + " : " 
-     + minutes + " : " + seconds + "s ";
-
-     // If the count down is over, write some text 
-     if (distance < 0) {
-         clearInterval(countdownFunction);
-         document.getElementById("countdown").innerHTML = "EXPIRED";
-     }
- }, 1000);
 
 
 
@@ -99,39 +71,10 @@ document.getElementById('heart-icon').addEventListener("click", function () {
  }
 
 
-//  const products = document.getElementById('products');
-// const cardWidth = document.querySelector('.product-card').offsetWidth + 20; // 20 is the margin-right
-// const visibleCards = 5;
-// const totalCards = document.querySelectorAll('.product-card').length;
-// const maxScroll = (totalCards - visibleCards) * cardWidth;
-// let scrollAmount = 0;
-
-// function slideLeft() {
-//     if (scrollAmount > 0) {
-//         scrollAmount -= cardWidth * visibleCards;
-//         if (scrollAmount < 0) {
-//             scrollAmount = 0;
-//         }
-//         products.style.transform = `translateX(-${scrollAmount}px)`;
-//     }
-// }
-
-// function slideRight() {
-//     if (scrollAmount < maxScroll) {
-//         scrollAmount += cardWidth * visibleCards;
-//         if (scrollAmount > maxScroll) {
-//             scrollAmount = maxScroll;
-//         }
-//         products.style.transform = `translateX(-${scrollAmount}px)`;
-//     }
-// }
-
-
-
 // search bar hide show on toggle
 document.addEventListener('DOMContentLoaded', function() {
     const searchIcon = document.getElementById('searchIcon');
-    const searchBar = document.getElementById('search');
+    const searchBar = document.getElementById('searchBar');
 
     searchIcon.addEventListener('click', function() {
         if (searchBar.style.display === 'none' || searchBar.style.display === '') {
@@ -237,11 +180,17 @@ function toggleHeart() {
     }
 }
 
-function showContactform() {
-    const contactImage = document.getElementById("contact-image");
-    contactImage.addEventListener("click", function(){
-        const mycontactForm = document.getElementById("contactForm");
-        mycontactForm.style.display = "block";
-    });
 
+function showTshirtPopup(){
+    const tshirtEyeIcon = document.getElementById("tshirt-eye");
+    const tshirtPopupdiv = document.getElementById("tshirt-popupdiv");
+
+    tshirtEyeIcon.addEventListener("click", function(){
+        tshirtPopupdiv.style.display = "block";
+    });
+}
+
+function closeTshirtPopup() {
+    const tshirtPopupdiv = document.getElementById("tshirt-popupdiv");
+    tshirtPopupdiv.style.display = "none";
 }

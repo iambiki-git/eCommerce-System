@@ -1,0 +1,399 @@
+{% extends "main.html" %}
+{% load static %}
+
+{% block title %}eCommerce | T-Shirt{% endblock %}
+{% block tShirt %}
+<div class="tshirt-section">
+    <div class="firstheadingdiv">
+        <div class="info-content">
+            <h5>Women's Wear (T-Shirt)</h5>
+            <h6>10 items found</h6>
+        </div>
+        <div class="sortby">
+            <h6><i class='bx bx-sort'></i>Sort By</h6>
+            <form method="POST">
+                {% csrf_token %}
+                <select id="services" name="services">
+                    <option value="latest">Latest</option>
+                    <option value="lowtohighprice">Low to High Price</option>
+                    <option value="hightolowprice">High to Low Price</option>
+                    <option value="atozorder">A to Z Order</option>
+                    <option value="ztoaorder">Z to A Order</option>
+                </select>
+            </form>
+        </div> 
+    </div>
+    <div class="filter-product">
+        <div class="filter">
+            <h2 class="text-center fs-5">Filter</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <select id="filter" name="filter">
+                    <option value="choose">Choose</option>
+                    <option value="bestsellingproduct">Best selling product</option>
+                    <option value="toprated">Top rated</option>
+                    <option value="mostfav">Most Favourite</option>
+                </select>
+            </form>
+
+            <h2 class="text-center fs-5 mt-5">Price</h2>
+           
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="price-filter">
+                        <input type="number" value="0" placeholder="Min">
+                        <h5 class="fs-5 ">To</h5>
+                        <input type="number" value="1000" placeholder="Max">
+                        <div id="arrow_icon" class="bg bg-primary"><i class='bx bx-chevron-right'></i></div>
+                    </div>
+                </form>
+
+            <h2 class="text-center fs-5 mt-5">Brands</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <select id="filter" name="filter">
+                    <option value="select">Select Brand</option>
+                    <option value="zara">Zara</option>
+                    <option value="gucci">Gucci</option>
+                    <option value="prada">Prada</option>
+                    <option value="lv">Louis Vuitton</option>
+                    <option value="levis">Levis</option>
+                    <option value="denim">Denim</option>
+                </select>
+            </form>
+            
+            <h2 class="text-center fs-5 mt-5">Categories</h2>
+
+            <div class="categories-items">
+                <h2 class="mt-4 categories-fashion">Top Wear</h2>   
+                <div class="topwear-items">
+                    <a href="#"><p>T-shirts</p></a>
+                    <p>Shirts</p>
+                    <p>Sweaters & Cardigans</p>
+                    <p>Hoodies & Sweatshirts</p>
+                    <p>Jackets & Coats</p>
+                </div>  
+            </div>      
+            <div class="categories-items">
+                <h2 class="mt-1 categories-fashion">Bottom Wear</h2>   
+                <div class="topwear-items">
+                    <p>Jeans</p>
+                    <p>Trousers</p>
+                    <p>Shorts</p>
+                    <p>Swimwear</p>
+                    <p>Activewear Bottoms</p>
+                </div>  
+            </div>      
+            <div class="categories-items">
+                <h2 class="mt-1 categories-fashion">Foot Wear</h2>   
+                <div class="topwear-items">
+                    <p>Sneakers</p>
+                    <p>Causal Shoes</p>
+                    <p>Dress Shoes</p>
+                    <p>Boots</p>
+                    <p>Sandal & Flipflops</p>
+                </div>  
+            </div>      
+            <div class="categories-items">
+                <h2 class="mt-1 categories-fashion">Accessories</h2>   
+                <div class="topwear-items">
+                    <p>Watches</p>
+                    <p>Belts</p>
+                    <p>Wallets</p>
+                    <p>Sunglasses</p>
+                    <p>Bags & Backpacks</p>
+                </div>  
+            </div>      
+        </div>
+        
+
+    
+        <div class="product">
+            <div class="row">
+                 {% for item in items %}               
+                <div class="product-card">
+                    <div class="tshirt-img">
+                        {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="{{ item.title }}">
+                        {% else %}
+                        <p>No image available</p>
+                        {% endif %}
+                    </div>
+                    <div class="tshirt-ratings text-center">
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bxs-star-half'></i>
+                    </div>
+                    <div class="infoaboutproduct">
+                        <p>{{ item.title }}</p>
+                        <p class="fs-5 fw-bold">Rs {{ item.price }}</p>
+                    </div> 
+                    
+                    <div class="tshirt-eyeicon" id="tshirt-eyeicon" onclick="showTshirtPopup()">
+                        <i class="fa-regular fa-eye" id="tshirt-eye"></i>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+                
+                
+                {% comment %} <div class="product-card">
+                    <div class="tshirt-img">
+                        <img src="{% static 'myeSite/images/t-shirt3.webp' %}" alt="tshirt1">
+                    </div>
+                    <div class="tshirt-ratings text-center">
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bxs-star-half'></i>
+                    </div>
+                    <div class="infoaboutproduct">
+                        <p>Summer T-Shirt</p>
+                        <p class="fs-5 fw-bold">Rs 750</p>
+                    </div> 
+                    <div class="tshirt-eyeicon" id="tshirt-eyeicon">
+                        <i class="fa-regular fa-eye" id="tshirt-eye"></i>
+                    </div>  
+                </div> 
+                <div class="product-card">
+                    <div class="tshirt-img">
+                        <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt1">
+                    </div>
+                    <div class="tshirt-ratings text-center">
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bxs-star-half'></i>
+                    </div>
+                    <div class="infoaboutproduct">
+                        <p>Summer T-Shirt</p>
+                        <p class="fs-5 fw-bold">Rs 750</p>
+                    </div> 
+                    <div class="tshirt-eyeicon" id="tshirt-eyeicon">
+                        <i class="fa-regular fa-eye" id="tshirt-eye"></i>
+                    </div>  
+                </div>
+                <div class="product-card">
+                    <div class="tshirt-img">
+                        <img src="{% static 'myeSite/images/t-shirt2.webp' %}" alt="tshirt1">
+                    </div>
+                    <div class="tshirt-ratings text-center">
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bxs-star-half'></i>
+                    </div>
+                    <div class="infoaboutproduct">
+                        <p>Summer T-Shirt</p>
+                        <p class="fs-5 fw-bold">Rs 750</p>
+                    </div>   
+                    <div class="tshirt-eyeicon" id="tshirt-eyeicon">
+                        <i class="fa-regular fa-eye" id="tshirt-eye"></i>
+                    </div>
+                </div> {% endcomment %}
+
+
+           
+
+
+
+{% comment %} 
+            <div class="row">
+                <div class="product-card">
+                    <div class="tshirt-img">
+                        <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt1">
+                    </div>
+                    <div class="tshirt-ratings text-center">
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bxs-star-half'></i>
+                    </div>
+                    <div class="infoaboutproduct">
+                        <p>Summer T-Shirt</p>
+                        <p class="fs-5 fw-bold">Rs 750</p>
+                    </div>
+                    <div class="tshirt-eyeicon" id="tshirt-eyeicon">
+                        <i class="fa-regular fa-eye" id="tshirt-eye" onclick="showTshirtPopup()"></i>
+                    </div>   
+                </div>
+                <div class="product-card">
+                    <div class="tshirt-img">
+                        <img src="{% static 'myeSite/images/t-shirt2.webp' %}" alt="tshirt1">
+                    </div>
+                    <div class="tshirt-ratings text-center">
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bxs-star-half'></i>
+                    </div>
+                    <div class="infoaboutproduct">
+                        <p>Summer T-Shirt</p>
+                        <p class="fs-5 fw-bold">Rs 750</p>
+                    </div>
+                    <div class="tshirt-eyeicon" id="tshirt-eyeicon">
+                        <i class="fa-regular fa-eye" id="tshirt-eye"></i>
+                    </div>   
+                </div> 
+                <div class="product-card">
+                    <div class="tshirt-img">
+                        <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt1">
+                    </div>
+                    <div class="tshirt-ratings text-center">
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bxs-star-half'></i>
+                    </div>
+                    <div class="infoaboutproduct">
+                        <p>Summer T-Shirt</p>
+                        <p class="fs-5 fw-bold">Rs 750</p>
+                    </div>  
+                    <div class="tshirt-eyeicon" id="tshirt-eyeicon">
+                        <i class="fa-regular fa-eye" id="tshirt-eye"></i>
+                    </div> 
+                </div>
+                <div class="product-card">
+                    <div class="tshirt-img">
+                        <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt1">
+                    </div>
+                    <div class="tshirt-ratings text-center">
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bxs-star-half'></i>
+                    </div>
+                    <div class="infoaboutproduct">
+                        <p>Summer T-Shirt</p>
+                        <p class="fs-5 fw-bold">Rs 750</p>
+                    </div>   
+                    <div class="tshirt-eyeicon" id="tshirt-eyeicon">
+                        <i class="fa-regular fa-eye" id="tshirt-eye"></i>
+                    </div>
+                </div>
+            </div> {% endcomment %}
+{% comment %} 
+            <div class="row">
+                <div class="product-card">
+                    <div class="tshirt-img">
+                        <img src="{% static 'myeSite/images/t-shirt3.webp' %}" alt="tshirt1">
+                    </div>
+                    <div class="tshirt-ratings text-center">
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bxs-star-half'></i>
+                    </div>
+                    <div class="infoaboutproduct">
+                        <p>Summer T-Shirt</p>
+                        <p class="fs-5 fw-bold">Rs 750</p>
+                    </div> 
+                    <div class="tshirt-eyeicon" id="tshirt-eyeicon">
+                        <i class="fa-regular fa-eye" id="tshirt-eye"></i>
+                    </div>  
+                </div>
+                <div class="product-card">
+                    <div class="tshirt-img">
+                        <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt1">
+                    </div>
+                    <div class="tshirt-ratings text-center">
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bxs-star-half'></i>
+                    </div>
+                    <div class="infoaboutproduct">
+                        <p>Summer T-Shirt</p>
+                        <p class="fs-5 fw-bold">Rs 750</p>
+                    </div> 
+                    <div class="tshirt-eyeicon" id="tshirt-eyeicon">
+                        <i class="fa-regular fa-eye" id="tshirt-eye"></i>
+                    </div>  
+                </div> 
+                <div class="product-card">
+                    <div class="tshirt-img">
+                        <img src="{% static 'myeSite/images/t-shirt2.webp' %}" alt="tshirt1">
+                    </div>
+                    <div class="tshirt-ratings text-center">
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bxs-star-half'></i>
+                    </div>
+                    <div class="infoaboutproduct">
+                        <p>Summer T-Shirt</p>
+                        <p class="fs-5 fw-bold">Rs 750</p>
+                    </div> 
+                    <div class="tshirt-eyeicon" id="tshirt-eyeicon">
+                        <i class="fa-regular fa-eye" id="tshirt-eye"></i>
+                    </div>  
+                </div>
+                <div class="product-card">
+                    <div class="tshirt-img">
+                        <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt1">
+                    </div>
+                    <div class="tshirt-ratings text-center">
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bxs-star-half'></i>
+                    </div>
+                    <div class="infoaboutproduct">
+                        <p>Summer T-Shirt</p>
+                        <p class="fs-5 fw-bold">Rs 750</p>
+                    </div>   
+                    <div class="tshirt-eyeicon" id="tshirt-eyeicon">
+                        <i class="fa-regular fa-eye" id="tshirt-eye"></i>
+                    </div>
+                </div>
+            </div> {% endcomment %}
+        </div>
+
+
+     
+      
+
+
+
+
+    </div>
+    <div class="tshirt-popupdiv" id="tshirt-popupdiv">
+        <div class="title-heading">
+            <p class="fw-bold fs-5">New Branded Tshirt</p>
+        </div>
+        <span onclick="closeTshirtPopup()">&times;</span>
+        <div class="imageAndInfoDiv">
+            <div class="tshirt-imagediv">
+                <img src="{% static 'myeSite/images/t-shirt2.webp' %}" alt="tshirt1">
+            </div>
+            <div class="tshirt-infodiv">
+                <p class="fw-bold fs-5">New Branded Tshirt</p>
+                <p id="new-price" class="fs-4">Rs. 1500</p>
+                <p class="fw-bold fs-5">Size: </p>
+                <select name="size" id="size">
+                    <option value="choose">Choose Your Size</option>
+                    <option value="choose">s</option>
+                    <option value="choose">l</option>
+                    <option value="choose">xl</option>
+                </select>
+
+            </div>
+        </div>
+        
+ 
+    </div>
+
+{% endblock %}
