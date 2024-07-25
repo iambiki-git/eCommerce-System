@@ -5,42 +5,53 @@
 
 
 {% block signUp %}
-    <div class="signup-container">
-        <div class="signUpImage">
-            <img src="{% static 'myeSite/images/image.png' %}" alt="">
-        </div> 
-        <div class="signup-module">
-            <form class="login-form">
-                {% csrf_token %}
-                <h2>Sign Up</h2>
-                <div class="input-group">
-                    <label for="fname">First Name</label>
-                    <input type="text" id="fname" name="fname" required>
-                </div>
-                <div class="input-group">
-                    <label for="lname">Last Name</label>
-                    <input type="text" id="lname" name="lname" required>
-                </div>
-                <div class="input-group">
-                    <label for="phoneno">Phone no</label>
-                    <i class='bx bx-phone' id="emailIcon"></i>
-                    <input type="number" id="phoneno" name="phoneno" required>
-                </div>
-                <div class="input-group">
-                    <label for="email">Email</label>
-                    <i class='bx bxs-envelope' id="emailIcon"></i>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <i class='bx bxs-lock' id="emailIcon"></i>
-                    <input type="password" id="password" name="password" required>
-                    <i class='bx bxs-hide' id="togglePass" onclick="togglePassword()"></i>
-                </div>
-                <button type="submit" class="login-btn">Signup</button>
-                <p class="signup-text">Already have an account? <a href="{% url 'login' %}">Sign In</a></p>
-            </form>
-        </div>
-    </div>
 
+<div class="container">
+    <div class="card">
+        {% if errors %}
+        {% for error in errors %}
+        <p class="text-danger ms-0 fw-bold mb-0">{{error}}</p>
+        {% endfor %}
+        {% endif %}
+        <h2 class="mb-4 mt-2">Signup | Register</h2>
+        <form method="POST" action="{% url 'signup' %}">
+            {% csrf_token %}
+            <div class="form-row d-flex gap-1 mb-4">
+                <div class="form-group col-md-6">
+                    <label for="first_name">First Name</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder='Ex: Jhon' required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder='Ex: Doe'  required>
+                </div>
+            </div>
+            <div class="form-row d-flex gap-1 mb-4">
+                <div class="form-group col-md-6">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="phone">Phone</label>
+                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number" required>
+                </div>
+            </div>
+            <div class="form-row d-flex gap-1">
+                <div class="form-group col-md-6">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Minimum 6 characters long" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
+                </div>
+            </div>
+            <div class="terms-conditions d-flex align-items-center">
+                <input type="checkbox" name="rememberme" id="rememberme"><p>I agree to your<a href="#" class="fw-bold">Terms and Conditions.</a></p>
+            </div>
+            <button type="submit" class="btn btn-success btn-block w-100 fw-bold ms-0 mb-0">Sign up</button>
+        </form>
+        <p class="ms-0 fw-light">Already have an account?<a href="{% url 'login' %}" class="fw-bold ms-1"> Login.</a></p>
+    </div>
+</div>
 {% endblock %}

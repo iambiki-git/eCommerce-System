@@ -15,28 +15,36 @@ html, body {
     margin-left: 5%;
     margin-right: 5%; 
 }
+
 header {
     position: fixed;  
     /* position: absolute; */
     width: 90%;
     top: 0;
     z-index: 1000;
+    background-color: #fff;
     display: flex;
     align-items: center;
+    padding: 30px 0px;
     justify-content: space-between;
-    padding: 20px 10%;
 }
-header.sticky {
-    background-color: #222;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+header form button, small {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+} 
+header form button {
+    width: 40px;
+    height: 25px;
+    background-color: #fff;
 }
-
 header a {
    text-decoration: none;
 }
 .navmenu {
     display: flex;
-    list-style-type: none;; 
+    list-style-type: none;
 }
 .navmenu a {
     color: #2c2c2c;
@@ -55,13 +63,16 @@ header a {
     align-items: center;
 }
 .nav-icon form input{
-    padding-left: 5px;
-    border: 2px solid #222;
-    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: 1px solid #ccc;
     margin-left: 5px;
-    height: 5vh;
+    height: 6vh;
     margin-top: -11px;
-    display: none;
+    padding: 10px;
+    border-radius: 5px 0px 0px 5px;
+}
+.nav-icon form i {
+    cursor: pointer;
 }
 .nav-icon i {
     margin-right: 20px;
@@ -74,30 +85,41 @@ header a {
     transform: scale(1.1);
     color: #EE1C47;
 }
-#searchBar {
-    display: none;
+.search_icon {
+    border: 1px solid #ccc;
+    outline: 1px solid #ccc;
+    background: purple;
+    margin-top: -11px;
+    border-radius: 0px 5px 5px 0px;
+    display: flex;
+    align-items: center;
 }
+.search_icon i {
+    display: flex;
+    margin-left: 1.3rem;
+    color: #fff;
+} 
 #menu-icon {
     font-size: 25px;
     color: #2c2c2c;
     z-index: 10001;
     cursor: pointer;
-    /* display: none; */
+    display: none;
 }
 .dropdown {
     position: relative;
 }
 .category-dropdownlist{
     position: absolute;
-    margin-left: -325px;
+    margin-left: -340px;
     margin-top: 12px;
-    height: 30vh;
-    width: 61rem;
+    height: auto;
+    width: 77rem;
     background-color: whitesmoke;
     padding: 5px 5px;
     list-style-type: none;
     color: #000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 5px rgb(8, 162, 131);
     border-radius: 5px;
     overflow: hidden;
     z-index: 1;
@@ -108,16 +130,19 @@ header a {
     justify-content: space-around;
 }
 .categories {
-    height: 200px;
+    height: auto;
     width: 200px;
+    text-align: center;
     transition: all .42s ease;
 }
-.categories p {
-    font-size: small;
-    text-align: center;
-    margin-bottom: 7px;
+.categories p{
+    margin: 2px;
 }
-.categories p:hover {
+.categories a {
+    font-size: small;
+    font-weight: 400;
+}
+.categories p a:hover {
     cursor: pointer;
     color: #EE1C47;
 }
@@ -144,33 +169,94 @@ header a {
 .dropdownlist {
     position: absolute;
     height: auto;
-    width: 6rem;
+    width: 20rem;
+    margin-left: -15.5rem;
+    margin-top: 3px;
     background-color: whitesmoke;
     padding: 5px 10px;
     list-style-type: none;
+    box-shadow: 0px 0px 5px rgb(8, 162, 131);
     color: #000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    border-radius: 3px;
     overflow: hidden;
     z-index: 1;
     display: none;
+}
+.dropdownlist_cart {
+    position: absolute;
+    height: auto;
+    width: 27rem;
+    margin-left: -25rem;
+    margin-top: 3px;
+    background-color: whitesmoke;
+    padding: 5px 10px;
+    list-style-type: none;
+    box-shadow: 0px 0px 5px rgb(8, 162, 131);
+    color: #000;
+    border-radius: 3px;
+    overflow: hidden;
+    z-index: 1;
+    display: none;
+}
+#mydropdown .title {
+    border-bottom: 2px solid rgb(75, 121, 221);
+}
+.show-quantity {
+    height: 20px;
+    width: 20px;
+    font-size: 13px;
+    background-color: white;
+    border: 1px solid white;
+    outline: 1px solid white;
+    border-radius: 50%;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+
+}
+.trashicon {
+    cursor: pointer;
+}
+.first-container{
+    border-bottom: 2px solid #dadada;
+}
+.sub-total_section {
+    border-bottom: 2px solid #dadada;
+}
+.grandTotal {
+    border-bottom: 2px solid #dadada;   
+}
+.image-div {
+    position: relative;
+}
+.image-div img {
+    margin-left: -15px;
+
+}
+.scrollable-div {
+    height: 200px;
+    overflow-y: scroll;
 }
 .dropdownlist li {
     margin: 0;
     padding: 0;
 }
-
-.dropdownlist li a {
-    text-decoration: none;
-    color: black;
-    display: block;
-    transition: background-color .42s;
+.dropdownlist li button {
+    letter-spacing: 0.8px;
+    font-size: 13px;
+    border: 1px solid #ccc;
 }
-.dropdownlist li a:hover {
-    color: #EE1C47;
+.dropdownlist li button:hover {
+    border: 1px solid #ea325d;
 }
 .dropdown:hover .dropdownlist{
     display: block;
+}
+#myicons {
+    cursor: pointer;
+}
+#bagicon{
+    cursor: pointer;
 }
 #login-outIcon {
     float: right;
@@ -242,184 +328,71 @@ header.sticky {
     padding: 20px 10%;
     box-shadow: 0px 0px 10px rgb(0 0 0 / 10%);
 }
+
 /* signIn Css */
-.signin-container {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.signInImage {
-    height: 100%;
-    width: 40%  ;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 .signin-module {
-    height: 100%;
-    width: 60%;
-    padding: 20px 30px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border: 1px solid #dadada;
+    padding: 2rem 0px;
 }
-.login-form {
-    display: flex;
-    flex-direction: column;
-    position: relative;  
+.signin-module:hover{
+    box-shadow: 0px 0px 5px gray;
 }
-.login-form h2 {
-    margin-bottom: 20px;
-    text-align: center;
-}
-.input-group {
-    margin-bottom: 15px;
-}
-.input-group label {
-    margin-bottom: 5px;
-    display: block;
-}
-.input-group input {
-    width: 100%;
-    padding: 8px 25px;
+.fields input {
     border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
+    outline: 1px solid #ccc;
+ }
+ .fields input:focus {
+    outline: 1px solid #44a7e9;
+ }
+.continue-btn {
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    background-color: #ff3f6c;
 }
-.login-btn {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
+.continue-btn:hover {
+    border: 1px solid red;
+    box-shadow: 0px 0px 5px #ff3f6c;
 }
-.login-btn:hover {
-    background-color: #45a049;
+.fields p {
+    margin-top: 1rem;
 }
-.signin-text {
-   margin-left: 0px;
-}
-.signin-text a {
-    color: #4CAF50;
+.fields a {
+    margin-left: 13rem;
     text-decoration: none;
 }
-.signup-text a:hover {
-    text-decoration: underline;
-}
-#emailIcon {
-    position: absolute;
-    margin-top: 2.7rem;
-    padding-left: 5px;
-}
-#passIcon {
-    position: absolute;
-    margin-top: 2.7rem;
-    padding-left: 5px;
-}
-#togglePass {
-    position: absolute;
-    margin-top: 2.7rem;
-    margin-left: 17rem;
+.fields input[type="checkbox"] {
     cursor: pointer;
 }
+
 /* signup css */
-.signup-container {
+.container {
     height: 100%;
     width: 100%;
-    margin-top: 6rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    margin-top: 7rem;
 }
-.signUpImage {
-    height: 100%;
-    width: 40%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.signup-module {
-    height: 300px;
-    width: 60%;
-    padding: 20px 30px;
+.card {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
     border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: whitesmoke;
 }
-
-.login-form {
-    display: flex;
-    flex-direction: column;
-    position: relative;
+.terms-conditions p {
+    margin-top: 1rem;
 }
-
-.login-form h2 {
-    margin-bottom: 20px;
-    text-align: center;
+.terms-conditions p a {
+    margin-left: 5px;
 }
-
-.input-group {
-    margin-bottom: 15px;
+.terms-conditions a {
+    margin-left: 21rem;
 }
-
-.input-group label {
-    margin-bottom: 5px;
-    display: block;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 8px 25px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-.login-btn {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 0;
-}
-.login-btn:hover {
-    background-color: #45a049;
-}
-.signup-text {
-    margin-left: 0;
-}
-.signup-text a {
-    color: #4CAF50;
-    text-decoration: none;
-}
-.signup-text a:hover {
-    text-decoration: underline;
-}
-#emailIcon {
-    position: absolute;
-    margin-top: 2.7rem;
-    padding-left: 5px;
-}
-#passIcon {
-    position: absolute;
-    margin-top: 2.7rem;
-    padding-left: 5px;
-}
-#togglePass {
-    position: absolute;
-    margin-top: 2.7rem;
-    margin-left: 17rem;
+.terms-conditions input[type="checkbox"] {
     cursor: pointer;
 }
+
+
+
 /* featured products css */
 .featured-products {
     width: 100%;
@@ -1153,7 +1126,7 @@ button i {
 .tshirt-section {
     height: 200vh;
     width: 100%;
-    margin-top: 5.5rem;
+    margin-top: 7rem;
 }
 .firstheadingdiv {
     height: 4.5rem;
@@ -1186,115 +1159,83 @@ button i {
 #services {
     border: none;
     outline: none;
+    cursor: pointer;
 }
 .filter-product {
     display: flex;
     gap: 2%;
 }
 .filter {
-    height: 100vh;
-    width: 25%;
+    height: auto;
+    width: 20%;
     border: 1px solid #dadada;
     border-radius: 4px;
     transition: all .42s ease;
 }
-#filter {
-    width: 96%;
-    height: 6vh; 
-    border-radius: 5px;
-    margin-left: 7px;
-    border: 1px solid #82b7eb;
-    outline: #82b7eb;
+.filter h2 {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+.filter h5 {
+    margin-bottom: 1rem;
+    font-size: .9rem;
+    font-weight: 700;
+}
+.filter ul {
+    list-style-type: none;
+}
+.filter ul li {
+    margin-left: -20px;
+}
+.filter input[type='checkbox'] {
     cursor: pointer;
-}
-.price-filter {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-}
-.price-filter input {
-    width: 6rem;
-    height: 5vh;
-    border-radius: 5px;
-    border: 1px solid #82b7eb;
-    outline: #82b7eb;
-    padding-left: 3px;
-    cursor: pointer;
-}
-#arrow_icon {
-    height: 5vh;
-    width: 3vw;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    color: #fff;   
-    border: none; 
-    cursor: pointer;
-}
-.filter i {
-    font-size: 1.5rem;
-}
-
-.categories-fashion{
-    cursor: pointer;
-    font-size: 1rem;
-    padding-left: 10px;
-}
-.categories-fashion:hover {
-    color: #EE1C47;
-}
-.topwear-items {
-    height: 7.5rem;
-    width: 13rem;
-    border: 1px solid #dadada;
-    margin-left: 5px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 1px gray;
-    display: none;
-}
-.topwear-items p {
-    margin: 0;
-    padding-left: 10px;
-    cursor: pointer;
-}
-.topwear-items p:hover {
-    color: #EE1C47;
-}
-.categories-items:hover .topwear-items {
-    display: block;
+    height: .92rem;
+    width: .92rem;
+    margin-right: 10px;
 }
 
 /* t-shirt-product-css */
 .product {
-    height: 120vh;
-    width: 72%;
+    height: auto;
+    width: 80%;
     margin-bottom: 5rem;
+    margin-left: 2rem;
 }
 .row {
     display: flex;  
-    justify-content: space-between;
+    justify-content: start;
     margin-bottom: 8px;
 }
 
 .product-card {
-    height: 16rem;
+    height: 16.3rem;
     width: 23%;
     border: 1px solid #dadada;
     box-shadow: 0px 0px 1px gray;   
     position: relative;
-    margin-bottom: 10px;
+    margin-bottom: 1.7rem;
+    margin-right: 1rem;
+}
+.show-discount {
+    height: 2rem;
+    width: 7.2rem;
+    border: 1px solid #333;
+    position: absolute;
+    top: 5px;
+    z-index: 1;
+    background-color: purple;
+    color: #fff;
 }
 .tshirt-img {
     height: 10rem;
-    width: 94%;
+    width: 100%;
     border: 1px solid #ccc;
-    margin: 5px;
+    margin-top: 5px;
     transition: transform .42s ease;
 }
 .tshirt-img img {
     height: 100%;
-    width: 173px;
+    width: 199px;
     object-fit: cover;
 }
 .tshirt-img:hover {
@@ -1305,74 +1246,263 @@ button i {
     height: 7vh;
     width: 100%;
 }
-.infoaboutproduct p {
+.infoaboutproduct p, span {
     margin: 0;
-    text-align: center;
 }
-.tshirt-eyeicon {
-    position: absolute;
-    top: 3%;
-    right: 10%;
-    height: 24px;
-    width: 24px;
-    background-color: gray;
-    color: #fff;
-    border-radius: 50%;
-    font-weight: 800;
-    cursor: pointer; 
+.text-justify{
+    text-align: justify;
+    font-size: 13px;
+}
+.addToWishlist {
+    height: 2rem;
+    width: 12.5rem;
+    margin: 5px 0px;
+    border: 1px solid #dadada;
+    background-color: #fff;
+    font-size: 13px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.tshirt-eyeicon:hover {
-    background-color: rgb(92, 1, 1);
-    color: #fff;
+.addToWishlist:hover {
+    border: 1px solid purple;
+    color: #ea325d;
 }
-#tshirt-eye {
-    font-size: 11px;
-}
-/* tshirt-popup-div-css */
-.tshirt-popupdiv {
-    height: 75vh;
-    width: 55%;
-    background-color: #fff;
-    border: 1px solid #1957bb;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: none;
-}
-.tshirt-popupdiv span {
-    position: absolute;
-    top: -15px;
-    right: 5px;
-    font-size: 21px;
-    cursor: pointer;
-}
-.title-heading {
-    height: 6vh;
+
+
+/* T-SHIRT DETAILS CSS */
+.tshirtDetail-mainContainer {
+    height: auto;
     width: 100%;
-    border-bottom: 1px solid #ccc;
+    margin-top: 130px;
+    display: flex;
+    gap: 2%;
 }
-.imageAndInfoDiv{
+.tshirtimages-div {
+    height: auto;
+    width: 58%;
+}
+.tshirtdetail-info {
+    width: 40%;
+}
+.tshirtImage-row {
     display: flex;
     justify-content: space-between;
 }
-.tshirt-imagediv {
-    height: 14rem;
-    width: 43%;
-    border: 1px solid #dadada;
-    margin-top: 8px;
+
+.tshirtImage-row img {
+    height: 50vh;
+    width: 49%;
+    margin-bottom: 10px;
+    object-fit: cover;
 }
-.tshirt-imagediv img {
-    height: 13rem;
+.tshirtImage-row img:hover {
+    box-shadow: 0px 0px 3px gray;
+}
+.circle1 {
+    height: 3rem;
+    width: 3rem;
+    border: 1px solid #dadada;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.circle1:hover {
+    border: 1px solid #45a049;
+}
+.circle1.selected {
+    border: 1px solid #EE1C47;
+}
+.addtocart {
+    background-color: #ff3e6c;
+}
+.addtocart:hover {
+    background-color: #ea325d;
+}
+.wishlistbtn {
+    border: 1px solid #dadada;
+    background-color: whitesmoke;
+    padding: 0px 2rem;
+}
+.wishlistbtn:hover {
+    border: 1px solid #222;
+}
+.reviews i {
+    cursor: pointer;
+}
+.heart-icon {
+    transition: color 0.2s;
+}
+.heart-icon.bxs-heart {
+    color: #ea325d;
+}
+.tshirtdetail-buttons  button a {
+    text-decoration: none;
+}
+
+/* SIMILAR PRODUCT CSS */
+.similarProducts-list {
+    height: auto;
+    width: 100%;
+}
+.similarProduct-imageCard {
+    height: auto;
+    width: 20vw;
+    cursor: pointer;
+}
+.similarProduct-imageCard:hover {
+    box-shadow: 0px 0px 4px gray;
+}
+.similarProduct-imageCard img {
+    height: 40vh;
     width: 100%;
     object-fit: contain;
 }
-.tshirt-infodiv {
-    height: 14rem;
-    width: 54%;
+
+/* CART CSS */
+.cart-page {
+    height: auto;
+    width: 100%;
+    margin-top: 7rem;
+    display: flex;
+    gap: 1%;   
+    border: 1px solid #ccc;
+    padding: 20px 5%; 
+}
+.cart-list {
+    width: 60%;
+    height: auto;
+    border: 1px solid #ccc;
+    background: #fff;
+}
+.cart-list:hover {
+    box-shadow: 0px 0px 5px gray;
+}
+.cart-heading {
+    position: relative;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ccc;
+}
+.cart-heading p {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.cart-row {
+    height: 10rem;
+    width: 100%;
+    /* border: 1px solid green; */
+    border-bottom: 1px solid #ccc;
+}
+.item-image img {
+    height: 120px;
+    width: 120px;
+    object-fit: contain;
+    margin-left: -49px;
+}
+.item-quantity input {
+    width: 30px;
+    /* border: none;
+    outline: none; */
+}
+.item-quantity i {
+    font-size: 20px;
+    cursor: pointer;
+}
+.remove-icon span {
+    cursor: pointer;
+}
+.cart-summary {
+    width: 39%;
+    height: 21rem;
+    border: 1px solid #ccc;
+    background: whitesmoke;
+}
+.cart-summary:hover {
+    box-shadow: 0px 0px 5px gray;
+}
+.summary-title {
+    border-bottom: 1px solid #ccc;
+}
+.summary-title h2 {
+    padding-bottom: 10px;
+}
+.cart-subtotalAmt {
+    height: auto;
+}
+.summary-price {
+    border-bottom: 1px solid #ccc;
+}
+.cart-summary button {
+    margin: 0;
+    width: 80%;
+    border: 1px solid #ccc;
+    background: black;
+    color: #fff;
+    border-radius: 0px;
+    margin-left: 3rem;
+    margin-top: 3.5rem;
+}
+.cart-summary button:hover {
+    box-shadow: 0px 0px 5px #ea325d;
+}
+
+
+/* mycart css */
+.cart-outerdiv {
+    height: auto;
+    width: 100%;
+    margin-top: 7rem;
+    display: flex;
+    gap: 1%;
+    margin-bottom: 3rem;
+}
+.cart-details {
+    height: auto;
+    width: 69%;
     border: 1px solid #dadada;
-    margin-top: 8px;
+}
+.cart_summary {
+    height: 10rem;
+    width: 30%;
+    border: 1px solid #dadada;
+}
+.cart_summary h4 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 1.5rem;
+    margin-top: 1rem;
+}
+.product_image img {
+    height: 120px;
+    width: 120px;
+    object-fit: contain;
+    margin-left: -20px;
+}
+.product_quantity input {
+    width: 5.5rem;
+    height: 2rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: 1px solid #ccc;
+    margin-top: 2rem;
+}
+.product_heading {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 1rem;
+    margin-bottom: 0.7rem;
+}
+.action span {
+    cursor: pointer;
+}
+.total_price {
+   border-bottom: 1px solid #ccc;
+   padding-bottom: 0.5rem;
+   margin-bottom: 1rem;
+}
+.cart_summary button {
+    width: 85%;
+    margin-left: 1.5rem;
+}
+.cart_summary button a {
+    color: #fff;
+    text-decoration: none;
 }

@@ -1,19 +1,36 @@
-const header = document.querySelector("header");
+// const header = document.querySelector("header");
 
-window.addEventListener("scroll", function(){
-    header.classList.toggle("sticky", this.window.scrollY > 0);
-});
+// window.addEventListener("scroll", function(){
+//     header.classList.toggle("sticky", this.window.scrollY > 0);
+// });
 
 
 // PASSWORD HIDE SHOW
-function togglePassword() {
-    var passwordField = document.getElementById("password");
-    if (passwordField.type === "password") {
-        passwordField.type = "text";
-    } else {
-        passwordField.type = "password";
-    }
+// function togglePassword() {
+//     var passwordField = document.getElementById("password");
+//     if (passwordField.type === "password") {
+//         passwordField.type = "text";
+//     } else {
+//         passwordField.type = "password";
+//     }
+// }
+
+//show short desc of cart
+function showcart() {
+    const bagicon = document.getElementById('bagicon');
+    const mydropdown = document.getElementById('mydropdown_cart');
+    bagicon.addEventListener('click', function() {
+        mydropdown.style.display = 'block';
+    })
 }
+const bagicon = document.getElementById('bagicon');
+const mydropdown = document.getElementById('mydropdown_cart');
+document.addEventListener('click', function (event) {
+    if (!mydropdown.contains(event.target) && event.target !== bagicon) {
+        mydropdown.style.display = 'none';
+    }
+});
+
 
 
 const prevButton = document.querySelector('.prev');
@@ -193,4 +210,24 @@ function showTshirtPopup(){
 function closeTshirtPopup() {
     const tshirtPopupdiv = document.getElementById("tshirt-popupdiv");
     tshirtPopupdiv.style.display = "none";
+}
+
+//function to select size (tshirt-detail page)
+function selectSize(element) {
+    // Remove the 'selected' class from all elements
+    const sizes = document.querySelectorAll('.circle1');
+    sizes.forEach(size => size.classList.remove('selected'));
+
+    // Add the 'selected' class to the clicked element
+    element.classList.add('selected');
+}
+
+
+
+function myHeartCount () {
+    const heartIconCount = document.getElementById('heartIconCount');
+    
+    heartIconCount.classList.toggle('bx-heart');
+    heartIconCount.classList.toggle('bxs-heart');
+
 }

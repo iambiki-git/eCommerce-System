@@ -5,20 +5,25 @@
    
 
         <div class="image-container">
+            {% if items %}
             <div class="slider">
+                {% for item in items %}
                 <div class="slide">
-                    <img src="{% static 'myeSite/images/fashion1.jpg' %}" alt="Product 1">
-                    <h3>Product 1</h3>
-                    <span id="old-price">$105</span>
-                    <span id="new-price">$100</span>
+                    {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.title }}">
+                    {% endif %}
+                    <h3>{{ item.title }}</h3>
+                    {% comment %} <span id="old-price"></span> {% endcomment %}
+                    <span id="new-price">{{ item.price }}</span>
                     <div class="overlay">
                         <div class="eye-icon">
                             <i class="fa-regular fa-eye" id="eye-link" onclick="showPopup()"></i>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
 
-                <div class="slide">
+                {% comment %} <div class="slide">
                     <img src="{% static 'myeSite/images/t-shirt3.webp' %}" alt="Product 1">
                     <h3>Product 1</h3>
                     <span>$100</span>
@@ -27,8 +32,8 @@
                             <i class="fa-regular fa-eye" id="eye-link" onclick="showPopup()"></i>
                         </div>
                     </div>
-                </div>
-                <div class="slide">
+                </div> {% endcomment %}
+                {% comment %} <div class="slide">
                     <img src="{% static 'myeSite/images/fashion3.jpg' %}" alt="Product 1">
                     <h3>Product 1</h3>
                     <span id="old-price">$135</span>
@@ -38,8 +43,8 @@
                             <i class="fa-regular fa-eye" id="eye-link" onclick="showPopup()"></i>
                         </div>
                     </div>
-                </div>
-                <div class="slide">
+                </div> {% endcomment %}
+                {% comment %} <div class="slide">
                     <img src="{% static 'myeSite/images/fashion1.jpg' %}" alt="Product 1">
                     <h3>Product 1</h3>
                     <span>$100</span>
@@ -48,8 +53,8 @@
                             <i class="fa-regular fa-eye" id="eye-link" onclick="showPopup()"></i>
                         </div>
                     </div>
-                </div>
-                <div class="slide">
+                </div> {% endcomment %}
+                {% comment %} <div class="slide">
                     <img src="{% static 'myeSite/images/fashion2.jpg' %}" alt="Product 1">
                     <h3>Product 1</h3>
                     <span>$100</span>
@@ -58,8 +63,8 @@
                             <i class="fa-regular fa-eye" id="eye-link" onclick="showPopup()"></i>
                         </div>
                     </div>
-                </div>
-                <div class="slide">
+                </div> {% endcomment %}
+                {% comment %} <div class="slide">
                     <img src="{% static 'myeSite/images/fashion3.jpg' %}" alt="Product 1">
                     <h3>Product 1</h3>
                     <span>$100</span>
@@ -68,13 +73,16 @@
                             <i class="fa-regular fa-eye" id="eye-link" onclick="showPopup()"></i>
                         </div>
                     </div>
-                </div>
+                </div> {% endcomment %}
                 <!-- Repeat for other slides -->
 
 
             </div>
             <button class="prev"><i class='bx bx-chevron-left' ></i></button>
             <button class="next"><i class='bx bx-chevron-right'></i></button>
+            {% else %}
+            <h2 class="text-center text-danger fw-bold">No Items Available</h2>
+            {% endif %}
         </div>
 
 

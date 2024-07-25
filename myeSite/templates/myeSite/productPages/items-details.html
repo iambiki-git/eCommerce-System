@@ -1,0 +1,158 @@
+{% extends "main.html" %}
+{% load static %}
+
+{% block tshirtDetails %}
+<div class="tshirtDetail-mainContainer mb-4">
+    <div class="tshirtimages-div">
+        <div class="tshirtImage-row">
+            {% for images in related_images %}
+            <img src="{{images.image.url}}" alt="additional image">
+            {% endfor %}
+        </div>
+        {% if tshirt.image %}
+        <div class="tshirtImage-row">
+            <img src="{{tshirt.image.url}}" alt="primary_image">
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="tshirtdetail-info h-auto">
+
+        <div class="tshirtdetail-title h-auto mb-4">
+            <p class="text-primary fs-3 mt-0 mb-0 fw-bold">{{ tshirt.title }} {% if tshirt.stock_status %} <span class='text-success fs-5'>({{tshirt.stock_status}})</span>{% endif %}</p>
+            <p class="mt-0 mb-0 fw-bold">{{ tshirt.desc }}</p>
+        </div>
+
+        <div class="tshirtdetail-price h-auto mb-4">
+            <p class="text-dark fs-3 mt-1 mb-0 fw-bold">Rs.{{ tshirt.price }}</p>
+            {% if tshirt.old_price %}
+            <span id="old-price" class="text-dark fs-5 fw-semibold ms-3">{{ tshirt.old_price }}</span>
+            {% endif %}
+            <p class="mt-0 mb-0 fw-medium text-success">inclusive of all taxes</p>
+        </div>
+        <form action="#" method="POST">
+            {% csrf_token %}
+        <div class="items-quantity h-auto mb-4 d-flex align-items-center">
+            <p class="text-dark fs-4 mt-1 fw-semibold">Quantity:</p>
+            <div class="quantity-minusPlus">
+                <i class='bx bx-minus' onclick="decreaseQuantity()"></i>
+                <input type="text" id="quantity-input" class="quantity-input" value="1" readonly>
+                <i class='bx bx-plus' onclick="increaseQuantity()"></i>
+            </div>
+        </div>
+
+        <div class="tshirtdetail-size h-auto mt-1 mb-4">
+            <p class="text-dark fs-5 fw-semibold mb-3">SELECT SIZE</p>
+            <div class="circle d-flex gap-2 ms-2 mt-0">
+                <div class="circle1 d-flex align-items-center justify-content-center fw-bold" onclick="selectSize(this)">S</div>
+                <div class="circle1 d-flex align-items-center justify-content-center fw-bold" onclick="selectSize(this)">M</div>
+                <div class="circle1 d-flex align-items-center justify-content-center fw-bold" onclick="selectSize(this)">L</div>
+                <div class="circle1 d-flex align-items-center justify-content-center fw-bold" onclick="selectSize(this)">XL</div>
+            </div>
+        </div>
+
+        <div class="tshirtdetail-buttons h-auto mt-1 d-flex mb-4"> 
+            <button class="text-white w-50 d-flex fw-bold align-items-center justify-content-center addtocart"><i class='bx bx-shopping-bag text-white me-2' ></i>Add To Cart</button>
+            <button class="bg bg-white text-dark fw-bold w-auto d-flex align-items-center justify-content-center wishlistbtn"><i class='bx bx-heart text-dark me-2' ></i>WISHLIST</button>
+            {% comment %} <a href="{% url 'cart' %}" class="text-white d-flex"></a> {% endcomment %}
+        </div>
+    </form>
+
+        <div class="delivery-option h-auto mt-1 mb-4">
+            <p class="text-dark fs-5 fw-semibold d-flex mb-0">DELIVERY OPTIONS<i class='bx bxs-truck fs-4 ms-2'></i></p>
+            <p class="mt-1 mb-0">We currently provide two payment options for your convenience: </p>
+            <p class="mt-1 mb-0">1. COD (Cash On Delivery) &</p>
+            <p class="mt-1 mb-0">2. Khalti</p>
+        </div> 
+
+        <div class="products-review h-auto mt-1">
+            <p class="mt-1 text-dark fs-5 fw-semibold">Review Section</p>
+            <form action="#" class="d-flex align-items-center mb-4">
+                {% csrf_token %}
+                <textarea style="height: 150px;" name="review" id="review" class="ms-2 p-2 w-75" placeholder="Write your review ..."></textarea>
+                <input type="submit" value="Submit" class="ms-2 p-2 w-25 bg-success border-0 text-light rounded-1">
+            </form>
+            <div class="reviews h-auto w-100">
+                <div class="review-list">
+                    <p class="fw-semibold">Customer Name</p>
+                    <p class="d-flex align-items-center">this is my review<i id='heartIconCount' onclick='myHeartCount()' class='bx bx-heart ms-3 me-2 heart-icon'><span class="m-0 text-dark"><sup>0</sup></span></i></p>
+                </div>
+                
+            </div>
+        </div>
+    </div> 
+</div>
+<div class="similar-products h-auto w-100">
+    <p class="text-dark fs-5 fw-bold mt-3">SIMILAR PRODUCTS</p>
+    <div class="similarProducts-list">
+
+        <div class="similarProducts-row d-flex justify-content-between gap-2 mb-4">
+            <div class="similarProduct-imageCard ms-1">
+                <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt3">
+                <p class="text-dark fw-bold mb-0">T-Shirt</p>
+                <p class="text-dark fw-light mt-0 mb-0">Description</p>
+                <p class="text-dark fw-bold mt-0">Rs. 650</p>
+            </div>
+            <div class="similarProduct-imageCard">
+                <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt3">
+                <p class="text-dark fw-bold mb-0">T-Shirt</p>
+                <p class="text-dark fw-light mt-0 mb-0">Description</p>
+                <p class="text-dark fw-bold mt-0">Rs. 650</p>
+            </div>
+            <div class="similarProduct-imageCard">
+                <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt3">
+                <p class="text-dark fw-bold mb-0">T-Shirt</p>
+                <p class="text-dark fw-light mt-0 mb-0">Description</p>
+                <p class="text-dark fw-bold mt-0">Rs. 650</p>
+            </div>
+            <div class="similarProduct-imageCard">
+                <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt3">
+                <p class="text-dark fw-bold mb-0">T-Shirt</p>
+                <p class="text-dark fw-light mt-0 mb-0">Description</p>
+                <p class="text-dark fw-bold mt-0">Rs. 650</p>
+            </div>
+            <div class="similarProduct-imageCard">
+                <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt3">
+                <p class="text-dark fw-bold mb-0">T-Shirt</p>
+                <p class="text-dark fw-light mt-0 mb-0">Description</p>
+                <p class="text-dark fw-bold mt-0">Rs. 650</p>
+            </div>
+        </div>
+        <div class="similarProducts-row d-flex justify-content-between gap-2 mb-4">
+            <div class="similarProduct-imageCard ms-1">
+                <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt3">
+                <p class="text-dark fw-bold mb-0">T-Shirt</p>
+                <p class="text-dark fw-light mt-0 mb-0">Description</p>
+                <p class="text-dark fw-bold mt-0">Rs. 650</p>
+            </div>
+            <div class="similarProduct-imageCard">
+                <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt3">
+                <p class="text-dark fw-bold mb-0">T-Shirt</p>
+                <p class="text-dark fw-light mt-0 mb-0">Description</p>
+                <p class="text-dark fw-bold mt-0">Rs. 650</p>
+            </div>
+            <div class="similarProduct-imageCard">
+                <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt3">
+                <p class="text-dark fw-bold mb-0">T-Shirt</p>
+                <p class="text-dark fw-light mt-0 mb-0">Description</p>
+                <p class="text-dark fw-bold mt-0">Rs. 650</p>
+            </div>
+            <div class="similarProduct-imageCard">
+                <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt3">
+                <p class="text-dark fw-bold mb-0">T-Shirt</p>
+                <p class="text-dark fw-light mt-0 mb-0">Description</p>
+                <p class="text-dark fw-bold mt-0">Rs. 650</p>
+            </div>
+            <div class="similarProduct-imageCard">
+                <img src="{% static 'myeSite/images/t-shirt1.png' %}" alt="tshirt3">
+                <p class="text-dark fw-bold mb-0">T-Shirt</p>
+                <p class="text-dark fw-light mt-0 mb-0">Description</p>
+                <p class="text-dark fw-bold mt-0">Rs. 650</p>
+            </div>
+        </div>
+        
+        
+
+    </div>
+</div>
+{% endblock %}
