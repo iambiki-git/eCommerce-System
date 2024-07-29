@@ -8,38 +8,19 @@
             <li><a href="#">Women's Wear</a></li>
             <div class="category-dropdownlist">
                 <div class="mycatcontainer">
+                    {% for category in categories %}
                     <div class="categories">
-                        <h6 id="cat-head">Top Wear</h6>
-                        <p><a href="{% url 'tshirt' %}">T-Shirts</a></p>
-                        <p><a href="#">Shirts</a></p>
-                        <p><a href="#">Sweaters & Cardigans</a></p>
-                        <p><a href="#">Hoodies & Sweatshirts</a></p>
-                        <p><a href="#">Jackets & Coats</a></p>
+                        <h6 id="cat-head">{{category.name}}</h6>
+                        {% if category.subcategories.all %}
+                            {% for subcategory in category.subcategories.all %}
+                                <p><a href="{% url 'product' subcategory.name %}">{{subcategory.name}}</a></p>
+                            {% endfor %}
+                        {% else %}
+                            <li>No subcategories</li>
+                        {% endif %}
                     </div>
-                    <div class="categories">
-                        <h6 id="cat-head">Bottom Wear</h6>
-                        <p><a href="{% url 'jeans' %}">Jeans</a></p>
-                        <p><a href="#">Trousers</a></p>
-                        <p><a href="{% url 'shorts' %}">Shorts</a></p>
-                        <p><a href="#">Swimwear</a></p>
-                        <p><a href="#">Activewear Bottoms</a></p>
-                    </div>
-                    <div class="categories">
-                        <h6 id="cat-head">Foot Wear</h6>
-                        <p><a href="{% url 'sneaker' %}">Sneakers</a></p>
-                        <p><a href="#">Casual Shoes</a></p>
-                        <p><a href="#">Dress Shoes</a></p>
-                        <p><a href="#">Boots</a></p>
-                        <p><a href="#">Sandals & Flip Flops</a></p>
-                    </div>
-                    <div class="categories">
-                        <h6 id="cat-head">Accessories</h6>
-                        <p><a href="#">Watches</a></p>
-                        <p><a href="#">Belts</a></p>
-                        <p><a href="#">Wallets</a></p>
-                        <p><a href="{% url 'sunglass' %}">Sunglasses</a></p>
-                        <p><a href="{% url 'bag' %}">Bags & Backpacks</a></p>
-                    </div>
+                    {% endfor %}
+                   
                 </div>
              
             </div>
@@ -59,6 +40,7 @@
                 <i class='bx bx-search' id="searchIcon"></i>
             </div>
         </form> 
+
         <div class="dropdown">
             <i class='bx bx-user' id="myicons" ></i>
             <div class="dropdownlist" id="mydropdown">
@@ -67,7 +49,13 @@
                 <li class='text-center'><button class="h-25 mb-0 w-50 bg-light"><a href="{% url 'login' %}" class="text-danger fw-medium">LOGIN/SIGNUP</a></button></li>
             </div>
         </div>
-        <div class="dropdown">
+        
+        {% if user.is_authenticated %}
+        <div class="dropdown">   
+            <a href="{% url 'wishlistdetail' %}"><i class='bx bx-heart' id="myicons"></i></a>
+        </div>
+        {% else %}
+        <div class="dropdown">           
             <i class='bx bx-heart' id="myicons"></i>
             <div class="dropdownlist" id="mydropdown">
                 <li><p class="m-0 p-0 text-center text-dark fw-semibold title">Unlock Your Wish List</p></li>
@@ -75,6 +63,9 @@
                 <li class="text-center"><button class="h-25 mb-0 w-50 bg-primary"><a href="{% url 'login' %}" class="text-white fw-medium">Sign In</a></button></li>
             </div>
         </div> 
+        {% endif %}
+        
+
 
         {% comment %} <a href="{% url 'cart' %}"><i class='bx bx-shopping-bag' ><sup class="text-success fw-bold">2</sup></i></a> {% endcomment %}
         <div class="dropdown">
@@ -99,7 +90,7 @@
                                         <p>Rs. 500 each</p>
                                     </div>
                                     <div class="trashicon ms-4">
-                                        <i class='bx bx-trash-alt mt-0' ></i>
+                                        <i class='bx bx-trash-alt mt-0 text-danger' ></i>
                                     </div>
                                 </div>
                             </div>
@@ -122,7 +113,7 @@
                                         <p>Rs. 500 each</p>
                                     </div>
                                     <div class="trashicon ms-4">
-                                        <i class='bx bx-trash-alt mt-0' ></i>
+                                        <i class='bx bx-trash-alt mt-0 text-danger' ></i>
                                     </div>
                                 </div>
                             </div>
@@ -146,7 +137,7 @@
                                         <p>Rs. 500 each</p>
                                     </div>
                                     <div class="trashicon ms-4">
-                                        <i class='bx bx-trash-alt mt-0' ></i>
+                                        <i class='bx bx-trash-alt mt-0 text-danger' ></i>
                                     </div>
                                 </div>
                             </div>
@@ -173,7 +164,7 @@
                 </div>
                 <div class="mybuttons d-flex justify-content-center">
                     <button class="bg bg-primary text-white w-100 mb-0 fw-semibold">Place Order</button>
-                    <button class="bg bg-primary w-100 mb-0"><a href="{% url 'cart' %}" class='text-white fw-semibold'>View Cart</a></button>
+                    <button class="bg bg-primary w-100 mb-0"><a href="#" class='text-white fw-semibold'>View Cart</a></button>
                 </div>
             </div>
         </div> 
@@ -181,9 +172,10 @@
          
         <div class="bx bx-menu" id="menu-icon"></div>
     </div>
-    {% if request.session.user_id %}
+    {% if user.is_authenticated %}
     <form action="{% url 'logoutModule' %}" method="GET">
         <button><small class="me-2 mb-0"><i class='bx bx-log-out bx-flip-horizontal' ></i></small></button>
     </form>
+    <p>{{user.username}}</p>
     {% endif %}
 </header>

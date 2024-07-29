@@ -1,0 +1,138 @@
+{% extends "main.html" %}
+{% load static %}
+
+{% block title %}eCommerce | T-Shirt{% endblock %}
+{% block tShirt %}
+<div class="tshirt-section">
+    <div class="firstheadingdiv">
+        <div class="info-content">
+            <h5>{{subcateogry.name}}</h5>
+            <h6>{% if item_count %}{{ item_count }} items found {% else %} No items found {% endif %}</h6>
+        </div>
+        <div class="sortby">
+            <h6><i class='bx bx-sort'></i>Sort By</h6>
+            <form method="POST">
+                {% csrf_token %}
+                <select id="services" name="services">
+                    <option value="latest">Recommended</option>
+                    <option value="latest">What's New</option>
+                    <option value="latest">Popularity</option>
+                    <option value="lowtohighprice">Price: High to Low</option>
+                    <option value="hightolowprice">Price: Low to High</option>
+                </select>
+            </form>
+        </div> 
+    </div>
+    <div class="filter-product">
+        <div class="filter">
+            <h2 class="text-center fs-5">Filter</h2>
+
+            <h5 class="ms-2 mt-5">BRAND</h5>
+            <form action="#" method="POST">
+                {% csrf_token %}
+                <ul>
+                    <li><input type="checkbox" name="brand1" id="brand1"> Gucci</li>
+                    <li><input type="checkbox" name="brand2" id="brand2"> Prada</li>
+                    <li><input type="checkbox" name="brand3" id="brand3"> Levis</li>
+                    <li><input type="checkbox" name="brand4" id="brand4"> Denim</li>
+                    <li><input type="checkbox" name="brand5" id="brand5"> Barcode</li>
+                </ul>
+            </form>
+            
+            <h5 class="ms-2 mt-5">PRICE</h5>
+                <form action="#" method="POST">
+                    <ul>
+                        <li><input type="checkbox" name="price" id="price"> Rs. 300 to Rs. 1999</li>
+                        <li><input type="checkbox" name="price2" id="price2"> Rs. 1999 to Rs. 5999</li>
+                        <li><input type="checkbox" name="price3" id="price3"> Rs. 5999 to Rs. 15000</li>
+                    </ul>
+                </form>
+
+                <h5 class="ms-2 mt-5">COLOR</h5>
+                <form action="#" method="POST">
+                    {% csrf_token %}
+                    <ul>
+                        <li><input type="checkbox" name="color1" id="color1"> Red</li>
+                        <li><input type="checkbox" name="color2" id="color2"> Black</li>
+                        <li><input type="checkbox" name="color3" id="color3"> White</li>
+                        <li><input type="checkbox" name="color4" id="color4"> Green</li>
+                        <li><input type="checkbox" name="color5" id="brand5"> Gray</li>
+                    </ul>
+                </form>
+        </div>
+        
+
+        {% if items %}
+        <div class="product">
+            <div class="row">
+
+
+                 <!-- Display messages -->
+                 {% if messages %}
+                 <div id="popupMessage" class="popupclass">
+                     {% for message in messages %}
+                         <p>{{ message }}</p>
+                     {% endfor %}
+                 </div>
+             {% endif %}
+
+
+                 {% for item in items %}               
+                <div class="product-card">
+                    {% if item.discount_price %}
+                    <div class="show-discount d-flex align-items-center"><p class="ms-2 mt-3">Rs. {{item.discount_price}} off</p></div>
+                    {% endif %}
+                    <div class="tshirt-img">
+                        {% if item.image %}
+                        <a href="{% url 'itemsDetail' item.pk %}"><img src="{{ item.image.url }}" alt="{{ item.name }}"></a>
+                        {% else %}
+                        <p>No image available</p>
+                        {% endif %} 
+                    </div>
+                    {% comment %} <div class="tshirt-ratings text-center">
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bx-star' ></i>
+                        <i class='bx bxs-star-half'></i>
+                    </div> {% endcomment %}
+
+                    
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="productid" value="{{item.id}}">
+                        <button type="submit" class="addToWishlist" onclick="filledheart()"><i class='bx bx-heart' id="wishlist_hearticon"></i>WISHLIST</button>
+                    </form>
+                   
+                    
+                    <div class="infoaboutproduct">
+                        <p>{{ item.name }}</p>
+                        {% if item.old_price %}
+                        <span id='old-price' class="fw-light">Rs {{ item.old_price }}</span>
+                        {% endif %}
+                        <span id='new-price' class="fw-semibold">Rs {{ item.new_price  }}</span>
+
+                    </div> 
+                    
+                   
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <h4 class="text-danger fw-bold">No Items Available</h4>
+            {% endif %}
+                
+                
+        </div>
+
+
+     
+      
+
+
+
+
+    </div>
+   
+
+{% endblock %}

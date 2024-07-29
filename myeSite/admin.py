@@ -1,22 +1,50 @@
 from django.contrib import admin
-from .models import Items, ItemsImage, UserTable
+from .models import Product, Brand, Category, Subcategory, ProductImage
+from .models import Wishlist
 
-# Register your models here.
-class ItemImageInline(admin.TabularInline):
-    model = ItemsImage
+ 
+# # Register your models here.
+
+class BrandAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+class SubcategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'category')
+    list_filter = ('category',)
+
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
     extra = 1
 
-class ItemAdmin(admin.ModelAdmin):
-    list_display = ('title', 'price', 'category', 'sub_category')
-    inlines = [ItemImageInline]
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('name', 'stock_status', 'old_price', 'new_price', 'discount_price', 'brand', 'category', 'subcategory')
+    list_filter = ('brand', 'category', 'subcategory')
+    search_fields = ('name', 'description')
+    inlines = [ProductImageInline]
 
-  
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ('product', 'image')
+
+class WishlistAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product', 'added_date')
+    search_fields = ('user__username', 'product__name')
 
 
 
-class UserAdmin(admin.ModelAdmin):
-    list_display = ('firstname', 'lastname', 'email')
 
 
-admin.site.register(Items, ItemAdmin)
-admin.site.register(UserTable, UserAdmin)
+
+
+
+
+admin.site.register(Brand, BrandAdmin)
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Subcategory, SubcategoryAdmin)
+admin.site.register(Product, ProductAdmin)
+admin.site.register(ProductImage, ProductImageAdmin)
+
+
+admin.site.register(Wishlist, WishlistAdmin)

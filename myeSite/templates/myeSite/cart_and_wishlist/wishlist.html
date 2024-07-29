@@ -1,0 +1,67 @@
+{% extends "main.html" %}
+{% load static %}
+
+{% block title %}eCommerce | cart{% endblock %}
+
+
+{% block wishlist %}
+    
+    <div class="wishlist-container">
+        <h2 class="fs-2 text-center fw-bold mb-4">My Wishlist</h2>
+        {% if wishlisted_items %}
+        <div class="wishlist-detail">
+            <table class="table table-striped text-center">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Unit Price</th>
+                        <th>Stock Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {% for wishlistitem in wishlisted_items %} 
+                        <tr>
+                            <td>
+                                <div class="product_image d-flex align-items-center">
+                                    <img src="{{wishlistitem.product.image.url}}" alt="" class="ms-0 me-2">
+                                    <div class="image_info">
+                                        <p class="mb-0 m-0 fs-5 fw-semibold text-start">{{wishlistitem.product.name}}</p>
+                                        {% comment %} <p class="mb-0 m-0 fw-light text-start">Size: L</p> {% endcomment %}
+                                        <p class="mb-0 m-0 fw-light text-start">Brand: {{wishlistitem.product.brand.name}}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="product_price">
+                                    <p class="mb-0 mt-4 fw-bold">Rs. {{wishlistitem.product.new_price}}</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="product_price">
+                                    <p class="mb-0 mt-4 fw-bold">{{wishlistitem.product.stock_status}}</p>
+                                </div>
+                            </td>
+                            <td>
+                                <form method="post" action="#">
+                                    {% csrf_token %}
+                                    <p class="mb-0">{{wishlistitem.added_date}}</p>
+                                    <button type="submit" class="btn btn-success w-75 mb-1">Add to Cart</button>
+                                </form>
+                                <form method="post" action="#">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger w-75 mt-0">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p class="fs-4 fw-bold text-danger text-center mb-5">Your wishlist is empty.</p>
+        {% endif %} 
+    </div>
+    
+{% endblock %}

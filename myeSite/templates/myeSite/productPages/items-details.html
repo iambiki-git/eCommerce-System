@@ -9,9 +9,9 @@
             <img src="{{images.image.url}}" alt="additional image">
             {% endfor %}
         </div>
-        {% if tshirt.image %}
+        {% if item.image %}
         <div class="tshirtImage-row">
-            <img src="{{tshirt.image.url}}" alt="primary_image">
+            <img src="{{item.image.url}}" alt="primary_image">
         </div>
         {% endif %}
     </div>
@@ -19,14 +19,14 @@
     <div class="tshirtdetail-info h-auto">
 
         <div class="tshirtdetail-title h-auto mb-4">
-            <p class="text-primary fs-3 mt-0 mb-0 fw-bold">{{ tshirt.title }} {% if tshirt.stock_status %} <span class='text-success fs-5'>({{tshirt.stock_status}})</span>{% endif %}</p>
-            <p class="mt-0 mb-0 fw-bold">{{ tshirt.desc }}</p>
+            <p class="text-primary fs-3 mt-0 mb-0 fw-bold">{{ item.name }} {% if item.stock_status %} <span class='text-success fs-5'>({{item.stock_status}})</span>{% endif %}</p>
+            <p class="mt-0 mb-0 fw-bold">{{ tshirt.description }}</p>
         </div>
 
         <div class="tshirtdetail-price h-auto mb-4">
-            <p class="text-dark fs-3 mt-1 mb-0 fw-bold">Rs.{{ tshirt.price }}</p>
-            {% if tshirt.old_price %}
-            <span id="old-price" class="text-dark fs-5 fw-semibold ms-3">{{ tshirt.old_price }}</span>
+            <p class="text-dark fs-3 mt-1 mb-0 fw-bold">Rs.{{ item.new_price }} {% if item.discount_price %}<span class='fw-light fs-5 ms-4 text-secondary'> Rs.{{item.discount_price}} off </span>{% endif %}</p>
+            {% if item.old_price %}
+            <span id="old-price" class="text-dark fs-5 fw-semibold ms-3">{{ item.old_price }}</span>
             {% endif %}
             <p class="mt-0 mb-0 fw-medium text-success">inclusive of all taxes</p>
         </div>

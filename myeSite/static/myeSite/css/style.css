@@ -1126,7 +1126,7 @@ button i {
 .tshirt-section {
     height: 200vh;
     width: 100%;
-    margin-top: 7rem;
+    margin-top: 7.3rem;
 }
 .firstheadingdiv {
     height: 4.5rem;
@@ -1264,6 +1264,7 @@ button i {
     align-items: center;
     justify-content: center;
 }
+
 .addToWishlist:hover {
     border: 1px solid purple;
     color: #ea325d;
@@ -1505,4 +1506,34 @@ button i {
 .cart_summary button a {
     color: #fff;
     text-decoration: none;
+}
+/* wishlist css  */
+.wishlist-container {
+    height: auto;
+    width: 100%;
+    margin-top: 7rem;
+    margin-bottom: 2rem;
+}
+.wishlist-detail {
+    border: 1px solid #dadada;
+    height: auto;
+    padding: 10px;
+}
+
+
+.popupclass {
+    height: 5rem;
+    width: 90%;
+    display: block; /* Hidden by default */
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000;
 }

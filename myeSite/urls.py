@@ -1,5 +1,7 @@
 from django.urls import path
 from .import views
+from django.contrib.auth import views as auth_views
+
 
 urlpatterns = [
     path('', views.index, name="index"),
@@ -7,20 +9,19 @@ urlpatterns = [
     path('aboutus/', views.aboutusPage, name='aboutus'),
     path('login/', views.loginModule, name='login'),
     path('signup/', views.signupModule, name='signup'),
-    path('t-shirt/', views.tShirt, name='tshirt'),
+    path('subcategory/<str:subcategory_name>/', views.subcategory_details, name='product'),
     path('items-details/<int:pk>/', views.itemsDetailsPage, name='itemsDetail'),
-    path('jeans/', views.jeansProductPage, name='jeans'),
-    path('shorts/', views.shortsProductpage, name='shorts'),
-    path('sneakers/', views.sneakerProductPage, name="sneaker"),
-    path('bag/', views.bagProductPage, name='bag'),
-    path('sunglass/', views.sunglassProductPage, name='sunglass'),
+   
 
 
-    path('cart/', views.cart, name='cart'),
+    
+
+    # path('cart/', views.cart, name='cart'),
+    path('wishlist-details/', views.wishlistDetail, name='wishlistdetail'),
+    path('add-to-wishlist/', views.add_to_wishlist, name='add_to_wishlist'),
 
     path('logout/', views.logoutModule, name='logoutModule'),
 
 
-
-    path('admin-dashboard/', views.adminBasePage, name='admin'),
+    # path('admin-dashboard/', views.adminBasePage, name='admin'),
 ]

@@ -15,6 +15,25 @@
 //     }
 // }
 
+document.addEventListener('DOMContentLoaded', function() {
+    var popup = document.getElementById('popupMessage');
+    if (popup) {
+        popup.style.display = 'block'; // Show the popup
+        setTimeout(function() {
+            popup.style.display = 'none'; // Hide the popup after 3 seconds
+        }, 2000);
+    }
+
+    document.querySelectorAll('.addToWishlist').forEach(button => {
+        button.addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
+    });
+});
+
+
+
+
 //show short desc of cart
 function showcart() {
     const bagicon = document.getElementById('bagicon');
