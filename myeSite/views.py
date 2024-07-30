@@ -144,9 +144,9 @@ def itemsDetailsPage(request, pk):
 #     return render(request, 'myeSite/cart_and_wishlist/cart.html')
 
 #Wishlist
-
 def wishlistDetail(request):
-    wishlisted_items = Wishlist.objects.all()
+    user = request.user
+    wishlisted_items = Wishlist.objects.filter(user=user)
     return render(request, 'myeSite/cart_and_wishlist/wishlist.html', {'wishlisted_items':wishlisted_items})
 
 def add_to_wishlist(request):
