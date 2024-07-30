@@ -1285,6 +1285,7 @@ button i {
 }
 .tshirtdetail-info {
     width: 40%;
+    position: relative;
 }
 .tshirtImage-row {
     display: flex;
@@ -1320,10 +1321,20 @@ button i {
     background-color: #ea325d;
 }
 .wishlistbtn {
-    border: 1px solid #dadada;
+    position: absolute;
+    border: 1px solid #ccc;
     background-color: whitesmoke;
-    padding: 0px 2rem;
+    padding: 0.5rem 2rem;
 }
+.wishlistbtn.has-discount {
+    top: 27.5rem;
+    right: -30px; /* Adjust this value as needed */
+}
+.wishlistbtn.no-discount {
+    top: 25.6rem; /* Adjust this value for products without discount */
+    right: -30px; /* Adjust this value for products without discount */
+}
+
 .wishlistbtn:hover {
     border: 1px solid #222;
 }
@@ -1521,6 +1532,8 @@ button i {
 }
 
 
+
+
 .popupclass {
     height: 5rem;
     width: 90%;
@@ -1536,4 +1549,8 @@ button i {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     z-index: 1000;
+}
+
+#browseProduct {
+    text-decoration: none;
 }

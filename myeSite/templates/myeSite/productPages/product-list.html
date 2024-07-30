@@ -98,10 +98,10 @@
                     </div> {% endcomment %}
 
                     
-                    <form action="" method="post">
+                    <form method="post" action="#">
                         {% csrf_token %}
                         <input type="hidden" name="productid" value="{{item.id}}">
-                        <button type="submit" class="addToWishlist" onclick="filledheart()"><i class='bx bx-heart' id="wishlist_hearticon"></i>WISHLIST</button>
+                        <button type="submit" class="addToWishlist"><i class='bx bx-heart' id="wishlist_hearticon"></i>WISHLIST</button>
                     </form>
                    
                     

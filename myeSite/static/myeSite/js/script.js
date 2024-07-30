@@ -233,12 +233,14 @@ function closeTshirtPopup() {
 
 //function to select size (tshirt-detail page)
 function selectSize(element) {
-    // Remove the 'selected' class from all elements
-    const sizes = document.querySelectorAll('.circle1');
-    sizes.forEach(size => size.classList.remove('selected'));
-
-    // Add the 'selected' class to the clicked element
-    element.classList.add('selected');
+    const size = element.textContent.trim();
+        
+     // Update the hidden input field with the selected size
+     document.getElementById('size-input').value = size;
+     
+     // Optional: Update styling to indicate selected size
+     document.querySelectorAll('.circle1').forEach(el => el.classList.remove('selected'));
+     element.classList.add('selected');
 }
 
 

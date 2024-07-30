@@ -49,8 +49,9 @@
                                     <p class="mb-0">{{wishlistitem.added_date}}</p>
                                     <button type="submit" class="btn btn-success w-75 mb-1">Add to Cart</button>
                                 </form>
-                                <form method="post" action="#">
+                                <form method="post" action="{% url 'remove_from_wishlist' %}">
                                     {% csrf_token %}
+                                    <input type="hidden" name="item_id" value="{{wishlistitem.id}}">
                                     <button type="submit" class="btn btn-danger w-75 mt-0">Remove</button>
                                 </form>
                             </td>
@@ -61,6 +62,8 @@
         </div>
         {% else %}
             <p class="fs-4 fw-bold text-danger text-center mb-5">Your wishlist is empty.</p>
+            <p>Explore our collection and add items to your wishlist.</p>
+            <button class='w-25 bg bg-secondary'><a href="{% url 'index' %}" id="browseProduct" class="text-light fw-bold">Browse Products</a></button>
         {% endif %} 
     </div>
     

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
-from .models import Product, Category, Subcategory, Wishlist
+from .models import Product, Category, Subcategory, Wishlist, Brand, CartSystem
 from django.contrib.auth.models import User, auth
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -10,30 +10,37 @@ from django.urls import reverse
 
 # Create your views here.
 
+from decimal import Decimal
 def index(request):
+    # user = request.user
+    # cart_items = CartSystem.objects.filter(user=user)
     return render(request, 'myeSite/index.html')
+
 # def index(request):
 #     items = Items.objects.all()
 #     return render(request, 'myeSite/index.html', {'items':items})
 
 def loginModule(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = auth.authenticate(username=username, password=password)
+    if not request.user.is_authenticated:
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = auth.authenticate(username=username, password=password)
 
-    
-        errors = []
+        
+            errors = []
 
-        if user is not None:
-            auth.login(request, user)
-            # messages.success(request, 'Login successful!')
-            return redirect('/')
-        else:
-            errors.append('Invalid Credentials.')
-            return render(request, 'myeSite/loginModule.html', {'errors': errors})           
+            if user is not None:
+                auth.login(request, user)
+                # messages.success(request, 'Login successful!')
+                return redirect('/')
+            else:
+                errors.append('Invalid Credentials.')
+                return render(request, 'myeSite/loginModule.html', {'errors': errors})           
 
-    return render(request, 'myeSite/loginModule.html')
+        return render(request, 'myeSite/loginModule.html')
+    else:
+        return redirect('/')
 
 
 def signupModule(request):
@@ -110,7 +117,6 @@ def subcategory_details(request, subcategory_name):
     subcategory = get_object_or_404(Subcategory, name=subcategory_name)
     items = Product.objects.filter(subcategory=subcategory)
     items_count = items.count()
-
     if request.method =="POST": 
         #check if the user is authenticated
         if not request.user.is_authenticated:
@@ -126,22 +132,80 @@ def subcategory_details(request, subcategory_name):
             Wishlist.objects.create(user=request.user, product=product)
             messages.success(request, 'Item added to wishlist!')
 
-        return redirect(request.path)
+        return redirect(request.path)  
     return render(request, 'myeSite/productPages/product-list.html', {'subcateogry':subcategory, 'items':items, 'item_count':items_count})
 
 
-def itemsDetailsPage(request, pk):
+def itemsDetailsPage(request, pk):   
     item = get_object_or_404(Product, pk=pk)
     related_image = item.images.all()
+
+    if request.method == 'POST':
+        product_id = request.POST.get('item_id') 
+        size = request.POST.get('size')
+        brand_id = request.POST.get('brand_id')
+        quantity = int(request.POST.get('quantity', 1))
+
+        if not product_id or not size or not brand_id:
+            messages.error(request, 'Required fields are missing!')
+            return redirect(request.path)
+
+        product = get_object_or_404(Product, id=product_id)
+        brand = get_object_or_404(Brand, id=brand_id)
+
+        # Check if the item is already in the cart
+        cart_item, created = CartSystem.objects.get_or_create(
+            user=request.user,
+            product=product,
+            size=size,
+            brand=brand
+        )
+        if not created:
+            cart_item.quantity = quantity
+            cart_item.save()
+            messages.success(request, 'Item quantity updated in cart!')
+        else:
+            cart_item.quantity = quantity
+            cart_item.save()
+            messages.success(request, 'Item added to cart!')
+        return redirect(request.path)
     return render(request, 'myeSite/productPages/items-details.html', {'item':item, 'related_images':related_image})
 
 
 
-# #cart views
-# def cart(request):   
-#     # if 'user_id' not in request.session:
-#     #     return redirect(reverse('login'))
-#     return render(request, 'myeSite/cart_and_wishlist/cart.html')
+#cart views
+def cart(request):   
+        # if not request.user.is_authenticated:
+        #     return redirect(reverse('login'))
+    return render(request, 'myeSite/cart_and_wishlist/cart.html')
+ 
+# def add_to_cart(request):
+#     if request.method == 'POST':
+#         product_id = request.POST.get('item_id') 
+#         size = request.POST.get('size')
+#         brand_id = request.POST.get('brand_id')
+#         quantity = int(request.POST.get('quantity', 1))
+
+#         product = get_object_or_404(Product, id=product_id)
+#         brand = get_object_or_404(Brand, id=brand_id)
+
+#         # Check if the item is already in the cart
+#         cart_item, created = CartSystem.objects.get_or_create(
+#             user=request.user,
+#             product=product,
+#             size=size,
+#             brand=brand
+#         )
+#         if not created:
+#             cart_item.quantity += quantity
+#             cart_item.save()
+#             messages.success(request, 'Item quantity updated in cart!')
+#         else:
+#             cart_item.quantity = quantity
+#             cart_item.save()
+#             messages.success(request, 'Item added to cart!')
+#         return redirect(request.META.get('HTTP_REFERER', 'cart'))
+#     return redirect('cart') 
 
 #Wishlist
 def wishlistDetail(request):
@@ -149,9 +213,17 @@ def wishlistDetail(request):
     wishlisted_items = Wishlist.objects.filter(user=user)
     return render(request, 'myeSite/cart_and_wishlist/wishlist.html', {'wishlisted_items':wishlisted_items})
 
-def add_to_wishlist(request):
-    return redirect('/product/{produ}')
 
+
+
+
+def remove_from_wishlist(request):
+    if request.method == 'POST':
+        item_id = request.POST.get('item_id')
+        item = get_object_or_404(Wishlist, id=item_id)
+        item.delete()
+        return redirect('wishlistdetail')
+    return HttpResponse(status=405)
 
 
 

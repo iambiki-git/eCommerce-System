@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Product, Brand, Category, Subcategory, ProductImage
-from .models import Wishlist
+from .models import Wishlist, CartSystem
 
  
 # # Register your models here.
@@ -32,6 +32,11 @@ class WishlistAdmin(admin.ModelAdmin):
     list_display = ('user', 'product', 'added_date')
     search_fields = ('user__username', 'product__name')
 
+class CartSystemAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product', 'quantity', 'size', 'brand')
+    list_filter = ('user', 'product', 'size', 'brand')
+    search_fields = ('user__username', 'product__name', 'size', 'brand__name')
+    ordering = ('-user', 'product')
 
 
 
@@ -48,3 +53,4 @@ admin.site.register(ProductImage, ProductImageAdmin)
 
 
 admin.site.register(Wishlist, WishlistAdmin)
+admin.site.register(CartSystem, CartSystemAdmin)

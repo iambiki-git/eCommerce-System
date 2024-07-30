@@ -16,9 +16,11 @@ urlpatterns = [
 
     
 
-    # path('cart/', views.cart, name='cart'),
+    path('cart/', views.cart, name='cart'),
+    # path('add_to_cart/', views.add_to_cart, name="add_to_cart"),
+
     path('wishlist-details/', views.wishlistDetail, name='wishlistdetail'),
-    path('add-to-wishlist/', views.add_to_wishlist, name='add_to_wishlist'),
+    path('remove-from-wishlist/', views.remove_from_wishlist, name='remove_from_wishlist'),
 
     path('logout/', views.logoutModule, name='logoutModule'),
 

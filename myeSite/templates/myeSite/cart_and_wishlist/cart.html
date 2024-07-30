@@ -16,6 +16,7 @@
             </div>
             
             <table class="table table-striped table-hover">
+                
                 <thead class="thead-dark">
                     <tr>
                         <th>Product</th>
@@ -24,27 +25,33 @@
                         <th>Action</th>
                     </tr>
                 </thead>
+                {% if request.cart_items %}
                 <tbody>
+                    
+                    {% for item in request.cart_items %}
                     <tr>
                         <td>
                             <div class="product_image d-flex align-items-center">
-                                <img src="{% static 'myeSite/images/fashion1.jpg' %}" alt="">
-                                <div class="image_info">
-                                    <p class="mb-0 m-0 fs-5 fw-semibold">Title </p>
-                                    <p class="mb-0 m-0 fw-light">Size: L</p>
-                                    <p class="mb-0 m-0 fw-light">Brand: Gucci</p>
+                                <img src="{{item.product.image.url}}" alt="">
+                                <div class="image_info ms-2">
+                                    <p class="mb-0 m-0 fs-5 fw-semibold">{{ item.product.name }} </p>
+                                    <p class="mb-0 m-0 fw-light">Size: {{ item.size }}</p>
+                                    <p class="mb-0 m-0 fw-light">Brand: {{ item.brand.name }}</p>
                                 </div>
                             </div>
                         </td>
                         <td>
                             <div class="product_quantity">
-                                <input type="number" value="1">
+                                <input type="number" value="{{item.quantity}}" readonly>
                             </div>
                         </td>
                         <td>
                             <div class="product_price">
-                                <p class="mb-0 mt-4 fw-bold ms-0">Rs.500</p>
-                                <span class="mt-0 ms-0 fw-light">Rs.350 each</span>
+                                
+                               
+                                <p class="mb-0 mt-4 fw-bold ms-0">Rs.{{request.cart_summary.subtotal }}</p>
+                                
+                                <span class="mt-0 ms-0 fw-light">Rs.{{item.product.new_price}} each</span>
                             </div>
                         </td>
                         <td>
@@ -53,7 +60,11 @@
                             </div>
                         </td>
                     </tr>
-                    <tr>
+                    {% endfor %}
+                    {% endif %}
+                    
+
+                    {% comment %} <tr>
                         <td>
                             <div class="product_image d-flex align-items-center">
                                 <img src="{% static 'myeSite/images/fashion1.jpg' %}" alt="">
@@ -108,31 +119,38 @@
                                 <span class='d-flex align-items-center fs-3 mt-4'>&times;</span>
                             </div>
                         </td>
-                    </tr>
+                    </tr> {% endcomment %}
                     <!-- Add more rows as needed -->
                 </tbody>
             </table>
         </div>
     </div>
+
+    {% if request.cart_items %}
     <div class="cart_summary h-50">
         <h4 class="text-dark fw-bold text-center mb-4">Order Summary</h4>
         <div class="total_price">
             <div class="subtotal d-flex justify-content-between">
                 <p class="text-dark fw-light">Sub - Total :</p>
-                <p class="text-dark fw-semibold me-3">Rs.1000</p>
+                <p class="text-dark fw-semibold me-3">Rs.{{request.cart_summary.subtotal}}</p>
             </div>
             <div class="subtotal d-flex justify-content-between">
                 <p class="text-dark fw-light">Standard Delivery Charge :</p>
-                <p class="text-dark fw-semibold me-3">Rs.150</p>
+                <p class="text-dark fw-semibold me-3">Rs.{{request.cart_summary.shipping}}</p>
             </div>
             <div class="subtotal d-flex justify-content-between">
                 <p class="text-secondary fw-semibold fs-5">Total Price :</p>
-                <p class="text-dark fw-semibold me-3">Rs.1150</p>
+                <p class="text-dark fw-semibold me-3">Rs.{{request.cart_summary.total}}</p>
             </div>
         </div>
-        <button class="mb-2 bg-primary"><a href="#">CHECKOUT</a></button><br>
+        {% if request.user.is_authenticated %}
+            <button class="mb-2 bg-primary"><a href="#">CHECKOUT</a></button><br>
+            {% else %}
+            <button class="mb-2 bg-primary"><a href="{% url 'login' %}">LOGIN TO CHECKOUT</a></button><br>
+        {% endif %}
         <button class="mt-0 bg-success"><a href="/">CONTINUE SHOPPING</a></button>
     </div>
+    {% endif %}
 
 </div>
 
