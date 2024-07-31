@@ -33,7 +33,7 @@ class WishlistAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'product__name')
 
 class CartSystemAdmin(admin.ModelAdmin):
-    list_display = ('user', 'product', 'quantity', 'size', 'brand')
+    list_display = ('id', 'user', 'product', 'quantity', 'size', 'brand')
     list_filter = ('user', 'product', 'size', 'brand')
     search_fields = ('user__username', 'product__name', 'size', 'brand__name')
     ordering = ('-user', 'product')

@@ -4,14 +4,24 @@
 {% block tshirtDetails %}
 <div class="tshirtDetail-mainContainer mb-4">
 
-     <!-- Display messages -->
-     {% if messages %}
+    {% comment %} {% if errors %}
+        <div id="popupMessage" class="popupclass">
+            {% for error in errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %} {% endcomment %}
+
+    <!-- Display messages -->
+    {% if messages %}
         <div id="popupMessage" class="popupclass">
             {% for message in messages %}
                 <p>{{ message }}</p>
             {% endfor %}
         </div>
     {% endif %}
+
+     
 
     <div class="tshirtimages-div">
         <div class="tshirtImage-row">
@@ -42,12 +52,12 @@
             <p class="mt-0 mb-0 fw-medium text-success">inclusive of all taxes</p>
         </div>
 
+        
         <form action="#" method="POST">
             {% csrf_token %}
 
             <input type="hidden" name="item_id" value="{{ item.id }}">
             <input type="hidden" name="brand_id" value="{{item.brand.id}}">
-
 
             <div class="items-quantity h-auto mb-4 d-flex align-items-center">
                 <p class="text-dark fs-4 mt-1 fw-semibold">Quantity:</p>
@@ -73,6 +83,9 @@
                 <button type="submit" class="text-white w-50 d-flex fw-bold align-items-center justify-content-center addtocart"><i class='bx bx-shopping-bag text-white me-2' ></i>Add To Cart</button>
             </div>
         </form>
+       
+       
+
 
         <form action="#" method="POST">
             {% csrf_token %}

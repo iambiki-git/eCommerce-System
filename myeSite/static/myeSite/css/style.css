@@ -205,13 +205,14 @@ header a {
     height: 20px;
     width: 20px;
     font-size: 13px;
-    background-color: white;
+    background-color: yellow;
+    color: black;
     border: 1px solid white;
     outline: 1px solid white;
     border-radius: 50%;
     position: absolute;
     top: 5px;
-    right: 10px;
+    right: 0;
 
 }
 .trashicon {
@@ -1457,6 +1458,9 @@ button i {
 .cart-summary button:hover {
     box-shadow: 0px 0px 5px #ea325d;
 }
+.cart_action button i {
+    color: white;
+}
 
 
 /* mycart css */
@@ -1529,6 +1533,10 @@ button i {
     border: 1px solid #dadada;
     height: auto;
     padding: 10px;
+}
+.wishlistLinkButton a {
+    text-decoration: none;
+    color: #fff;
 }
 
 

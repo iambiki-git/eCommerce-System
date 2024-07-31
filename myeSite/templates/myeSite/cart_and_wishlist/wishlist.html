@@ -44,11 +44,13 @@
                                 </div>
                             </td>
                             <td>
-                                <form method="post" action="#">
+                                {% comment %} <form method="post" action="#">
                                     {% csrf_token %}
+                                    </form> {% endcomment %}
                                     <p class="mb-0">{{wishlistitem.added_date}}</p>
-                                    <button type="submit" class="btn btn-success w-75 mb-1">Add to Cart</button>
-                                </form>
+                                    <button type="submit" class="btn btn-success w-75 mb-1 wishlistLinkButton"><a href="{% url 'itemsDetail' wishlistitem.product.id %}">View Details</a></button>
+
+
                                 <form method="post" action="{% url 'remove_from_wishlist' %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="item_id" value="{{wishlistitem.id}}">

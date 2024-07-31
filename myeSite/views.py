@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
 from .models import Product, Category, Subcategory, Wishlist, Brand, CartSystem
 from django.contrib.auth.models import User, auth
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import IntegrityError
 import random
@@ -44,60 +45,63 @@ def loginModule(request):
 
 
 def signupModule(request):
-    if request.method == 'POST':
-        firstname = request.POST.get('first_name')
-        lastname = request.POST.get('last_name')
-        email = request.POST.get('email')
-        username = request.POST.get('username')
-        password1 = request.POST.get('password')
-        password2 = request.POST.get('confirm_password')
+    if not request.user.is_authenticated:
+        if request.method == 'POST':
+            firstname = request.POST.get('first_name')
+            lastname = request.POST.get('last_name')
+            email = request.POST.get('email')
+            username = request.POST.get('username')
+            password1 = request.POST.get('password')
+            password2 = request.POST.get('confirm_password')
 
-        errors = []
+            errors = []
 
-        # Check for password mismatch
-        if password1 != password2:
-            errors.append('Passwords do not match!')
+            # Check for password mismatch
+            if password1 != password2:
+                errors.append('Passwords do not match!')
 
-        # Validate email and username uniqueness
-        try:
-            if User.objects.filter(email=email).exists():
-                errors.append('Email address already exists.')
-            if User.objects.filter(username=username).exists():
-                errors.append('Username already exists.')
-        except Exception as e:
-            errors.append(f'Error checking existing records: {str(e)}')
-
-        if errors:
-            # If there are errors, pass them to the template
-            return render(request, 'myeSite/signupModule.html', {'errors': errors})
-
-        try:
-            # Create user instance
-            user = User.objects.create_user(first_name=firstname, last_name = lastname, email=email, username=username, password=password1)
-            user.save()
-
-            # Add success message
-            messages.success(request, 'Registration successful. Please log in.')
-
-            # Redirect to the login page
-            return redirect('login')
-
-        except IntegrityError as e:
-            error_message = str(e)
-            if 'UNIQUE constraint failed' in error_message:
-                if 'email' in error_message:
+            # Validate email and username uniqueness
+            try:
+                if User.objects.filter(email=email).exists():
                     errors.append('Email address already exists.')
-                elif 'username' in error_message:
+                if User.objects.filter(username=username).exists():
                     errors.append('Username already exists.')
+            except Exception as e:
+                errors.append(f'Error checking existing records: {str(e)}')
+
+            if errors:
+                # If there are errors, pass them to the template
+                return render(request, 'myeSite/signupModule.html', {'errors': errors})
+
+            try:
+                # Create user instance
+                user = User.objects.create_user(first_name=firstname, last_name = lastname, email=email, username=username, password=password1)
+                user.save()
+
+                # Add success message
+                messages.success(request, 'Registration successful. Please log in.')
+
+                # Redirect to the login page
+                return redirect('login')
+
+            except IntegrityError as e:
+                error_message = str(e)
+                if 'UNIQUE constraint failed' in error_message:
+                    if 'email' in error_message:
+                        errors.append('Email address already exists.')
+                    elif 'username' in error_message:
+                        errors.append('Username already exists.')
+                    else:
+                        errors.append(f'Integrity error: {error_message}')
                 else:
-                    errors.append(f'Integrity error: {error_message}')
-            else:
-                errors.append(f'Error: {error_message}')
+                    errors.append(f'Error: {error_message}')
 
-            # If there are errors, pass them to the template
-            return render(request, 'myeSite/signupModule.html', {'errors': errors})
+                # If there are errors, pass them to the template
+                return render(request, 'myeSite/signupModule.html', {'errors': errors})
 
-    return render(request, 'myeSite/signupModule.html')
+        return render(request, 'myeSite/signupModule.html')
+    else:
+        return redirect('/')
 
 
 def logoutModule(request):
@@ -135,19 +139,22 @@ def subcategory_details(request, subcategory_name):
         return redirect(request.path)  
     return render(request, 'myeSite/productPages/product-list.html', {'subcateogry':subcategory, 'items':items, 'item_count':items_count})
 
-
 def itemsDetailsPage(request, pk):   
     item = get_object_or_404(Product, pk=pk)
     related_image = item.images.all()
 
     if request.method == 'POST':
+        if not request.user.is_authenticated:
+            messages.error(request, 'You need to login to add items in the cart.')
+            return redirect(reverse('login'))
+        
         product_id = request.POST.get('item_id') 
         size = request.POST.get('size')
         brand_id = request.POST.get('brand_id')
         quantity = int(request.POST.get('quantity', 1))
-
-        if not product_id or not size or not brand_id:
-            messages.error(request, 'Required fields are missing!')
+             
+        if not size:
+            messages.error(request, 'Please Select Size.')
             return redirect(request.path)
 
         product = get_object_or_404(Product, id=product_id)
@@ -174,48 +181,28 @@ def itemsDetailsPage(request, pk):
 
 
 #cart views
-def cart(request):   
-        # if not request.user.is_authenticated:
-        #     return redirect(reverse('login'))
-    return render(request, 'myeSite/cart_and_wishlist/cart.html')
- 
-# def add_to_cart(request):
-#     if request.method == 'POST':
-#         product_id = request.POST.get('item_id') 
-#         size = request.POST.get('size')
-#         brand_id = request.POST.get('brand_id')
-#         quantity = int(request.POST.get('quantity', 1))
+def cart(request): 
+    if request.user.is_authenticated:
+        cart_items = CartSystem.objects.filter(user=request.user)
+        for item in cart_items:
+            item.total_price = item.quantity * item.product.new_price
+    else:
+        cart_items = []
+        return redirect('login')
 
-#         product = get_object_or_404(Product, id=product_id)
-#         brand = get_object_or_404(Brand, id=brand_id)
+    context = {
+        'cart_items': cart_items,
+    }
+    return render(request, 'myeSite/cart_and_wishlist/cart.html', context)
 
-#         # Check if the item is already in the cart
-#         cart_item, created = CartSystem.objects.get_or_create(
-#             user=request.user,
-#             product=product,
-#             size=size,
-#             brand=brand
-#         )
-#         if not created:
-#             cart_item.quantity += quantity
-#             cart_item.save()
-#             messages.success(request, 'Item quantity updated in cart!')
-#         else:
-#             cart_item.quantity = quantity
-#             cart_item.save()
-#             messages.success(request, 'Item added to cart!')
-#         return redirect(request.META.get('HTTP_REFERER', 'cart'))
-#     return redirect('cart') 
 
 #Wishlist
 def wishlistDetail(request):
     user = request.user
     wishlisted_items = Wishlist.objects.filter(user=user)
+
+    
     return render(request, 'myeSite/cart_and_wishlist/wishlist.html', {'wishlisted_items':wishlisted_items})
-
-
-
-
 
 def remove_from_wishlist(request):
     if request.method == 'POST':
@@ -226,6 +213,13 @@ def remove_from_wishlist(request):
     return HttpResponse(status=405)
 
 
+def remove_from_cart(request):
+    if request.method == 'POST':
+        item_id = request.POST.get('item_id')
+        item = get_object_or_404(CartSystem, id=item_id, user=request.user)
+        item.delete()
+        return redirect('cart')
+    return HttpResponse(status=405)
 
 
 

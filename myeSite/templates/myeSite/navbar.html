@@ -41,6 +41,17 @@
             </div>
         </form> 
 
+        {% if request.user.is_authenticated %}
+        <div class="dropdown">
+            <i class='bx bx-user' id="myicons" ></i>
+            <div class="dropdownlist" id="mydropdown">
+                <li><p class="m-0 p-0 text-dark fw-semibold text-center mb-2 title">Welcome <span class="fw-bold">{{ user.username }} !</span></p></li>
+                {% comment %} <li><p class="m-0 p-0 text-dark fw-light text-justify">Welcome <span class="fw-bold">{{ user.username }} !</span></p></li> {% endcomment %}
+                <li class='text-center'><button class="h-25 mb-0 w-50 bg-light"><a href="#" class="text-danger fw-medium">Change Password</a></button></li>
+                <li class='text-center'><button class="h-25 mb-0 w-50 bg-light"><a href="{% url 'logoutModule' %}" class="text-danger fw-medium">LOGOUT</a></button></li>
+            </div>
+        </div>
+        {% else %}
         <div class="dropdown">
             <i class='bx bx-user' id="myicons" ></i>
             <div class="dropdownlist" id="mydropdown">
@@ -49,8 +60,9 @@
                 <li class='text-center'><button class="h-25 mb-0 w-50 bg-light"><a href="{% url 'login' %}" class="text-danger fw-medium">LOGIN/SIGNUP</a></button></li>
             </div>
         </div>
+        {% endif %}
         
-        {% if user.is_authenticated %}
+        {% if request.user.is_authenticated %}
         <div class="dropdown">   
             <a href="{% url 'wishlistdetail' %}"><i class='bx bx-heart' id="myicons"></i></a>
         </div>
@@ -70,7 +82,8 @@
         {% comment %} <a href="{% url 'cart' %}"><i class='bx bx-shopping-bag' ><sup class="text-success fw-bold">2</sup></i></a> {% endcomment %}
         <div class="dropdown">
             {% if request.user.is_authenticated %}
-            <i class='bx bx-shopping-bag' id="bagicon" onclick="showcart()" ><sup class="text-success fw-bold">2</sup></i>
+            <i class='bx bx-shopping-bag' id="bagicon" onclick="showcart()" ><sup class="text-success fw-bold">{{request.cart_items|length}}</sup></i>
+            
             <div class="dropdownlist_cart" id="mydropdown_cart">
                 <li><p class="m-0 p-0 text-dark fs-5 fw-semibold text-center title">Your recent cart products</p></li>
                {% if request.cart_items %}
@@ -92,9 +105,9 @@
                                     <div class="cartitemprice ms-4">
                                         <p>Rs. {{ item.product.new_price }} each</p>
                                     </div>
-                                    <div class="trashicon ms-4">
+                                    {% comment %} <div class="trashicon ms-4">
                                         <i class='bx bx-trash-alt mt-0 text-danger' ></i>
-                                    </div>
+                                    </div> {% endcomment %}
                                 </div>
                             </div>
                         </li>
@@ -110,10 +123,10 @@
                         <p class="fw-light mb-0">Subtotal</p>
                         <p class="me-3 fw-semibold mb-0">Rs. {{ request.cart_summary.subtotal }}</p>
                     </div>
-                    <div class="mydiv2 d-flex justify-content-between">
+                    {% comment %} <div class="mydiv2 d-flex justify-content-between">
                         <p class="fw-light mb-0">Discount</p>
                         <p class="me-3 fw-semibold mb-0">Rs. {{ request.cart_summary.discount }}</p>
-                    </div>
+                    </div> {% endcomment %}
                     <div class="mydiv3 d-flex justify-content-between">
                         <p class="fw-light mb-1">Shipping</p>
                         <p class="me-3 fw-semibold mb-1">Rs. {{ request.cart_summary.shipping }}</p>
@@ -130,7 +143,7 @@
                 {% endif %}
             </div>
            {% else %}
-           <a href="{% url 'cart' %}"><i class='bx bx-shopping-bag' id="bagicon" ><sup class="text-success fw-bold">2</sup></i></a>
+           <a href="{% url 'login' %}"><i class='bx bx-shopping-bag' id="bagicon" ><sup class="text-success fw-bold">{{request.cart_items|length}}</sup></i></a>
             {% endif %}
         </div> 
         
