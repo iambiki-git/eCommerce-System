@@ -64,7 +64,7 @@
         
         {% if request.user.is_authenticated %}
         <div class="dropdown">   
-            <a href="{% url 'wishlistdetail' %}"><i class='bx bx-heart' id="myicons"></i></a>
+            <a href="{% url 'wishlistdetail' %}"><i class='bx bx-heart' id="myicons"><sup class="text-warning fw-bold">{{wishlist_item_count}}</sup></i></a>
         </div>
         {% else %}
         <div class="dropdown">           

@@ -145,36 +145,55 @@ def itemsDetailsPage(request, pk):
 
     if request.method == 'POST':
         if not request.user.is_authenticated:
-            messages.error(request, 'You need to login to add items in the cart.')
+            messages.error(request, 'Login Required!')
             return redirect(reverse('login'))
         
-        product_id = request.POST.get('item_id') 
-        size = request.POST.get('size')
-        brand_id = request.POST.get('brand_id')
-        quantity = int(request.POST.get('quantity', 1))
+        form_type = request.POST.get('form_type')
+        if form_type == 'add_to_cart':
+            product_id = request.POST.get('item_id') 
+            size = request.POST.get('size')
+            brand_id = request.POST.get('brand_id')
+            quantity = int(request.POST.get('quantity', 1))
              
-        if not size:
-            messages.error(request, 'Please Select Size.')
-            return redirect(request.path)
+            if not size:
+                messages.error(request, 'Please Select Size.')
+                return redirect(request.path)
 
-        product = get_object_or_404(Product, id=product_id)
-        brand = get_object_or_404(Brand, id=brand_id)
+            product = get_object_or_404(Product, id=product_id)
+            brand = get_object_or_404(Brand, id=brand_id)
 
-        # Check if the item is already in the cart
-        cart_item, created = CartSystem.objects.get_or_create(
-            user=request.user,
-            product=product,
-            size=size,
-            brand=brand
-        )
-        if not created:
-            cart_item.quantity = quantity
-            cart_item.save()
-            messages.success(request, 'Item quantity updated in cart!')
-        else:
-            cart_item.quantity = quantity
-            cart_item.save()
-            messages.success(request, 'Item added to cart!')
+            # Check if the item is already in the cart
+            cart_item, created = CartSystem.objects.get_or_create(
+                user=request.user,
+                product=product,
+                size=size,
+                brand=brand
+            )
+            if not created:
+                cart_item.quantity = quantity
+                cart_item.save()
+                messages.success(request, 'Item quantity updated in cart!')
+            else:
+                cart_item.quantity = quantity
+                cart_item.save()
+                messages.success(request, 'Item added to cart!')
+        elif form_type == 'add_to_wishlist':
+            if not request.user.is_authenticated:
+                return redirect('login')
+            
+            product_id = request.POST.get('item_id')
+            product = Product.objects.get(id = product_id)
+
+            # Check if the item is already in the wishlist
+            wishlist_item, created = Wishlist.objects.get_or_create(
+                user=request.user,
+                product=product
+            )
+            if not created:
+                messages.info(request, 'Item is already in your wishlist!')
+            else:
+                messages.success(request, 'Item added to wishlist!')
+
         return redirect(request.path)
     return render(request, 'myeSite/productPages/items-details.html', {'item':item, 'related_images':related_image})
 
@@ -197,12 +216,12 @@ def cart(request):
 
 
 #Wishlist
+
 def wishlistDetail(request):
     user = request.user
     wishlisted_items = Wishlist.objects.filter(user=user)
-
-    
     return render(request, 'myeSite/cart_and_wishlist/wishlist.html', {'wishlisted_items':wishlisted_items})
+
 
 def remove_from_wishlist(request):
     if request.method == 'POST':
@@ -221,7 +240,11 @@ def remove_from_cart(request):
         return redirect('cart')
     return HttpResponse(status=405)
 
+def shipping_address(request):
+    return render(request, 'myeSite/shippingAddress/shippingAddress.html')
 
+def billingAddress(request):
+    return render(request, 'myeSite/shippingAddress/billingAddress.html')
 
 
 # # Admin Views

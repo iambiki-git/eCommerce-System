@@ -22,6 +22,9 @@ urlpatterns = [
     path('wishlist-details/', views.wishlistDetail, name='wishlistdetail'),
     path('remove-from-wishlist/', views.remove_from_wishlist, name='remove_from_wishlist'),
 
+    path('shipping_address/', views.shipping_address, name="shipping_address"),
+    path('billingAddress/', views.billingAddress, name="billingAddress"),
+
     path('logout/', views.logoutModule, name='logoutModule'),
 
 

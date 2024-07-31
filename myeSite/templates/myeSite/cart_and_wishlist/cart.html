@@ -35,9 +35,9 @@
                             <div class="product_image d-flex align-items-center">
                                 <img src="{{item.product.image.url}}" alt="">
                                 <div class="image_info ms-2">
-                                    <p class="mb-0 m-0 fs-5 fw-semibold">{{ item.product.name }} </p>
-                                    <p class="mb-0 m-0 fw-light">Size: {{ item.size }}</p>
-                                    <p class="mb-0 m-0 fw-light">Brand: {{ item.product.brand.name }}</p>
+                                    <p class="mb-0 m-0 fs-5 fw-bold">{{ item.product.name }} </p>
+                                    <p class="mb-0 m-0 fw-semibold">Size: {{ item.size }}</p>
+                                    <p class="mb-0 m-0 fw-semibold">Brand: {{ item.product.brand.name }}</p>
                                 </div>
                             </div>
                         </td>
@@ -56,11 +56,14 @@
                             </div>
                         </td>
                         <td>
-                            <div class="cart_action">
+                            <div class="cart_action d-flex align-items-center justify-content-evenly">
+                                
+                                <button type="submit" class="btn btn-success ms-0 w-auto mt-4"><a href="{% url 'itemsDetail' item.product.id %}"><i class='bx bx-edit'></i></a></button>
+
                                 <form method="POST" action="{% url 'remove_from_cart' %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="item_id" value="{{ item.id }}">
-                                    <button type="submit" class="btn btn-danger w-75 mt-4"><i class='bx bx-trash'></i></button>
+                                    <button type="submit" class="btn btn-danger ms-0 w-auto mt-4"><i class='bx bx-trash'></i></button>
                                 </form>
                                 {% comment %} <span class='d-flex align-items-center fs-3 mt-4 remove-cartItem'>&times;</span> {% endcomment %}
                             </div>
@@ -98,11 +101,11 @@
                 <p class="text-dark fw-semibold me-3">Rs.{{request.cart_summary.total}}</p>
             </div>
         </div>
-        {% if request.user.is_authenticated %}
-            <button class="mb-2 bg-primary"><a href="#">CHECKOUT</a></button><br>
-            {% else %}
-            <button class="mb-2 bg-primary"><a href="{% url 'login' %}">LOGIN TO CHECKOUT</a></button><br>
-        {% endif %}
+        {% comment %} {% if request.user.is_authenticated %} {% endcomment %}
+            <button class="mb-2 bg-primary"><a href="{% url 'shipping_address' %}">CHECKOUT</a></button><br>
+            {% comment %} {% else %} {% endcomment %}
+            {% comment %} <button class="mb-2 bg-primary"><a href="{% url 'login' %}">LOGIN TO CHECKOUT</a></button><br> {% endcomment %}
+        {% comment %} {% endif %} {% endcomment %}
         <button class="mt-0 bg-success"><a href="/">CONTINUE SHOPPING</a></button>
     </div>
     {% endif %}

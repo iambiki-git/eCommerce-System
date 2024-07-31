@@ -1,0 +1,68 @@
+{% extends "main.html" %}
+{% block title %}e-Commerce | Billing-Address{% endblock %}
+{% comment %} {% block navbar %} {% endblock %}
+{% block footer %} {% endblock %} {% endcomment %}
+{% block billingAddress %}
+
+<div class="billing-container mb-4">
+
+    <div class="container mt-0">
+        <h2 class="form-title text-center mb-4">Billing Information</h2>
+        <form action="/process_billing_info" method="POST">
+          <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                <label for="email" class="form-label">Email Address <sup class="text-danger fw-bold">*</sup></label>
+                <input type="email" class="form-control mb-0" id="validEmail" name="email" placeholder="Enter your valid email address." autocomplete="off" required>
+                <p id="emailError" class="mt-0 ms-0 text-danger fw-semibold email-address">Please enter a valid email address.</p>
+              </div> 
+              <div class="form-group mb-3">
+                <label for="billingFullName" class="form-label">Full Name <sup class="text-danger fw-bold">*</sup></label>
+                <input type="text" class="form-control" id="billingFullName" name="billingFullName" placeholder="Enter your fullname" required>
+              </div>
+              <div class="form-group mb-3">
+                <label for="billingAddress" class="form-label">Address</label>
+                <input type="text" class="form-control" id="billingAddress" name="billingAddress" placeholder="Enter your street address" autocomplete="off" required>
+              </div>
+              <div class="form-group mb-3">
+                <label for="billingCity" class="form-label">City</label>
+                <input type="text" class="form-control" id="billingCity" name="billingCity" placeholder="Enter your city (ex: Biratnagar, Dharan, Jhapa, etc.)" required>
+              </div>
+              
+            </div>
+            <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="state" class="form-label">State/Province</label>
+                <select class="form-control" id="state" name="state" required>
+                    <option value="state" selected>Koshi Province</option>
+                    <option value="state">Bagmati Province</option>
+                    <option value="state">Gandaki Province</option>
+                    <option value="state">Karnali Province</option>
+                    <option value="state">Lumbini Province</option>
+                    <option value="state">Madhesh Province</option>
+                    <option value="state">Sudurpashchim Province</option>
+                </select>
+            </div>
+             
+              <div class="form-group mb-3">
+                <label for="country" class="form-label">Country</label>
+                <select class="form-control" id="country" name="country" required>
+                  <option value="country" selected>Nepal</option>
+                </select>
+              </div>
+              <div class="form-group mb-3">
+                <label for="billingPhone" class="form-label">Contact Number</label>
+                <input type="number" class="form-control" id="billingPhone" name="billingPhone" placeholder="Enter contact number" autocomplete="off" required>
+              </div>
+              
+              <div class="form-group mt-4">
+                <button type="submit" class="btn btn-success btn-lg w-100">Save and Proceed to Payment</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+</div>
+
+{% endblock %}

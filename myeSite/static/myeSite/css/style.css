@@ -1541,7 +1541,7 @@ button i {
 
 
 
-
+/* cart wishlist added message css */
 .popupclass {
     height: 5rem;
     width: 90%;
@@ -1561,4 +1561,25 @@ button i {
 
 #browseProduct {
     text-decoration: none;
+}
+
+/* Shipping Address Page Css  */
+.shipping-container {
+    height: auto;
+    width: 100%;
+    border: 1px solid #ccc;
+    margin-top: 8rem;
+}
+.email-address {
+    display: none;
+}
+.form-group input:focus + .email-address {
+    display: block;
+}
+/* billing address css */
+.billing-container {
+    height: auto;
+    width: 100%;
+    border: 1px solid #ccc;
+    margin-top: 8rem;
 }

@@ -20,6 +20,12 @@ class Subcategory(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Size(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -32,6 +38,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='product_images/')
+    sizes = models.ManyToManyField(Size)
 
     def __str__(self):
         return self.name

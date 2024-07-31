@@ -252,3 +252,5 @@ function myHeartCount () {
     heartIconCount.classList.toggle('bxs-heart');
 
 }
+
+
