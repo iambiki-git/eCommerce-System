@@ -12,7 +12,7 @@ class CartMiddleware:
 
             subtotal = Decimal('0.00')
             discount = Decimal('0.00')
-            shipping = Decimal('150.00')
+            # shipping = Decimal('150.00')
 
             cart_item_details = []
 
@@ -33,14 +33,14 @@ class CartMiddleware:
                 })
                
 
-            total = (subtotal - discount) + shipping
+            total = subtotal 
 
             request.cart_items = cart_items
             request.cart_item_details = cart_item_details
             request.cart_summary = {
                 'subtotal': subtotal,
                 'discount': discount,
-                'shipping': shipping,
+                # 'shipping': shipping,
                 'total': total,
             }
         else:

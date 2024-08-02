@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
-from .models import Product, Category, Subcategory, Wishlist, Brand, CartSystem
+from .models import Product, Category, Subcategory, Wishlist, Brand, CartSystem, ShippingAddress, BillingAddress
 from django.contrib.auth.models import User, auth
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -241,10 +241,125 @@ def remove_from_cart(request):
     return HttpResponse(status=405)
 
 def shipping_address(request):
+    if request.method == "POST":
+        fullname = request.POST.get('fullname')
+        city = request.POST.get('shippingAvailableCity')
+        address = request.POST.get('address')
+        contact_number = request.POST.get('phone')
+        shipping_option = request.POST.get('shippingOptions')
+
+        shipping_address = ShippingAddress.objects.create(
+            user=request.user,
+            fullname=fullname,
+            city=city,
+            address=address,
+            contact_number=contact_number,
+            shipping_option=shipping_option
+        )
+
+        return redirect('process_billing_info')
     return render(request, 'myeSite/shippingAddress/shippingAddress.html')
 
-def billingAddress(request):
+from django.http import JsonResponse
+def get_shipping_address(request):
+    # Assuming there is only one shipping address per user
+    shipping_address = ShippingAddress.objects.filter(user=request.user).first()
+
+    if shipping_address:
+        data = {
+            'fullname': shipping_address.fullname,
+            'address': shipping_address.address,
+            'city': shipping_address.city,
+            'contact_number': shipping_address.contact_number
+        }
+        return JsonResponse(data)
+    else:
+        return JsonResponse({}, status=404)
+
+
+# def billingAddress(request):
+#     if request.method == 'POST':
+#         email = request.POST.get('email')
+#         fullname = request.POST.get('billingFullName')
+#         address = request.POST.get('billingAddress')
+#         city = request.POST.get('billingCity')
+#         state = request.POST.get('state')
+#         contact_number = request.POST.get('billingPhone')
+
+#          # Create a new BillingAddress instance and save it
+#         BillingAddress.objects.create(
+#             user=request.user,
+#             email=email,
+#             fullname=fullname,
+#             address=address,
+#             city=city,
+#             state=state,
+#             contact_number=contact_number
+#         )
+#         return redirect('payment')
+#     return render(request, 'myeSite/shippingAddress/billingAddress.html')
+
+
+def process_billing_info(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        fullname = request.POST.get('billingFullName')
+        address = request.POST.get('billingAddress')
+        city = request.POST.get('billingCity')
+        state = request.POST.get('state')
+        contact_number = request.POST.get('billingPhone')
+
+        # Create or update the billing address
+        BillingAddress.objects.update_or_create(
+            user=request.user,
+            defaults={
+                'email': email,
+                'fullname': fullname,
+                'address': address,
+                'city': city,
+                'state': state,
+                'contact_number': contact_number
+            }
+        )
+
+        # Redirect to the payment page
+        return redirect('payment')  # Update with the actual URL name for the payment page
+
     return render(request, 'myeSite/shippingAddress/billingAddress.html')
+
+
+SHIPPING_CHARGES = {
+    'standard': 0.00,
+    'express': 150.00,
+    'overnight': 250.00,
+}
+
+def payment(request):
+    # Ensure the user is authenticated
+    if not request.user.is_authenticated:
+        return redirect('login')  # Redirect to login if the user is not authenticated
+    
+    # Retrieve the user's shipping address
+    try:
+        shipping_address = ShippingAddress.objects.get(user=request.user)
+    except ShippingAddress.DoesNotExist:
+        # Handle the case where no shipping address exists
+        return redirect('shipping_address')  # Redirect to a page where the user can add a shipping address
+
+    # Get the shipping charge based on the selected shipping option
+    shipping_charge = SHIPPING_CHARGES.get(shipping_address.shipping_option, 0)
+
+    subtotal = request.cart_summary['subtotal']
+    total_amt = subtotal + Decimal(shipping_charge)
+
+    # Pass the shipping address and charge to the template
+    context = {
+        'shipping_address': shipping_address,
+        'shipping_charge': shipping_charge,
+        'subtotal': subtotal,
+        'total_amount':total_amt,
+    }
+    return render(request, 'myeSite/payment.html', context)
 
 
 # # Admin Views

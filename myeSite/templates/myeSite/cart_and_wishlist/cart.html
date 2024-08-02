@@ -92,12 +92,12 @@
                 <p class="text-dark fw-light">Discount :</p>
                 <p class="text-dark fw-semibold me-3">Rs.{{request.cart_summary.discount}}</p>
             </div> {% endcomment %}
-            <div class="subtotal d-flex justify-content-between">
+            {% comment %} <div class="subtotal d-flex justify-content-between">
                 <p class="text-dark fw-light">Standard Delivery Charge :</p>
                 <p class="text-dark fw-semibold me-3">Rs.{{request.cart_summary.shipping}}</p>
-            </div>
+            </div> {% endcomment %}
             <div class="subtotal d-flex justify-content-between">
-                <p class="text-secondary fw-semibold fs-5">Total Price :</p>
+                <p class="text-secondary fw-semibold fs-5">Total:</p>
                 <p class="text-dark fw-semibold me-3">Rs.{{request.cart_summary.total}}</p>
             </div>
         </div>

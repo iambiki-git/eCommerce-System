@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Product, Brand, Category, Subcategory, ProductImage
-from .models import Wishlist, CartSystem, Size
+from .models import Wishlist, CartSystem, Size, ShippingAddress, BillingAddress
 
  
 # # Register your models here.
@@ -44,9 +44,11 @@ class CartSystemAdmin(admin.ModelAdmin):
     ordering = ('-user', 'product')
 
 
+class ShippingAddressAdmin(admin.ModelAdmin):
+    list_display = ('user', 'fullname', 'city', 'address', 'contact_number', 'shipping_option')
 
-
-
+class BillingAddressAdmin(admin.ModelAdmin):
+    list_display = ('user','email', 'fullname', 'address', 'city', 'state', 'contact_number')
 
 
 
@@ -58,5 +60,8 @@ admin.site.register(ProductImage, ProductImageAdmin)
 admin.site.register(Size, SizeAdmin)
 
 
+
 admin.site.register(Wishlist, WishlistAdmin)
 admin.site.register(CartSystem, CartSystemAdmin)
+admin.site.register(ShippingAddress, ShippingAddressAdmin)
+admin.site.register(BillingAddress, BillingAddressAdmin)

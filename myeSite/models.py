@@ -54,7 +54,7 @@ from django.utils import timezone
 class Wishlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    added_date = models.DateTimeField(default=timezone.now())
+    added_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.user.username}'s wishlist item: {self.product.name}"
@@ -68,3 +68,30 @@ class CartSystem(models.Model):
 
     def __str__(self):
         return f"{self.product.name} (x{self.quantity}, Size: {self.size}, Brand: {self.brand.name})"
+    
+
+class ShippingAddress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    fullname = models.CharField(max_length=50, blank=False, null=False)
+    city = models.CharField(max_length=30, null=False, blank=False)
+    address = models.CharField(max_length=100, null=False, blank=False)
+    contact_number = models.CharField(max_length=10, null=False, blank=False)
+    shipping_option = models.CharField(max_length=100,null=False, blank=False)
+   
+    def __str__(self):
+        return f"{self.fullname} - {self.address}"
+    
+    
+
+class BillingAddress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    email = models.EmailField()
+    fullname = models.CharField(max_length=50, null=True, blank=True)
+    address = models.CharField(max_length=100)
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
+    contact_number = models.CharField(max_length=15)
+
+    def __str__(self):
+        return f"{self.user.username}'s billing address: {self.fullname}, {self.city}"
+ 

@@ -1583,3 +1583,28 @@ button i {
     border: 1px solid #ccc;
     margin-top: 8rem;
 }
+/* payment page css */
+.paymentPage {
+    height: 30rem;
+    width: 80%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.order-summary {
+    height: 25rem;
+    width: 50%;
+    border: 1px solid #333;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 5px 5px 5px gray;
+}
+.payment-method {
+    border-bottom: 2px solid #ccc;
+}
+.order-summary-heading {
+    border-bottom: 2px solid #ccc;
+}

@@ -1,0 +1,42 @@
+{% extends "main.html" %}
+{% block title %}e-Commerce | Shipping-Address{% endblock %}
+{% block navbar %} {% endblock %}
+{% block footer %} {% endblock %} 
+{% block payment %}
+<div class="paymentPage">
+    <div class="order-summary">
+
+        <div class="order-summary-heading">
+            <h2 class="text-center text-primary fw-bold p-3">Order Summary</h2>
+        </div>
+        <form action="#" method="POST">
+            {% csrf_token %}
+        <div class="order-summary-amount d-flex justify-content-between me-5 ms-5">
+            <p class="fw-semibold">Sub-Total: </p>
+            {% if request.cart_items %}
+            <p class="fw-bold">Rs. {{subtotal}}</p>
+            {% endif %}
+        </div>
+        <div class="delivery-charge d-flex justify-content-between me-5 ms-5">
+            <p class="fw-semibold">Delivery Charge: ({{shipping_address.shipping_option}}) </p>
+            <p class="fw-bold">Rs. {{shipping_charge}}</p>
+        </div>
+        <div class="payment-method ms-5 me-5 d-flex justify-content-between">
+            <p class="fw-semibold">Payment Mode: </p>
+            <p class="fw-semibold">Cash on Delivery (COD)</p>
+        </div>
+        <div class="total-amount d-flex justify-content-between me-5 ms-5">
+            <p class="fw-semibold">You Pay:</p>
+            <p class="fw-bold">Rs. {{total_amount}}</p>
+        </div>
+        
+        
+        <div class="place-order-btn d-flex justify-content-center mt-4">
+            <button class="bg bg-secondary text-light fw-bold w-75">Place Order</button>
+        </div>
+        </form>
+       
+
+    </div>
+</div>
+{% endblock %}

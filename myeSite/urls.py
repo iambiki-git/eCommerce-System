@@ -23,7 +23,12 @@ urlpatterns = [
     path('remove-from-wishlist/', views.remove_from_wishlist, name='remove_from_wishlist'),
 
     path('shipping_address/', views.shipping_address, name="shipping_address"),
-    path('billingAddress/', views.billingAddress, name="billingAddress"),
+    # path('billingAddress/', views.billingAddress, name="billingAddress"),
+
+    # path('payment/', views.payment, name='payment'),
+    path('process_billing_info/', views.process_billing_info, name='process_billing_info'),
+    path('get_shipping_address/', views.get_shipping_address, name='get_shipping_address'),
+    path('payment/', views.payment, name='payment'),
 
     path('logout/', views.logoutModule, name='logoutModule'),
 

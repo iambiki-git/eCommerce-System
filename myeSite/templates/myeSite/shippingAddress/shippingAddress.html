@@ -7,8 +7,8 @@
 <div class="shipping-container mb-4">
 
     <div class="container mt-0">
-        <h2 class="form-title text-center mb-4">Shipping Information</h2>
-        <form id="shippingForm" action="#" method="POST">
+        <h2 class="form-title text-start mb-4">Shipping Address</h2>
+        <form action="#" method="POST">
             {% csrf_token %}
           <div class="row">
             <div class="col-md-6">
@@ -25,10 +25,10 @@
                 <label for="shippingAvailableCity" class="form-label">City</label>
                 <select class="form-control" id="shippingAvailableCity" name="shippingAvailableCity" required>
                   <option value="standard" disabled>Currently Shipping available on these city only.</option>
-                  <option value="standard">Biratnagar</option>
-                  <option value="express">Dharan</option>
-                  <option value="overnight">Ithari</option>
-                  <option value="overnight">Jhapa</option>
+                  <option value="Biratnagar">Biratnagar</option>
+                  <option value="Dharan">Dharan</option>
+                  <option value="Ithari">Ithari</option>
+                  <option value="Jhapa">Jhapa</option>
                 </select>
               </div>
               <div class="form-group mb-3">
@@ -45,31 +45,30 @@
               <div class="form-group mb-3">
                 <label for="shippingOptions" class="form-label">Shipping Options</label>
                 <select class="form-control" id="shippingOptions" name="shippingOptions" required>
-                  <option value="standard">Standard Shipping (5-7 days) - Free</option>
-                  <option value="express">Express Shipping (2-3 days) - Rs.200</option>
-                  <option value="overnight">Overnight Shipping (1 day) - Rs. 500</option>
+                  <option value="standard">Standard Shipping (3-5 days) - Free</option>
+                  <option value="express">Express Shipping (2-3 days) - Rs.150</option>
+                  <option value="overnight">Overnight Shipping (1 day) - Rs. 250</option>
                 </select>
               </div>
 
-              <div class="form-check mb-3">
+              {% comment %} <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" id="sameAsBilling" name="sameAsBilling">
-                <label class="form-check-label" for="sameAsBilling">Use same for billing address? if not then dont check. </label>
-                {% comment %} <label class="form-check-label" for="addBillingAddress" id="addBillingAddress">or Add billing address.</label> {% endcomment %}
-                
-              </div>
+                <label class="form-check-label" for="sameAsBilling">Use same for billing address?</label>                
+              </div> {% endcomment %}
 
               <div class="form-group mt-4">
-                <button type="submit" class="btn btn-success btn-lg w-100">Save and Proceed to Payment</button>
+                <button type="submit" class="btn btn-success btn-lg w-100">Save and Continue</button>
               </div>
 
             </div>
           </div>
         </form>
+
       </div>
 
 </div>
 
-
+{% comment %} 
 <script>
     document.getElementById('shippingForm').addEventListener('submit', function(event) {
       event.preventDefault(); // Prevent default form submission
@@ -84,5 +83,5 @@
         window.location.href = '/billingAddress';
       }
     });
-  </script>
+  </script> {% endcomment %}
 {% endblock %}
