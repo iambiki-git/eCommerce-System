@@ -15,6 +15,7 @@ from decimal import Decimal
 def index(request):
     # user = request.user
     # cart_items = CartSystem.objects.filter(user=user)
+    # items = Product.objects.all()
     return render(request, 'myeSite/index.html')
 
 # def index(request):
@@ -247,6 +248,7 @@ def shipping_address(request):
         address = request.POST.get('address')
         contact_number = request.POST.get('phone')
         shipping_option = request.POST.get('shippingOptions')
+        
 
         shipping_address = ShippingAddress.objects.create(
             user=request.user,
@@ -277,29 +279,6 @@ def get_shipping_address(request):
         return JsonResponse({}, status=404)
 
 
-# def billingAddress(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-#         fullname = request.POST.get('billingFullName')
-#         address = request.POST.get('billingAddress')
-#         city = request.POST.get('billingCity')
-#         state = request.POST.get('state')
-#         contact_number = request.POST.get('billingPhone')
-
-#          # Create a new BillingAddress instance and save it
-#         BillingAddress.objects.create(
-#             user=request.user,
-#             email=email,
-#             fullname=fullname,
-#             address=address,
-#             city=city,
-#             state=state,
-#             contact_number=contact_number
-#         )
-#         return redirect('payment')
-#     return render(request, 'myeSite/shippingAddress/billingAddress.html')
-
-
 def process_billing_info(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -323,7 +302,7 @@ def process_billing_info(request):
         )
 
         # Redirect to the payment page
-        return redirect('payment')  # Update with the actual URL name for the payment page
+        return redirect('payment')  
 
     return render(request, 'myeSite/shippingAddress/billingAddress.html')
 
@@ -367,11 +346,3 @@ def payment(request):
 #     return render(request, 'myeSite/admin/base.html')
 
 
-# def categoryDisplay(request,id):
-    
-#     subcategories = Subcategory.objects.filter(id = id).first()
-#     print(subcategories)
-   
-#     items = Product.objects.filter(subcategory = subcategories)
-#     print(items)
-#     return render(request,'myeSite/productPages/products.html',{'items':items})

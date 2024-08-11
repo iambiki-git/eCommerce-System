@@ -1,7 +1,7 @@
 {% extends "main.html" %}
 {% block title %}e-Commerce | Shipping-Address{% endblock %}
-{% comment %} {% block navbar %} {% endblock %}
-{% block footer %} {% endblock %} {% endcomment %}
+  {% comment %} {% block navbar %} {% endblock %}
+  {% block footer %} {% endblock %} {% endcomment %}
 {% block shippingAddress %}
 
 <div class="shipping-container mb-4">
@@ -12,11 +12,7 @@
             {% csrf_token %}
           <div class="row">
             <div class="col-md-6">
-              {% comment %} <div class="form-group mb-3">
-                <label for="email" class="form-label">Email Address <sup class="text-danger fw-bold">*</sup></label>
-                <input type="email" class="form-control mb-0" id="validEmail" name="email" placeholder="Enter your valid email address." autocomplete="off" required>
-                <p id="emailError" class="mt-0 ms-0 text-danger fw-semibold email-address">Please enter a valid email address.</p>
-              </div> {% endcomment %}
+            
               <div class="form-group mb-3">
                 <label for="fullname" class="form-label">Full Name <sup class="text-danger fw-bold">*</sup></label>
                 <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Enter your fullname" required>
@@ -50,11 +46,6 @@
                   <option value="overnight">Overnight Shipping (1 day) - Rs. 250</option>
                 </select>
               </div>
-
-              {% comment %} <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="sameAsBilling" name="sameAsBilling">
-                <label class="form-check-label" for="sameAsBilling">Use same for billing address?</label>                
-              </div> {% endcomment %}
 
               <div class="form-group mt-4">
                 <button type="submit" class="btn btn-success btn-lg w-100">Save and Continue</button>

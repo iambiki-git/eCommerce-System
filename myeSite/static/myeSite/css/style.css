@@ -42,6 +42,15 @@ header form button {
 header a {
    text-decoration: none;
 }
+header a img{
+    height: 110px;
+    width: 110px;
+    position: absolute;
+    bottom: -5px;
+    left: 5rem;
+    z-index: -1;
+}
+
 .navmenu {
     display: flex;
     list-style-type: none;
@@ -268,61 +277,55 @@ header a {
 section {
     padding: 5% 10%;
 }
-.main-home {
+.main-home{
+    margin-top: 7.5rem;
+    height: 32rem;
     width: 100%;
-    height: 100vh;
-    margin-top: 3vh;
-    background-image: url('../images/banner-3.png');
-    background-size: contain;
-    background-position: center center;
-    background-repeat: no-repeat;
+    border: 1px solid #dadada;
+    margin-bottom: 4rem;
     display: flex;
-    grid-template-columns: repeat(1, 1fr);
     align-items: center;
     justify-content: space-between;
 }
-.main-text h5 {
-    color: #EE1C47;
-    font-size: 16px;
-    text-transform: capitalize;
-    font-weight: 500;
+.main-info{
+    width: 50%;
 }
-.main-text h1 {
-    color: #000;
-    font-size: 55px;
-    text-transform: capitalize;
-    line-height: 1.1;
-    font-weight: 400;
-    margin: 6px 0 10px;
+.main-info h1{
+    font-size: 80px;
+    font-weight: semibold;
+    line-height: 5rem;
+    font-family:Georgia, 'Times New Roman', Times, serif;
 }
-.main-text p {
-    color: #333c56;
-    font-size: 20px;
-    font-style: italic;
-    margin-bottom: 20px;
+.main-info p{
+    margin-left: 0;
+    font-size: 17px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
-.main-text span {
-    font-weight: 700;
-    margin-left: -2px;
-}
-.main-btn {
-    text-decoration: none;
-    display: inline-block;
-    color: #111;
-    font-size: 16px;
-    font-weight: 500;
-    text-transform: capitalize;
-    border: 2px solid #111;
-    padding: 12px 25px;
-    transition: all .42s ease;
-}
-.main-btn:hover {
-    background-color: #000;
+.main-info button{
+    height: 2.5rem;
+    width: 11rem;
+    margin-left: 0px;
+    background: linear-gradient(264deg, #DF8908 -5.09%, #B415FF 106.28%);
     color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    transition: 0.5s;
 }
-.main-btn i {
-    vertical-align: middle;
+.main-info button:hover{
+    transform: scale(1.05);
 }
+.main-image{
+    width: 50%;
+}
+.main-image img{
+    height: 30rem;
+    width: 50rem;
+    object-fit: contain;
+    margin-left: -12rem;
+}
+
 
 header.sticky {
     background: #fff;
@@ -397,12 +400,20 @@ header.sticky {
 /* featured products css */
 .featured-products {
     width: 100%;
-    height: 77%;
+    height: auto;
     background-color: whitesmoke;
     padding-top: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 4rem;
 }
+
+
+
+
+
+
+
+
 .featured-products .featured-para{
     float: right;
     font-size: 1rem;
