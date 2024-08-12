@@ -3,6 +3,29 @@
     <div class="title">
         <h1 class="text-center font-monospace fw-semibold">Featured Products</h1>
     </div>
-    
-   
-</div> 
+    {% if items %}
+    <div class="featured-row">
+        {% for item in items %}
+        <div class="featured-card">
+            <div class="featured-card-image">
+                {% if item.discount_price %}
+                <div class="featured-discount d-flex align-items-center">
+                    <p class="ms-2 mt-3">Rs.200 off</p>
+                </div>
+                {% endif %}
+                <a href="{% url 'itemsDetail' item.pk %}"><img src="{{item.image.url}}" alt=""></a>
+            </div>
+            <h4 class="mb-0">{{ item.name }}</h4>
+            <div class="price d-flex">
+                {% if item.old_price %}
+                <p class="mt-0" id="old-price">Rs.{{item.old_price}}</p>
+                {% endif %}
+                <p class="mt-0 fw-bold" id="new_price">Rs.{{item.new_price}}</p>
+            </div>
+        </div> 
+        {% endfor %}       
+    </div>
+    {% else %}
+    <p>No Items Available</p>
+    {% endif %}
+</div>

@@ -15,8 +15,10 @@ from decimal import Decimal
 def index(request):
     # user = request.user
     # cart_items = CartSystem.objects.filter(user=user)
-    # items = Product.objects.all()
-    return render(request, 'myeSite/index.html')
+    items = list(Product.objects.all())
+    random.shuffle(items)  # Shuffle the list
+    items = items[:5] 
+    return render(request, 'myeSite/index.html', {'items':items})
 
 # def index(request):
 #     items = Items.objects.all()

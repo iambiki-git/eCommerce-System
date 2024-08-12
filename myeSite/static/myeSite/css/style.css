@@ -20,6 +20,7 @@ header {
     position: fixed;  
     /* position: absolute; */
     width: 90%;
+    height: 6.5rem;
     top: 0;
     z-index: 1000;
     background-color: #fff;
@@ -43,12 +44,9 @@ header a {
    text-decoration: none;
 }
 header a img{
-    height: 110px;
-    width: 110px;
-    position: absolute;
-    bottom: -5px;
-    left: 5rem;
-    z-index: -1;
+    height: 200px;
+    width: 200px;
+    object-fit: contain;
 }
 
 .navmenu {
@@ -278,7 +276,7 @@ section {
     padding: 5% 10%;
 }
 .main-home{
-    margin-top: 7.5rem;
+    margin-top: 7rem;
     height: 32rem;
     width: 100%;
     border: 1px solid #dadada;
@@ -398,6 +396,14 @@ header.sticky {
 
 
 /* featured products css */
+.title h1 {
+    background: linear-gradient(90deg, #53c582, #5f5a8c, #75FF33);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 2rem;
+}
 .featured-products {
     width: 100%;
     height: auto;
@@ -406,7 +412,51 @@ header.sticky {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 4rem;
 }
+.featured-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
 
+.featured-card {
+    flex-basis: 19%; /* Each card takes up approximately 19% of the container width */
+    margin-bottom: 1rem; /* Adds space between rows */
+    height: 19rem;
+    width: 100%;
+    border: 2px solid #dadada;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box; /* Ensures padding and border are included in the width/height */
+}
+.featured-card-image{
+    height: auto;
+    width: auto;
+    position: relative;
+    transition: all .42s ease;
+}
+.featured-card-image:hover{
+    transform: scale(0.9);
+}
+.featured-card img{
+    height: 15rem;
+    width: 15rem;
+    object-fit: cover;
+}
+.featured-discount{
+    height: 2rem;
+    width: 7.2rem;
+    border: 1px solid #333;
+    position: absolute;    
+    background: linear-gradient(264deg, #C8A8E9 -5.09%, #EF476F 106.28%);
+    color: #fff;
+    border: none;
+    transition: 0.5s;
+}
+.featured-discount:hover{
+    transform: scale(1.05);
+}
 
 
 
@@ -1044,7 +1094,7 @@ button i {
 .footer {
     height: 40vh;
     width: 100%;
-    background-color: #273b65;
+    background-color: #fff;
     display: flex;
     align-items: flex-start;
     padding-top: 2rem;
@@ -1053,10 +1103,20 @@ button i {
 .content {
     height: auto;
     width: 12rem;
-    color: white;
+    color: black;
+    position: relative;
+}
+.content img{
+    height: 200px;
+    width: 200px;
+    object-fit: contain;
+    position: absolute;
+    top: -70px;
+    left: -20px;
+    cursor: pointer;
 }
 .content p {
-    margin-top: 2rem;
+    margin-top: 4rem;
     text-transform: uppercase;
 }
 .content i {
@@ -1067,13 +1127,13 @@ button i {
 .content1 {
     height: auto;
     width: 12rem;
-    color: #fff;
+    color: black;
 }
 
 .content2 {
     height: auto;
     width: 23rem;
-    color: #fff;
+    color: black;
 }
 
 /* fashion-page CSS */
