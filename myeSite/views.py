@@ -13,11 +13,8 @@ from django.urls import reverse
 
 from decimal import Decimal
 def index(request):
-    # user = request.user
-    # cart_items = CartSystem.objects.filter(user=user)
     items = list(Product.objects.all())
     random.shuffle(items)  # Shuffle the list
-    items = items[:5] 
     return render(request, 'myeSite/index.html', {'items':items})
 
 # def index(request):
@@ -123,6 +120,7 @@ def aboutusPage(request):
 def subcategory_details(request, subcategory_name):
     subcategory = get_object_or_404(Subcategory, name=subcategory_name)
     items = Product.objects.filter(subcategory=subcategory)
+    brand = Brand.objects.all()
     items_count = items.count()
     if request.method =="POST": 
         #check if the user is authenticated
@@ -140,7 +138,7 @@ def subcategory_details(request, subcategory_name):
             messages.success(request, 'Item added to wishlist!')
 
         return redirect(request.path)  
-    return render(request, 'myeSite/productPages/product-list.html', {'subcateogry':subcategory, 'items':items, 'item_count':items_count})
+    return render(request, 'myeSite/productPages/product-list.html', {'subcateogry':subcategory, 'items':items, 'item_count':items_count, 'brands':brand})
 
 def itemsDetailsPage(request, pk):   
     item = get_object_or_404(Product, pk=pk)

@@ -1,36 +1,18 @@
 {% load static %}
-<div class="category-section">
-  <h2>Bottom Wear</h2>
-  <p>View All<i class='bx bx-chevron-right' ></i></p>
-  <div class="category-container">
-    <div class="myCategory">
-      <img src="{% static 'myeSite/images/bottomwear1.webp' %}" alt="bottomwear1">
-      <h6 class="text-center mt-3">Rough Jeans</h6>
+<div class="bottom-category-section">
+  <h2 class="text-center mb-0 fs-2 mt-2">Product Subcategories</h2>
+  {% if items %}
+  <div class="category-row">
+    {% for item in items|slice:":5" %}
+    <div class="category-card">
+      <div class="category-info">
+        <a href={% url 'product' item.subcategory.name %}><img src={{item.image.url}} alt=""></a>
+      </div>
+      <h3>{{item.subcategory.name}}</h3>
     </div>
-  
-    <div class="myCategory">
-      <img src="{% static 'myeSite/images/bottomwear5.avif' %}" alt="beauty-logo">
-      <h6 class="text-center mt-3">Formal Pants</h6>
-    </div>
-
-    <div class="myCategory">
-      <img src="{% static 'myeSite/images/bottomwear4.webp' %}" alt="electronic-logo">
-      <h6 class="text-center mt-3">Ghagra</h6>
-    </div>
-
-    <div class="myCategory">
-      <img src="{% static 'myeSite/images/bottomwear2.webp' %}" alt="handicraft-logeo">
-      <h6 class="text-center mt-3">Plain Jeans</h6>
-    </div>
-
-    <div class="myCategory">
-      <img src="{% static 'myeSite/images/bottomwear3.webp' %}" alt="watches-logo">
-      <h6 class="text-center mt-3">Navy Jeans</h6>
-    </div>
-
-   
-
-    
+    {% endfor %}
   </div>
-  
+  {% else %}
+  <p class="text-danger fw-bold">No Category Available</p>
+  {% endif %}  
 </div>

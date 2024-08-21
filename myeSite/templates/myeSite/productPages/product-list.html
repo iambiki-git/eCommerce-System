@@ -27,17 +27,16 @@
         <div class="filter">
             <h2 class="text-center fs-5">Filter</h2>
 
-            <h5 class="ms-2 mt-5">BRAND</h5>
+            <h5 class="ms-2 mt-5">BRAND</h5>        
             <form action="#" method="POST">
                 {% csrf_token %}
                 <ul>
-                    <li><input type="checkbox" name="brand1" id="brand1"> Gucci</li>
-                    <li><input type="checkbox" name="brand2" id="brand2"> Prada</li>
-                    <li><input type="checkbox" name="brand3" id="brand3"> Levis</li>
-                    <li><input type="checkbox" name="brand4" id="brand4"> Denim</li>
-                    <li><input type="checkbox" name="brand5" id="brand5"> Barcode</li>
+                    {% for brand in brands %}
+                    <li><input type="checkbox" name="brand1" id="brand1"> {{brand.name}}</li>
+                    {% endfor %}
                 </ul>
             </form>
+               
             
             <h5 class="ms-2 mt-5">PRICE</h5>
                 <form action="#" method="POST">

@@ -80,7 +80,11 @@
             </div>
 
             <div class="tshirtdetail-buttons h-auto mt-1 d-flex mb-4">
+                {% if item.stock_status != "Out of Stock" %}
                 <button type="submit" class="text-white w-50 d-flex fw-bold align-items-center justify-content-center addtocart"><i class='bx bx-shopping-bag text-white me-2' ></i>Add To Cart</button>
+                {% else %}
+                <button type="submit" class="text-white w-50 d-flex fw-bold align-items-center justify-content-center addtocart" disabled><i class='bx bx-shopping-bag text-white me-2' ></i>Add To Cart</button>
+                {% endif %}
             </div>
         </form>
        
