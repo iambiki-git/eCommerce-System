@@ -9,7 +9,7 @@
         <div class="order-summary-heading">
             <h2 class="text-center text-primary fw-bold p-3">Order Summary</h2>
         </div>
-        <form action="#" method="POST">
+        <form action="{% url 'place_order' %}" method="POST">
             {% csrf_token %}
         <div class="order-summary-amount d-flex justify-content-between me-5 ms-5">
             <p class="fw-semibold">Sub-Total: </p>
@@ -32,7 +32,7 @@
         
         
         <div class="place-order-btn d-flex justify-content-center mt-4">
-            <button class="bg bg-secondary text-light fw-bold w-75">Place Order</button>
+            <button type="submit" class="bg bg-secondary text-light fw-bold w-75">Place Order</button>
         </div>
         </form>
        

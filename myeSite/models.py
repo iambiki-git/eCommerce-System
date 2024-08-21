@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 # Create your models here.
 
@@ -95,3 +96,15 @@ class BillingAddress(models.Model):
         return f"{self.user.username}'s billing address: {self.fullname}, {self.city}"
 
 
+
+class UserOrder(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    price = models.IntegerField()
+    size = models.CharField(max_length=50, default="M")
+    brand = models.CharField(max_length=50, default="Gucci")
+    shipping_add = models.CharField(max_length=100, default="drn")
+    billing_add = models.CharField(max_length=100, default="brt")
+    order_date = models.DateField(default=datetime.datetime.today)
+    

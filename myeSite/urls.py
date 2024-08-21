@@ -29,7 +29,8 @@ urlpatterns = [
     path('process_billing_info/', views.process_billing_info, name='process_billing_info'),
     path('get_shipping_address/', views.get_shipping_address, name='get_shipping_address'),
     path('payment/', views.payment, name='payment'),
-
+    path('place_order/', views.place_order, name='place_order'),
+    path('order_confirmation/', views.order_confirmation, name='order_confirmation'),
     path('logout/', views.logoutModule, name='logoutModule'),
 
 

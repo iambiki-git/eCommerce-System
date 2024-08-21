@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
-from .models import Product, Category, Subcategory, Wishlist, Brand, CartSystem, ShippingAddress, BillingAddress
+from .models import Product, Category, Subcategory, Wishlist, Brand, CartSystem, ShippingAddress, BillingAddress, UserOrder
 from django.contrib.auth.models import User, auth
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -345,4 +345,48 @@ def payment(request):
 # def adminBasePage(request):
 #     return render(request, 'myeSite/admin/base.html')
 
+def order_confirmation(request):
+    return render(request, 'myeSite/order_confirmation.html')
+
+
+from datetime import date
+def place_order(request):
+    if request.method == 'POST':
+        cart_items = CartSystem.objects.filter(user=request.user)
+        shipping_address = ShippingAddress.objects.filter(user=request.user).first()
+        billing_address = BillingAddress.objects.filter(user=request.user).first()
+
+        if not shipping_address or not billing_address:
+            return redirect('cart')
+
+        if not cart_items.exists():
+            # If there are no cart items, redirect to the cart page
+            return redirect('cart')
+        
+        # Create an order for each item in the cart
+        for item in cart_items:
+            UserOrder.objects.create(
+                user=request.user,
+                product=item.product,
+                quantity=item.quantity,
+                price=item.product.new_price,  # Assuming price is stored in the Product model
+                size=item.size,
+                brand=item.brand,
+                shipping_add= shipping_address,
+                billing_add= billing_address,
+                order_date=date.today()
+            )
+        
+        # Clear the user's cart after placing the order
+        cart_items.delete()  # This deletes all the cart items for the user
+        if shipping_address:
+            shipping_address.delete()
+        if billing_address:
+            billing_address.delete()
+
+        return redirect('order_confirmation')
+    return redirect('cart')
+
+
+        
 

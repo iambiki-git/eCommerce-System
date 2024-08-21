@@ -1515,3 +1515,8 @@ button i {
 .order-summary-heading {
     border-bottom: 2px solid #ccc;
 }
+
+/* order-confirmation-css */
+.order-confirmation {
+    margin-top: 7rem;
+}
