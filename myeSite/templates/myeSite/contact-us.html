@@ -3,13 +3,13 @@
 {% block contactus %}
 
 <div class="contactus-container" id="contactForm">
-    <h2 class="text-center fs-3 mb-3">Contact Us</h2>
+    <h2 class="text-center fs-3 mb-4">Contact Us</h2>
     <div class="subb-container">
         <div class="contactus-image">
             <img src="{% static 'myeSite/images/contactImg.png' %}" alt="contactimage">
         </div>
         <div class="contact-div">
-            <h2 class="text-center fs-4">Send us a message</h2>
+            <h2 class="text-center fs-4 mt-3 mb-0">Send us a message</h2>
 
 
             <div class="container">
@@ -18,13 +18,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label for="name">Your Name</label>
+                                <label for="name" class="mb-2 fw-semibold">Your Name</label>
                                 <input type="text" class="form-control" id="name" name="name" placeholder="John Doe" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="email">Email Address</label>
+                                <label for="email" class="mb-2 fw-semibold">Email Address</label>
                                 <input type="email" class="form-control" id="email" name="email"  placeholder="john123@gmail.com" required>
                             </div>
                         </div>
@@ -34,13 +34,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label for="phone">Your Phone</label>
+                                <label for="phone" class="mb-2 fw-semibold">Your Phone</label>
                                 <input type="number" class="form-control" id="phone" name="phone"  placeholder="+977 9810457811">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label for="subject">Subject</label>
+                                <label for="subject" class="mb-2 fw-semibold">Subject</label>
                                 <input type="text" class="form-control" id="subject" name="subject"  placeholder="Short Title" required>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
         
                     <!-- Row 3: Message -->
                     <div class="form-group">
-                        <label for="message">Message</label>
+                        <label for="message" class="mb-2 fw-semibold">Message</label>
                         <textarea class="form-control" id="message" name="message" rows="5"  placeholder="Your message ....." required></textarea>
                     </div>
         
