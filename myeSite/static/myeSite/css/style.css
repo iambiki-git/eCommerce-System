@@ -272,7 +272,7 @@ section {
     padding: 5% 10%;
 }
 .main-home{
-    margin-top: 7rem;
+    margin-top: 6.7rem;
     height: 32rem;
     width: 90%;
     margin-left: 5%;
@@ -286,11 +286,12 @@ section {
     width: 50%;
 }
 .main-info h1{
-    font-size: 80px;
+    font-size: 70px;
     font-weight: semibold;
-    line-height: 5rem;
+    line-height: 4.5rem;
     font-family:Georgia, 'Times New Roman', Times, serif;
 }
+
 .main-info p{
     margin-left: 0;
     font-size: 17px;
@@ -406,7 +407,7 @@ header.sticky {
     width: 90%;
     margin-left: 5%;
     height: auto;
-    background-color: whitesmoke;
+    /* background-color: whitesmoke; */
     padding-top: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 4rem;
@@ -419,10 +420,10 @@ header.sticky {
 
 .featured-card {
     flex-basis: 19%; /* Each card takes up approximately 19% of the container width */
-    margin-bottom: 1rem; /* Adds space between rows */
+    margin-bottom: 2rem; /* Adds space between rows */
     height: 19rem;
     width: 100%;
-    border: 2px solid #dadada;
+    /* border: 2px solid #dadada; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -773,19 +774,56 @@ button i {
 }
 
 /* New Arrivals Css */
+.arrivalTitle {
+    background: linear-gradient(90deg, #53c582, #5f5a8c, #75FF33);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 2rem;
+    
+}
 .new-arrivals {
-    height: 50%;
+    height: auto;
     width: 90%;
     margin-left: 5%;
     margin-bottom: 4rem;
     padding: 1rem;
-    background-color: whitesmoke;
+    background-color: white;
+    /* border: 1px solid #ccc; */
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.new-arrival-card{
+    height: auto;
+    width: 17rem;
+}
+.for-image img {
+    height: 20rem;
+    width: 17rem;
+    object-fit: cover;
+    cursor: pointer;
+}
+.arrival-tag{
+    height: 2rem;
+    width: 4rem;
+    border: 1px solid #333;
+    position: absolute;    
+    background: linear-gradient(264deg, #C8A8E9 -5.09%, #EF476F 106.28%);
+    color: #fff;
+    border: none;
+    transition: 0.5s;   
+}
+
+.arrival-tag:hover{
+    transform: scale(1.05);
 }
 
 
 
 /* watches-section Css */
-
 .watches {
     width: 100%;
     height: 60%;

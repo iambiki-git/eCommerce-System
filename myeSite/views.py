@@ -13,9 +13,12 @@ from django.urls import reverse
 
 from decimal import Decimal
 def index(request):
+    newItem = list(Product.objects.filter(isnew=True))
+    random.shuffle(newItem)
+    newItem=newItem[:4]
     items = list(Product.objects.all())
     random.shuffle(items)  # Shuffle the list
-    return render(request, 'myeSite/index.html', {'items':items})
+    return render(request, 'myeSite/index.html', {'items':items, 'newItems':newItem})
 
 # def index(request):
 #     items = Items.objects.all()

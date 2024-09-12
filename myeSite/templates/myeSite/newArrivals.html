@@ -1,7 +1,62 @@
 {% load static %}
 
+<h2 class="text-center fs-2 arrivalTitle">New Winter Arrivals</h2> 
 <div class="new-arrivals">
-   <h2 class="text-center fs-2">New Arrivals</h2>
+   {% if newItems %}
+   {% for newItem in newItems %}
+   <div class="new-arrival-card">
+      <div class="for-image">
+         <div class="arrival-tag d-flex align-items-center">
+            <p class="ms-2 mt-3">SALE</p>
+        </div>
+         <a href="{% url 'itemsDetail' newItem.pk %}"> 
+            <img src="{{ newItem.image.url}}" alt="{{newItem.name}}">
+         </a>
+      </div>
+      <div class="for-info">
+      <p class="text-center mb-0">{{newItem.name}}</p>
+         <h2 class="text-center mt-0">Rs. {{ newItem.new_price }}</h2>
+      </div>
+   </div>
+   {% endfor %}
+   {% endif %}
+   {% comment %} <div class="new-arrival-card">
+      <div class="for-image">
+         <div class="arrival-tag d-flex align-items-center">
+            <p class="ms-2 mt-3">SALE</p>
+        </div> 
+         <img src="{% static 'myeSite/images/fashion3.jpg' %}" alt="image">
+      </div>
+      <div class="for-info">
+         <p class="text-center mb-0">Wollen Fur Jackets</p>
+         <h2 class="text-center mt-0">Rs. 450</h2>
+      </div>
+   </div>
+   <div class="new-arrival-card">
+      <div class="for-image">
+         <div class="arrival-tag d-flex align-items-center">
+            <p class="ms-2 mt-3">SALE</p>
+        </div> 
+         <img src="{% static 'myeSite/images/fashion3.jpg' %}" alt="image">
+      </div>
+      <div class="for-info">
+         <p class="text-center mb-0">Wollen Fur Jackets</p>
+         <h2 class="text-center mt-0">Rs. 450</h2>
+      </div>
+   </div>
+   <div class="new-arrival-card">
+      <div class="for-image">
+         <div class="arrival-tag d-flex align-items-center">
+            <p class="ms-2 mt-3">SALE</p>
+        </div> 
+         <img src="{% static 'myeSite/images/fashion3.jpg' %}" alt="image">
+      </div>
+      <div class="for-info">
+         <p class="text-center mb-0">Wollen Fur Jackets</p>
+         <h2 class="text-center mt-0">Rs. 450</h2>
+      </div>
+   </div>
+    {% endcomment %}
 
     
     
