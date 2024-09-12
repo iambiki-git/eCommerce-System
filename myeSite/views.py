@@ -112,36 +112,101 @@ def logoutModule(request):
     messages.success(request, 'Thanks for visiting! We hope to see you again soon.☺️')
     return redirect('login')
 
-
+from .models import ContactUs
 def contactusPage(request):
+    if request.method == "POST":
+        fullname = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+
+         # Assuming the user is logged in, you can assign the user, otherwise set it to None.
+        user = request.user if request.user.is_authenticated else None
+
+        # Save the form data to the ContactUs model
+        contact_message = ContactUs.objects.create(
+            user = user,
+            fullname = fullname,
+            email = email,
+            phone = phone,
+            subject = subject,
+            message = message
+        )
+
+        messages.success(request, "Thank you for reaching out to us! We will get back to you soon.")
+
+        return redirect('contactus')
+     
     return render(request, 'myeSite/contact-us.html')
 
 def aboutusPage(request):
     return render(request, 'myeSite/about-us.html')
 
-
+from django.db.models import Q
 def subcategory_details(request, subcategory_name):
     subcategory = get_object_or_404(Subcategory, name=subcategory_name)
-    items = Product.objects.filter(subcategory=subcategory)
+    items = Product.objects.filter(subcategory=subcategory) 
     brand = Brand.objects.all()
+    
+
+     # Process filters
+    selected_brands = request.GET.getlist('brands')
+    selected_price_ranges = request.GET.getlist('price')
+
+    # Filter by brand
+    if selected_brands:
+        items = items.filter(brand__id__in=selected_brands)
+
+      # Filter by price ranges
+    if selected_price_ranges:
+        price_filters = []
+        if '1' in selected_price_ranges:
+            price_filters.append(Q(new_price__gte=300, new_price__lte=1999))
+        if '2' in selected_price_ranges:
+            price_filters.append(Q(new_price__gte=1999, new_price__lte=5999))
+        if '3' in selected_price_ranges:
+            price_filters.append(Q(new_price__gte=5999, new_price__lte=15000))
+
+        if price_filters:
+            items = items.filter(Q(*price_filters))
+
+    
+
     items_count = items.count()
+
     if request.method =="POST": 
-        #check if the user is authenticated
-        if not request.user.is_authenticated:
-            return redirect('login') #redirect to login page
+        action = request.POST.get('action')
+        if action == 'wishlist':
+            #check if the user is authenticated
+            if not request.user.is_authenticated:
+                return redirect('login') #redirect to login page
 
-        product_id = request.POST.get('productid')
-        product = Product.objects.get(id = product_id)
+            product_id = request.POST.get('productid')
+            product = Product.objects.get(id = product_id)
 
-        # Check if the product is already in the wishlist
-        if Wishlist.objects.filter(user=request.user, product=product).exists():
-            messages.info(request, 'This Item is already in wishlist!!!')
-        else:
-            Wishlist.objects.create(user=request.user, product=product)
-            messages.success(request, 'Item added to wishlist!')
+            # Check if the product is already in the wishlist
+            if Wishlist.objects.filter(user=request.user, product=product).exists():
+                messages.info(request, 'This Item is already in wishlist!!!')
+            else:
+                Wishlist.objects.create(user=request.user, product=product)
+                messages.success(request, 'Item added to wishlist!')
 
-        return redirect(request.path)  
-    return render(request, 'myeSite/productPages/product-list.html', {'subcateogry':subcategory, 'items':items, 'item_count':items_count, 'brands':brand})
+            return redirect(request.path)  
+        elif action == "sort":
+            # Sorting logic
+            sort_by = request.POST.get('services')
+            if sort_by == 'lowtohighprice':
+                items = items.order_by('new_price')
+            elif sort_by == 'hightolowprice':
+                items = items.order_by('-new_price')
+
+    return render(request, 'myeSite/productPages/product-list.html', {
+        'subcateogry':subcategory, 
+        'items':items, 
+        'item_count':items_count, 
+        'brands':brand
+    })
 
 def itemsDetailsPage(request, pk):   
     item = get_object_or_404(Product, pk=pk)
@@ -391,5 +456,36 @@ def place_order(request):
     return redirect('cart')
 
 
-        
 
+# def product_list(request):
+#     products = Product.objects.all()
+#     brands = Brand.objects.all()
+
+#     # Get the filters from the request
+#     selected_brands = request.GET.getlist('brands')
+#     selected_price_ranges = request.GET.getlist('price')
+
+#     # Filter by brand
+#     if selected_brands:
+#         products = products.filter(brand__id__in=selected_brands)
+    
+#     # Filter by price ranges
+#     if selected_price_ranges:
+#         price_filters = []
+#         if '1' in selected_price_ranges:
+#             price_filters.append({'price__gte': 300, 'price__lte': 1999})
+#         if '2' in selected_price_ranges:
+#             price_filters.append({'price__gte': 1999, 'price__lte': 5999})
+#         if '3' in selected_price_ranges:
+#             price_filters.append({'price__gte': 5999, 'price__lte': 15000})
+
+
+#         from django.db.models import Q
+#         if price_filters:
+#             products = products.filter(Q(**price_filters[0]) | Q(**price_filters[1]) | Q(**price_filters[2]))
+        
+#     context = {
+#         'products': products,
+#         'brands': brands,
+#     }
+#     return render(request, 'product_list.html', context)

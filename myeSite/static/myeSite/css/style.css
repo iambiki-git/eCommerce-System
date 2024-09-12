@@ -1030,7 +1030,7 @@ button i {
     background-color: #fafafc;
     border-radius: 5px;
     margin-bottom: 1.5rem;
-    margin-top: 6rem;
+    margin-top: 7rem;
 }
 .subb-container {
     display: flex;
@@ -1056,6 +1056,15 @@ button i {
 }
 .container {
     margin-top: 2rem;
+}
+.contactus-container ul li{
+    background: purple;
+    color: white;
+    font-size: 20px;
+    font-family: cursive;
+    font-weight: 600;
+    text-align: center;
+    height: 2rem;
 }
 
 
@@ -1093,13 +1102,29 @@ button i {
 }
 .sortby {
     height: 2.5rem;
-    width: 15rem;
+    width: 20rem;
     border: 1px solid #dadada;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding-right: 3px;
 }
+.sortby form{
+    display: flex;
+    align-items: center;
+}
+.sortbtn{
+    align-items: center;
+}
+.sortbtn input[type="submit"] {
+    width: 4rem;
+    height: 2rem;
+    background-color: #527ec5;
+    color: white;
+    border: none;
+    border-radius: 3px;
+}
+
 .sortby h6, i {
     padding-right: 4px;
     margin-top: 4px;
@@ -1572,5 +1597,37 @@ button i {
 
 /* order-confirmation-css */
 .order-confirmation {
-    margin-top: 7rem;
+    margin-top: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 6rem;
+}
+.order-confirmation img{
+    height: 20rem;
+    width: 20rem;
+    object-fit: cover;
+    margin-top: 3rem;
+}
+.order-confirmation p{
+    margin-top: -3rem;
+    font-size: 2rem;
+    font-family: cursive;
+}
+.order-confirmation button {
+    /* background: linear-gradient(245deg, pink, purple); */
+    background: white;
+    width: 12.5rem;
+    height: 3rem;
+    color: black;
+    border: 1px solid black;
+    font-size: 1.2rem;
+    font-family: cursive;
+    transition:background .42s ease;
+}
+.order-confirmation button:hover {
+    /* background: linear-gradient(245deg, rgb(238, 159, 172), rgb(79, 1, 79)); */
+    background: #000;
+    color: white;
 }

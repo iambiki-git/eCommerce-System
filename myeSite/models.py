@@ -108,4 +108,18 @@ class UserOrder(models.Model):
     shipping_add = models.CharField(max_length=100, default="drn")
     billing_add = models.CharField(max_length=100, default="brt")
     order_date = models.DateField(default=datetime.datetime.today)
+
+class ContactUs(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    fullname = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    subject = models.CharField(max_length=100)
+    message = models.TextField() 
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Message from {self.fullname} - {self.email}"
+
+
     

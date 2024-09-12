@@ -11,15 +11,21 @@
         </div>
         <div class="sortby">
             <h6><i class='bx bx-sort'></i>Sort By</h6>
-            <form method="POST">
+            <form method="POST" action="{% url 'product' subcateogry.name %}">
                 {% csrf_token %}
+               
+                <input type="hidden" name="action" value="sort">
                 <select id="services" name="services">
-                    <option value="latest">Recommended</option>
+                    {% comment %} <option value="latest">Recommended</option>
                     <option value="latest">What's New</option>
-                    <option value="latest">Popularity</option>
-                    <option value="lowtohighprice">Price: High to Low</option>
-                    <option value="hightolowprice">Price: Low to High</option>
+                    <option value="latest">Popularity</option> {% endcomment %}
+                    <option value="lowtohighprice" {% if request.POST.services == 'lowtohighprice' %}selected{% endif %}>Price: Low to High</option>
+                    <option value="hightolowprice" {% if request.POST.services == 'hightolowprice' %}selected{% endif %}>Price: High to Low</option>
                 </select>
+                <div class="sortbtn">
+                <input type="submit" value="Sort">
+                </div>
+                
             </form>
         </div> 
     </div>
@@ -27,38 +33,63 @@
         <div class="filter">
             <h2 class="text-center fs-5">Filter</h2>
 
+            
+
             <h5 class="ms-2 mt-5">BRAND</h5>        
-            <form action="#" method="POST">
+            <form action="{% url 'product' subcateogry.name %}" method="GET">
                 {% csrf_token %}
                 <ul>
                     {% for brand in brands %}
-                    <li><input type="checkbox" name="brand1" id="brand1"> {{brand.name}}</li>
+                    {% comment %} <li><input type="checkbox" name="brand1" id="brand1"> {{brand.name}}</li> {% endcomment %}
+                    <li><input type="checkbox" name="brands" value="{{ brand.id }}" id="brand_{{ brand.id }}" {% if brand.id|stringformat:"s" in request.GET.brands %} checked {% endif %}>
+                    <label for="brand_{{ brand.id }}">{{ brand.name }}</label></li>
                     {% endfor %}
                 </ul>
-            </form>
+            {% comment %} </form> {% endcomment %}
                
             
-            <h5 class="ms-2 mt-5">PRICE</h5>
-                <form action="#" method="POST">
-                    <ul>
+            {% comment %} <h5 class="ms-2 mt-5">PRICE</h5> {% endcomment %}
+                {% comment %} <form action="#" method="POST"> {% endcomment %}
+                    {% comment %} <ul>
                         <li><input type="checkbox" name="price" id="price"> Rs. 300 to Rs. 1999</li>
                         <li><input type="checkbox" name="price2" id="price2"> Rs. 1999 to Rs. 5999</li>
                         <li><input type="checkbox" name="price3" id="price3"> Rs. 5999 to Rs. 15000</li>
-                    </ul>
-                </form>
+                    </ul> {% endcomment %}
+                 <!-- Price Filter -->
+    <h5 class="ms-2 mt-5">PRICE</h5>
+    <ul>
+        <li>
+            <input type="checkbox" name="price" value="1" id="price1" {% if '1' in request.GET.price %} checked {% endif %}>
+            <label for="price1">Rs. 300 to Rs. 1999</label>
+        </li>
+        <li>
+            <input type="checkbox" name="price" value="2" id="price2" {% if '2' in request.GET.price %} checked {% endif %}>
+            <label for="price2">Rs. 1999 to Rs. 5999</label>
+        </li>
+        <li>
+            <input type="checkbox" name="price" value="3" id="price3" {% if '3' in request.GET.price %} checked {% endif %}>
+            <label for="price3">Rs. 5999 to Rs. 15000</label>
+        </li>
+    </ul>
+                {% comment %} </form> {% endcomment %}
 
-                <h5 class="ms-2 mt-5">COLOR</h5>
-                <form action="#" method="POST">
-                    {% csrf_token %}
-                    <ul>
+
+
+                {% comment %} <h5 class="ms-2 mt-5">COLOR</h5> {% endcomment %}
+                {% comment %} <form action="#" method="POST"> {% endcomment %}
+                    {% comment %} {% csrf_token %} {% endcomment %}
+                    {% comment %} <ul>
                         <li><input type="checkbox" name="color1" id="color1"> Red</li>
                         <li><input type="checkbox" name="color2" id="color2"> Black</li>
                         <li><input type="checkbox" name="color3" id="color3"> White</li>
                         <li><input type="checkbox" name="color4" id="color4"> Green</li>
                         <li><input type="checkbox" name="color5" id="brand5"> Gray</li>
-                    </ul>
+                    </ul> {% endcomment %}
+
+                    <button type="submit" class="btn btn-primary mt-3">Filter</button>
                 </form>
         </div>
+        
         
 
         {% if items %}
@@ -99,6 +130,7 @@
                     
                     <form method="post" action="#">
                         {% csrf_token %}
+                        <input type="hidden" name="action" value="wishlist">
                         <input type="hidden" name="productid" value="{{item.id}}">
                         <button type="submit" class="addToWishlist"><i class='bx bx-heart' id="wishlist_hearticon"></i>WISHLIST</button>
                     </form>

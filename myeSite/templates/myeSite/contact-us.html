@@ -3,6 +3,15 @@
 {% block contactus %}
 
 <div class="contactus-container" id="contactForm">
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     <h2 class="text-center fs-3 mb-4">Contact Us</h2>
     <div class="subb-container">
         <div class="contactus-image">
@@ -13,7 +22,8 @@
 
 
             <div class="container">
-                <form>
+                <form method="POST">
+                    {% csrf_token %}
                     <!-- Row 1: Name and Email -->
                     <div class="row">
                         <div class="col-md-6">
@@ -57,11 +67,12 @@
                 </form>
             </div>
 
-
-
         </div>
     </div>
    
 </div>
+
+
+  
 
 {% endblock %}

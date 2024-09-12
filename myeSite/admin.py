@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Product, Brand, Category, Subcategory, ProductImage
-from .models import Wishlist, CartSystem, Size, ShippingAddress, BillingAddress, UserOrder
+from .models import Wishlist, CartSystem, Size, ShippingAddress, BillingAddress, UserOrder, ContactUs
 
  
 # # Register your models here.
@@ -57,8 +57,13 @@ class BillingAddressAdmin(admin.ModelAdmin):
 class UserOrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'product', 'quantity', 'price', 'size', 'brand', 'shipping_add', 'billing_add', 'order_date')
 
+class ContactUsAdmin(admin.ModelAdmin):
+    list_display = ('fullname', 'email', 'subject', 'created_at')  # Fields to display in the list view
+    search_fields = ('fullname', 'email', 'subject')  # Searchable fields in the admin panel
+    list_filter = ('created_at', 'subject')  # Filters for the admin list view
 
 
+    
 admin.site.register(Brand, BrandAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Subcategory, SubcategoryAdmin)
@@ -73,3 +78,4 @@ admin.site.register(ShippingAddress, ShippingAddressAdmin)
 admin.site.register(BillingAddress, BillingAddressAdmin)
 # admin.site.register(ShippingOption, ShippingOptionAdmin)
 admin.site.register(UserOrder, UserOrderAdmin)
+admin.site.register(ContactUs, ContactUsAdmin)

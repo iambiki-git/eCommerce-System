@@ -1,10 +1,14 @@
 {% extends "main.html" %}
+{% load static %}
 {% block title %}Order Confirmation{% endblock %}
 {% block order_confirmation %}
 
 <div class="order-confirmation">
-    <h2 class="text-center">Thank you for your order!</h2>
+    {% comment %} <h2 class="text-center">Thank you for your order!</h2> {% endcomment %}
+    <img src="{% static 'myeSite/images/thankyouorder.webp' %}" alt="thanyouorderplacedimage">
     <p class="text-center">Your order has been placed successfully.</p>
-    <button>Go to Home</button>
+    <a href="{% url 'index' %}">
+        <button>Shop More</button>
+    </a>
 </div>
 {% endblock %}
