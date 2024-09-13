@@ -438,10 +438,6 @@ def payment(request):
     return render(request, 'myeSite/payment.html', context)
 
 
-# # Admin Views
-# def adminBasePage(request):
-#     return render(request, 'myeSite/admin/base.html')
-
 def order_confirmation(request):
     return render(request, 'myeSite/order_confirmation.html')
 
@@ -506,3 +502,13 @@ def ChangePassword(request):
 
     return render(request, 'myeSite/changePassword.html')
 
+
+# Admin Views
+def adminBase(request):
+    return render(request, 'myeSite/admin/base.html')
+
+def adminLogin(request):
+    return render(request, 'myeSite/admin/adminLogin.html')
+
+def adminSignup(request):
+    return render(request, 'myeSite/admin/adminSignup.html')

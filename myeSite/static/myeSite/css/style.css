@@ -1077,7 +1077,7 @@ button i {
     margin-top: 2rem;
 }
 .contactus-container ul li{
-    background: purple;
+    background: linear-gradient(269deg, #6157FF, #EE49FD);
     color: white;
     font-size: 20px;
     font-family: cursive;
@@ -1085,8 +1085,6 @@ button i {
     text-align: center;
     height: 2rem;
 }
-
-
 
 /* aboutus css */
 .aboutus-container {
@@ -1681,4 +1679,47 @@ button i {
 }
 .password-container p {
     margin-left: 5rem;
+}
+
+/* admin-dashboard-css-starts */
+/* login/signup-css */
+.login-container {
+    height: auto;
+    width: 30rem;
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #BDD1C5;
+    padding: 2rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.login-container h2 {
+    font-family: cursive;
+    font-weight: 600;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+}
+.admin-login-form form input {
+    height: 2.5rem;
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 8px;
+    outline: none;
+}
+.admin-login-form form input[type="button"] {
+    background: linear-gradient(190deg, #6157ff, #ee49fd);
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-family: cursive;
+    font-size: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+.admin-login-form form input[type="button"]:hover{
+    background: linear-gradient(360deg, #6157ff, #ee49fd);
 }

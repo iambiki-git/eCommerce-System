@@ -35,6 +35,7 @@ urlpatterns = [
     path('order_confirmation/', views.order_confirmation, name='order_confirmation'),
     path('logout/', views.logoutModule, name='logoutModule'),
 
-
-    # path('admin-dashboard/', views.adminBasePage, name='admin'),
+    path('admin-base-page/', views.adminBase, name='adminBase'),
+    path('admin-login/', views.adminLogin, name='adminLogin'),
+    path('admin-signup/', views.adminSignup, name='adminSignup'),
 ]
