@@ -106,22 +106,42 @@
             <p class="mt-1 mb-0">2. Khalti</p>
         </div> 
 
+        {% comment %} review-section {% endcomment %}
+       
         <div class="products-review h-auto mt-1">
             <p class="mt-1 text-dark fs-5 fw-semibold">Review Section</p>
-            <form action="#" class="d-flex align-items-center mb-4">
+            <form action="#" class="d-flex align-items-center mb-4" method="POST">
                 {% csrf_token %}
+                <input type="hidden" name="form_type" value="review-post">
+                <input type="hidden" name="item_id" value="{{ item.id }}">
                 <textarea style="height: 150px;" name="review" id="review" class="ms-2 p-2 w-75" placeholder="Write your review ..."></textarea>
                 <input type="submit" value="Submit" class="ms-2 p-2 w-25 bg-success border-0 text-light rounded-1">
             </form>
-    
-            <div class="reviews h-auto w-100">
+        
+            {% if reviews %}
+            <div class="reviews w-100">
                 <div class="review-list">
-                    <p class="fw-semibold">Customer Name</p>
-                    <p class="d-flex align-items-center">this is my review<i id='heartIconCount' onclick='myHeartCount()' class='bx bx-heart ms-3 me-2 heart-icon'><span class="m-0 text-dark"><sup>0</sup></span></i></p>
+                    <h3 class="fs-4 ms-2">Customer's Reviews</h3>
+                    {% for review in reviews %}
+                    <p class="fw-semibold">{{review.user.username}}:-</p>
+                    <p class="d-flex align-items-center">
+                        {{review.review_text}}
+                        
+                        <!-- Delete icon (only visible to the author) -->
+                        {% if review.user == request.user %}
+                            <a href="{% url 'delete_review' review.id %}" class="text-danger ms-3" title="Delete Review">
+                            <i class="bx bx-trash"></i></a>      
+                        {% endif %}
+                    </p>
+                    {% endfor %}
+                    {% endif %}
+                    
                 </div>
-                
             </div>
         </div>
+        
+        {% comment %} review-section-end {% endcomment %}
+
     </div> 
 </div>
 <div class="similar-products h-auto">

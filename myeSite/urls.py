@@ -11,7 +11,9 @@ urlpatterns = [
     path('signup/', views.signupModule, name='signup'),
     path('subcategory/<str:subcategory_name>/', views.subcategory_details, name='product'),
     path('items-details/<int:pk>/', views.itemsDetailsPage, name='itemsDetail'),
-   
+    path('delete_review/<int:pk>/', views.delete_review, name='delete_review'),
+
+    path('changePassword/', views.ChangePassword, name="changePassword"),
 
 
     

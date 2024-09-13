@@ -793,7 +793,7 @@ button i {
     /* border: 1px solid #ccc; */
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     flex-wrap: wrap;
 }
 .new-arrival-card{
@@ -801,8 +801,8 @@ button i {
     width: 17rem;
 }
 .for-image img {
-    height: 20rem;
-    width: 17rem;
+    height: 15;
+    width: 15rem;
     object-fit: cover;
     cursor: pointer;
 }
@@ -820,6 +820,7 @@ button i {
 .arrival-tag:hover{
     transform: scale(1.05);
 }
+
 
 
 
@@ -969,7 +970,7 @@ button i {
 .footer {
     height: 40vh;
     width: 100%;
-    background-color: yellowgreen;
+    background: linear-gradient(360deg, #0172AF, #74FEBD);
     display: flex;
     align-items: flex-start;
     padding-top: 2rem;
@@ -992,24 +993,42 @@ button i {
 }
 .content p {
     margin-top: 4rem;
+    font-size: 1.2rem;
     text-transform: uppercase;
 }
-.content i {
-   margin-left: 10px;
-   cursor: pointer;
+
+.content .icons{
+    cursor: pointer;
+    font-size: 1.3rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem; 
+    margin-left: -2.4rem;   
+    
 }
 
 .content1 {
     height: auto;
     width: 12rem;
-    color: black;
+    color: whitesmoke;
+    transition:color .42s ease;
+}
+.content1 a:hover {
+    color: white;
 }
 
 .content2 {
     height: auto;
     width: 23rem;
-    color: black;
+    color: whitesmoke;
+    transition: color .42s ease;
 }
+.content2 a:hover {
+    color: #fff;
+}
+
 
 /* fashion-page CSS */
 .fashion-container {
@@ -1316,19 +1335,12 @@ button i {
 .wishlistbtn:hover {
     border: 1px solid #222;
 }
-.reviews i {
-    cursor: pointer;
-}
-.heart-icon {
-    transition: color 0.2s;
-}
-.heart-icon.bxs-heart {
-    color: #ea325d;
-}
-.tshirtdetail-buttons  button a {
-    text-decoration: none;
-}
 
+/* review-section-css */
+.reviews{
+    height: 20rem;
+    overflow-y: scroll;
+}
 
 /* SIMILAR PRODUCT CSS */
 .similar-products p {
@@ -1630,4 +1642,43 @@ button i {
     /* background: linear-gradient(245deg, rgb(238, 159, 172), rgb(79, 1, 79)); */
     background: #000;
     color: white;
+}
+
+/* user-profile-css */
+.changePassword{
+    height: 20rem;
+    width: 90%;
+    margin: 15rem 5% 4rem 5%;
+    position: relative;
+}
+.password-container{
+    height: auto;
+    width: 50%;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 2px gray;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.password-container h2{
+    text-align: center;
+    font-family: cursive;
+    margin-bottom: 3rem;
+    margin-top: 1.5rem;
+}
+.password-container form {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+}
+.password-container form input[type="text"]{
+    height: 2.5rem;
+    width: 75%;
+    padding-left: 5px;
+    outline: none;
+}
+.password-container p {
+    margin-left: 5rem;
 }

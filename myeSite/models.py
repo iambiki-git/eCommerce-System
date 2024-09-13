@@ -122,4 +122,11 @@ class ContactUs(models.Model):
         return f"Message from {self.fullname} - {self.email}"
 
 
-    
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    review_text = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"Review by {self.user.username} for {self.product.name}"

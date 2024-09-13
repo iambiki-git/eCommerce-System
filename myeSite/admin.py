@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Brand, Category, Subcategory, ProductImage
+from .models import Product, Brand, Category, Subcategory, ProductImage, Review
 from .models import Wishlist, CartSystem, Size, ShippingAddress, BillingAddress, UserOrder, ContactUs
 
  
@@ -62,7 +62,8 @@ class ContactUsAdmin(admin.ModelAdmin):
     search_fields = ('fullname', 'email', 'subject')  # Searchable fields in the admin panel
     list_filter = ('created_at', 'subject')  # Filters for the admin list view
 
-
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('user', 'review_text', 'created_at')
     
 admin.site.register(Brand, BrandAdmin)
 admin.site.register(Category, CategoryAdmin)
@@ -79,3 +80,4 @@ admin.site.register(BillingAddress, BillingAddressAdmin)
 # admin.site.register(ShippingOption, ShippingOptionAdmin)
 admin.site.register(UserOrder, UserOrderAdmin)
 admin.site.register(ContactUs, ContactUsAdmin)
+admin.site.register(Review, ReviewAdmin)

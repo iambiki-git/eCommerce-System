@@ -47,7 +47,7 @@
             <div class="dropdownlist" id="mydropdown">
                 <li><p class="m-0 p-0 text-dark fw-semibold text-center mb-2 title">Welcome <span class="fw-bold">{{ user.username }} !</span></p></li>
                 {% comment %} <li><p class="m-0 p-0 text-dark fw-light text-justify">Welcome <span class="fw-bold">{{ user.username }} !</span></p></li> {% endcomment %}
-                <li class='text-center'><button class="h-25 mb-0 w-50 bg-light"><a href="#" class="text-danger fw-medium">Change Password</a></button></li>
+                <li class='text-center'><button class="h-25 mb-0 w-50 bg-light"><a href="{% url 'changePassword' %}" class="text-danger fw-medium">Change Password</a></button></li>
                 <li class='text-center'><button class="h-25 mb-0 w-50 bg-light"><a href="{% url 'logoutModule' %}" class="text-danger fw-medium">LOGOUT</a></button></li>
             </div>
         </div>
@@ -127,10 +127,10 @@
                         <p class="fw-light mb-0">Discount</p>
                         <p class="me-3 fw-semibold mb-0">Rs. {{ request.cart_summary.discount }}</p>
                     </div> {% endcomment %}
-                    <div class="mydiv3 d-flex justify-content-between">
+                    {% comment %} <div class="mydiv3 d-flex justify-content-between">
                         <p class="fw-light mb-1">Shipping</p>
                         <p class="me-3 fw-semibold mb-1">Rs. {{ request.cart_summary.shipping }}</p>
-                    </div>
+                    </div> {% endcomment %}
                 </div>
                 <div class="grandTotal d-flex justify-content-between">
                     <p class="fw-bold">Total</p>
@@ -151,10 +151,10 @@
          
         <div class="bx bx-menu" id="menu-icon"></div>
     </div>
-    {% if user.is_authenticated %}
+    {% comment %} {% if user.is_authenticated %}
     <form action="{% url 'logoutModule' %}" method="GET">
         <button><small class="me-2 mb-0"><i class='bx bx-log-out bx-flip-horizontal' ></i></small></button>
     </form>
     <p>{{user.username}}</p>
-    {% endif %}
+    {% endif %} {% endcomment %}
 </header>

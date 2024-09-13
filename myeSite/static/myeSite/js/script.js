@@ -244,13 +244,5 @@ function selectSize(element) {
 }
 
 
-
-function myHeartCount () {
-    const heartIconCount = document.getElementById('heartIconCount');
     
-    heartIconCount.classList.toggle('bx-heart');
-    heartIconCount.classList.toggle('bxs-heart');
-
-}
-
-
+    

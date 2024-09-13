@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, HttpResponse, redirect
-from .models import Product, Category, Subcategory, Wishlist, Brand, CartSystem, ShippingAddress, BillingAddress, UserOrder
+from .models import Product, Category, Subcategory, Wishlist, Brand, CartSystem, ShippingAddress, BillingAddress, UserOrder, Review
 from django.contrib.auth.models import User, auth
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -16,7 +16,7 @@ def index(request):
     newItem = list(Product.objects.filter(isnew=True))
     random.shuffle(newItem)
     newItem=newItem[:4]
-    items = list(Product.objects.all())
+    items = list(Product.objects.filter(isnew=False))
     random.shuffle(items)  # Shuffle the list
     return render(request, 'myeSite/index.html', {'items':items, 'newItems':newItem})
 
@@ -208,10 +208,15 @@ def subcategory_details(request, subcategory_name):
         'brands':brand
     })
 
+from django.utils import timezone
 def itemsDetailsPage(request, pk):   
     item = get_object_or_404(Product, pk=pk)
     related_image = item.images.all()
+    product = get_object_or_404(Product, id=pk)    
+    reviews = Review.objects.filter(product=product)
 
+
+    
     if request.method == 'POST':
         if not request.user.is_authenticated:
             messages.error(request, 'Login Required!')
@@ -263,10 +268,34 @@ def itemsDetailsPage(request, pk):
             else:
                 messages.success(request, 'Item added to wishlist!')
 
+        elif form_type == 'review-post':
+            if not request.user.is_authenticated:
+                return redirect('login')
+            
+            review_text = request.POST.get('review')
+            product_id = request.POST.get('item_id')
+            product = get_object_or_404(Product, id=product_id)
+    
+            review = Review (
+                user = request.user,
+                product = product,
+                review_text = review_text,
+                created_at = timezone.now()
+            )
+            review.save()
+            return redirect(request.path)
+        
+
         return redirect(request.path)
-    return render(request, 'myeSite/productPages/items-details.html', {'item':item, 'related_images':related_image})
+    return render(request, 'myeSite/productPages/items-details.html', {'item':item, 'related_images':related_image, 'reviews':reviews})
 
-
+def delete_review(request, pk):
+    review = get_object_or_404(Review, id=pk)
+    
+    if review.user == request.user:
+        review.delete()
+    
+    return redirect(request.META.get('HTTP_REFERER', 'itemsDetail'))
 
 #cart views
 def cart(request): 
@@ -455,37 +484,25 @@ def place_order(request):
         return redirect('order_confirmation')
     return redirect('cart')
 
+from django.contrib.auth import update_session_auth_hash
+def ChangePassword(request):
+    if request.method == "POST":
+        new_pass = request.POST.get('new_pass')
+        conf_pass = request.POST.get('confirm_new_pass')
 
+        user = request.user
 
-# def product_list(request):
-#     products = Product.objects.all()
-#     brands = Brand.objects.all()
-
-#     # Get the filters from the request
-#     selected_brands = request.GET.getlist('brands')
-#     selected_price_ranges = request.GET.getlist('price')
-
-#     # Filter by brand
-#     if selected_brands:
-#         products = products.filter(brand__id__in=selected_brands)
+        if new_pass != conf_pass:
+            messages.error(request, 'Passwords do not matched.')
+            return redirect('changePassword')
     
-#     # Filter by price ranges
-#     if selected_price_ranges:
-#         price_filters = []
-#         if '1' in selected_price_ranges:
-#             price_filters.append({'price__gte': 300, 'price__lte': 1999})
-#         if '2' in selected_price_ranges:
-#             price_filters.append({'price__gte': 1999, 'price__lte': 5999})
-#         if '3' in selected_price_ranges:
-#             price_filters.append({'price__gte': 5999, 'price__lte': 15000})
-
-
-#         from django.db.models import Q
-#         if price_filters:
-#             products = products.filter(Q(**price_filters[0]) | Q(**price_filters[1]) | Q(**price_filters[2]))
+        user.set_password(new_pass)
+        user.save()
         
-#     context = {
-#         'products': products,
-#         'brands': brands,
-#     }
-#     return render(request, 'product_list.html', context)
+        update_session_auth_hash(request, user)
+        messages.success(request, 'Password updated successfully.')
+        return redirect('changePassword')
+
+
+    return render(request, 'myeSite/changePassword.html')
+
