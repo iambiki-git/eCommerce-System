@@ -2,18 +2,27 @@
 {% load static %}
 
 {% block title %}Admin | Login{% endblock %}
+{% block adminNavbar %}{% endblock %}
+{% block sidebar %}{% endblock %}
 {% block adminLogin %}
 <section>
     <div class="login-container">
         <div class="admin-login-form">
             <h2>SignIn</h2>
+            {% if messages %}
+            {% for message in messages %}
+            <p class="text-danger ms-0">{{message}}</p>
+            {% endfor %}
+            {% endif %}
             <form action="#" method="POST">
                 {% csrf_token %}
-                <input type="text" name="username" id="username" placeholder="Username">
-                <input type="password" name="password" id="password" placeholder="Password">
-                <input type="button" value="Login">
+                <input type="text" name="username" id="username" placeholder="Username" required>
+                <input type="password" name="password" id="password" placeholder="Password" required>
+                <button type="submit" class="ms-0">Login</button>
             </form>
-            <p class="mb-0">Don't have an account? <a href="{% url 'adminSignup' %}">Click here.</a></p>
+            <p class="mt-2 mb-0 ms-0 text-center">Username:admin</p>
+            <p class="mt-0 mb-0 ms-0 text-center">Password:admin</p>
+            {% comment %} <p class="mb-0">Don't have an account? <a href="{% url 'adminSignup' %}">Click here.</a></p> {% endcomment %}
      </div>
     </div>
 </section>

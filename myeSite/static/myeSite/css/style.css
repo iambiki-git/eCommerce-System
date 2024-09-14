@@ -1683,6 +1683,7 @@ button i {
 
 /* admin-dashboard-css-starts */
 /* login/signup-css */
+
 .login-container {
     height: auto;
     width: 30rem;
@@ -1707,8 +1708,13 @@ button i {
     margin-bottom: 1rem;
     padding: 8px;
     outline: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
-.admin-login-form form input[type="button"] {
+
+.admin-login-form form button {
+    height: 2.5rem;
+    width: 100%;
     background: linear-gradient(190deg, #6157ff, #ee49fd);
     outline: none;
     border: none;
@@ -1717,9 +1723,19 @@ button i {
     font-weight: bold;
     font-family: cursive;
     font-size: 1rem;
-    margin-top: 1rem;
+    margin-top: .5rem;
     margin-bottom: 0;
 }
-.admin-login-form form input[type="button"]:hover{
+.admin-login-form form button:hover{
     background: linear-gradient(360deg, #6157ff, #ee49fd);
+}
+
+#sidebarMenu {
+    height: 100vh; /* Full height of viewport */
+    position: fixed; /* Fixed position */
+    top: 12%;
+    left: 0;
+    width: 250px; /* Adjust width as needed */
+    z-index: 100; /* Ensure it's above other content */
+    overflow-y: auto;
 }

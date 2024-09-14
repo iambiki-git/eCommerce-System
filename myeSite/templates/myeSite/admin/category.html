@@ -1,0 +1,176 @@
+{% extends "myeSite/admin/base.html" %}
+{% load static %}
+{% block title %}admin | Category{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Category List</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Category Name</th>
+                {% comment %} <th>Subcategories</th> {% endcomment %}
+                <th colspan="2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in page_obj %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ category.name }}</td>
+                {% comment %} <td>
+                    {% if category.subcategories.all %}
+                        {% for subcategory in category.subcategories.all %}
+                            {{ subcategory.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        None
+                    {% endif %}
+                </td> {% endcomment %}
+                <td>
+                    <!-- Edit Category Button Trigger -->
+                    <a href="javascript:void(0)" class="edit-category" 
+                       data-id="{{ category.id }}" 
+                       data-name="{{ category.name }}" 
+                       data-bs-toggle="modal" 
+                       data-bs-target="#categoryModal">
+                        <i class='bx bx-edit' style="color:green; margin-right:5px; font-size:1.2rem;"></i>
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'delete_category' category.id %}"><i class='bx bxs-trash-alt' style="color:red; margin-right:5px; font-size:1.2rem;"></i></a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No categories found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination controls -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">Previous</a>
+                </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- Add/Edit Brand Modal -->
+    <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryModalLabel">Add New Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'category_save' %}" id="categoryForm">
+                        {% csrf_token %}
+                        <!-- Hidden input for category ID -->
+                        <input type="hidden" id="category_id" name="category_id" value="">
+
+                        <!-- Category Name Input -->
+                        <div class="mb-3">
+                            <label for="category_name" class="form-label">Category Name</label>
+                            <input type="text" name="category_name" id="category_name" class="form-control" required>
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" style="width:8rem;" id="categorySubmitBtn">Add Category</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Add New Category Button -->
+     <button type="button" class="btn btn-warning mt-2 text-white" style="width:10rem;" id="addCategoryBtn" data-bs-toggle="modal" data-bs-target="#categoryModal">
+        Add New Category
+    </button>
+
+   
+
+   
+    {% comment %} <button class="btn btn-secondary" style="width:10rem;">Add Sub Category</button> {% endcomment %}
+</div>
+
+
+
+<script>
+    // Function to configure the form for adding a new category
+    function configureFormForAddCategory() {
+        document.getElementById('categoryModalLabel').textContent = "Add New Category";
+        document.getElementById('categorySubmitBtn').textContent = "Add Category";
+        document.getElementById('category_id').value = ""; // Clear category ID
+        document.getElementById('category_name').value = ""; // Clear category name
+    }
+
+    // Function to configure the form for editing an existing brand
+    function configureFormForEditCategory(categoryId, categoryName) {
+        document.getElementById('categoryModalLabel').textContent = "Edit Category";
+        document.getElementById('categorySubmitBtn').textContent = "Update";
+        document.getElementById('category_id').value = categoryId; // Set category ID
+        document.getElementById('category_name').value = categoryName; // Set category name
+    }
+
+    // Event listener for the 'Add New Category' button
+    document.getElementById('addCategoryBtn').addEventListener('click', function() {
+        configureFormForAddCategory(); // Configure the form for adding a new category
+    });
+
+    // Event listeners for 'Edit' buttons
+    document.querySelectorAll('.edit-category').forEach(function(editBtn) {
+        editBtn.addEventListener('click', function() {
+            var categoryId = this.getAttribute('data-id');
+            var categoryName = this.getAttribute('data-name');
+            configureFormForEditCategory(categoryId, categoryName); // Configure the form for editing a category
+        });
+    });
+
+
+
+     // Function to configure the form for adding a new subcategory
+     function configureFormForAddSubcategory() {
+        document.getElementById('subcategoryModalLabel').textContent = "Add New Subcategory";
+        document.getElementById('subcategorySubmitBtn').textContent = "Add Subcategory";
+        document.getElementById('subcategory_name').value = ""; // Clear subcategory name field
+        document.getElementById('category_select').value = ""; // Clear category selection
+    }
+
+    // Event listener for the 'Add New Subcategory' button
+    document.getElementById('addSubcategoryBtn').addEventListener('click', function() {
+        configureFormForAddSubcategory(); // Configure the form for adding a new subcategory
+    });
+
+</script>
+{% endblock %}

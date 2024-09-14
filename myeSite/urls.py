@@ -37,5 +37,30 @@ urlpatterns = [
 
     path('admin-base-page/', views.adminBase, name='adminBase'),
     path('admin-login/', views.adminLogin, name='adminLogin'),
+    path('adminLogout/', views.adminLogout, name='adminLogout'),
     path('admin-signup/', views.adminSignup, name='adminSignup'),
+    path('adminDashboard/', views.adminDashboard, name='adminDashboard'),
+
+    path('adminDashboard/brands/', views.Brands, name='brands'),
+    path('adminDashboard/brands/save/', views.brand_save, name='brand_save'),
+    path('adminDashboard/brand/delete-brand/<int:pk>', views.delete_brand, name='delete_brand'),
+
+    path('adminDashboard/category/', views.category_list_view, name='category'),
+    path('adminDashboard/category/save/', views.category_save, name='category_save'),
+    path('adminDashboard/category/delete-category/<int:pk>', views.delete_category, name='delete_category'),
+    
+    path('adminDashboard/sub-category/', views.subCategory_list_view, name='subcategory'),
+    path('adminDashboard/subcategory/save/', views.subcategory_save, name='subcategory_save'),
+    path('adminDashboard/subcategory/delete-subcategory/<int:pk>', views.subcategory_delete, name='subcategory_delete'),
+    
+    
+    
+
+    path('adminDashboard/products/', views.Products, name='products'),
+    path('adminDashboard/users/', views.Users, name='users'),
+    path('adminDashboard/users/delete/<int:user_id>/', views.DeleteUser, name='delete_user'),
+    path('adminDashboard/orders/', views.Orders, name='orders'),
+    path('adminDashboard/userMessage/', views.UserMsg, name='usermsg'),
+    path('adminDashboard/userMessage/deleteMessage/<int:pk>', views.deleteMessage, name='deleteMessage'),
+
 ]

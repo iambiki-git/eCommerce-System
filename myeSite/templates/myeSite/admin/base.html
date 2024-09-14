@@ -16,9 +16,24 @@
 
     {% block adminLogin %}{% endblock %}
 
+    {% block adminNavbar %} {% include "myeSite/admin/adminNav.html" %}{% endblock %}
+    
+    <div class="container-fluid">
+        <div class="row">
+          <!-- Include Sidebar -->
+          {% comment %} {% include 'myeSite/admin/sidebar.html' %} {% endcomment %}
+          {% block sidebar %} {% include "myeSite/admin/sidebar.html" %}{% endblock %}
 
+          <!-- Main content block -->
+          <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            {% block content %}
+            
+            {% endblock %}
+        </main>
+        </div>
+      </div>
 
-
+    
 
 
 

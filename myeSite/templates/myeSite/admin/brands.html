@@ -1,0 +1,144 @@
+{% extends "myeSite/admin/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center text-dark mb-4">Brand List</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Brand Name</th>
+                <th colspan="2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for brand in page_obj %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ brand.name }}</td>
+                <td>
+                    <!-- Edit Brand Button Trigger -->
+                    <a href="javascript:void(0)" class="edit-brand" 
+                       data-id="{{ brand.id }}" 
+                       data-name="{{ brand.name }}" 
+                       data-bs-toggle="modal" 
+                       data-bs-target="#brandModal">
+                        <i class='bx bx-edit' style="color:green; margin-right:5px; font-size:1.2rem;"></i>
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'delete_brand' brand.id %}"><i class='bx bxs-trash-alt' style="color:red; margin-right:5px; font-size:1.2rem;"></i></a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No brands found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination controls -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">Previous</a>
+                </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+  <!-- Add/Edit Brand Modal -->
+    <div class="modal fade" id="brandModal" tabindex="-1" aria-labelledby="brandModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="brandModalLabel">Add New Brand</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'brand_save' %}" id="brandForm">
+                        {% csrf_token %}
+                        <!-- Hidden input for brand ID -->
+                        <input type="hidden" id="brand_id" name="brand_id" value="">
+
+                        <!-- Brand Name Input -->
+                        <div class="mb-3">
+                            <label for="brand_name" class="form-label">Brand Name</label>
+                            <input type="text" name="brand_name" id="brand_name" class="form-control" required>
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" id="brandSubmitBtn">Add Brand</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add New Brand Button -->
+    <button type="button" class="btn btn-success mt-3" style="width:10rem;" id="addBrandBtn" data-bs-toggle="modal" data-bs-target="#brandModal">
+        Add New Brand
+    </button>
+    
+</div>
+
+
+<script>
+    // Function to configure the form for adding a new brand
+    function configureFormForAdd() {
+        document.getElementById('brandModalLabel').textContent = "Add New Brand";
+        document.getElementById('brandSubmitBtn').textContent = "Add Brand";
+        document.getElementById('brand_id').value = ""; // Clear brand ID
+        document.getElementById('brand_name').value = ""; // Clear brand name
+    }
+
+    // Function to configure the form for editing an existing brand
+    function configureFormForEdit(brandId, brandName) {
+        document.getElementById('brandModalLabel').textContent = "Edit Brand";
+        document.getElementById('brandSubmitBtn').textContent = "Update";
+        document.getElementById('brand_id').value = brandId; // Set brand ID
+        document.getElementById('brand_name').value = brandName; // Set brand name
+    }
+
+    // Event listener for the 'Add New Brand' button
+    document.getElementById('addBrandBtn').addEventListener('click', function() {
+        configureFormForAdd(); // Configure the form for adding a new brand
+    });
+
+    // Event listeners for 'Edit' buttons
+    document.querySelectorAll('.edit-brand').forEach(function(editBtn) {
+        editBtn.addEventListener('click', function() {
+            var brandId = this.getAttribute('data-id');
+            var brandName = this.getAttribute('data-name');
+            configureFormForEdit(brandId, brandName); // Configure the form for editing a brand
+        });
+    });
+</script>
+
+{% endblock %} 

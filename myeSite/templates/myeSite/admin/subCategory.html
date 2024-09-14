@@ -1,0 +1,166 @@
+{% extends "myeSite/admin/base.html" %}
+{% load static %}
+{% block title %}admin | Products{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Subcategory List</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Subcategory Name</th>
+                <th>Category</th>
+                <th colspan="2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subcategory in page_obj %}
+            <tr>
+               
+                <td>{{ subcategory.id }}</td>
+                <td>{{ subcategory.name }}</td>
+                <td>{{ subcategory.category.name }}</td>
+                <td>
+                    <a href="javascript:void(0)" 
+                       class="edit-subcategory" 
+                       data-id="{{ subcategory.id }}" 
+                       data-name="{{ subcategory.name }}" 
+                       data-category="{{ subcategory.category.id }}" 
+                       data-bs-toggle="modal" 
+                       data-bs-target="#subcategoryModal">
+                        <i class='bx bx-edit' style="color:green; margin-right:5px; font-size:1.2rem;"></i>
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'subcategory_delete' subcategory.id %}?page={{page_obj.number}}" style="display:inline;"><i class='bx bxs-trash-alt' style="color:red; margin-right:5px; font-size:1.2rem;"></i></a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No subcategories found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+      <!-- Pagination controls -->
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">Previous</a>
+                </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+       
+  <!-- Subcategory Modal -->
+  <div class="modal fade" id="subcategoryModal" tabindex="-1" aria-labelledby="subcategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="subcategoryModalLabel">Add New Subcategory</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'subcategory_save' %}" id="subcategoryForm">
+                    {% csrf_token %}
+                    <!-- Hidden input for subcategory ID -->
+                    <input type="hidden" id="subcategory_id" name="subcategory_id" value="">
+
+                    <!-- Subcategory Name Input -->
+                    <div class="mb-3">
+                        <label for="subcategory_name" class="form-label">Subcategory Name</label>
+                        <input type="text" name="subcategory_name" id="subcategory_name" class="form-control" required>
+                    </div>
+
+                    <!-- Parent Category Selection -->
+                    <div class="mb-3">
+                        <label for="category_select" class="form-label">Select Category</label>
+                        <select class="form-select" id="category_select" name="category_id" required>
+                            <option value="">Choose Category</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" style="width: 8rem;" id="subcategorySubmitBtn">Add Subcategory</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <!-- Add Subcategory Button -->
+    <button type="button" class="btn btn-secondary mt-2" id="addSubcategoryBtn" data-bs-toggle="modal" data-bs-target="#subcategoryModal" style="width: 10rem;">
+        Add Subcategory
+    </button>
+
+</div>
+
+
+
+<script>
+    // Function to configure the form for adding a new subcategory
+    function configureFormForAddSubcategory() {
+        document.getElementById('subcategoryModalLabel').textContent = "Add New Subcategory";
+        document.getElementById('subcategorySubmitBtn').textContent = "Add Subcategory";
+        document.getElementById('subcategory_id').value = ""; // Clear subcategory ID
+        document.getElementById('subcategory_name').value = ""; // Clear subcategory name
+        document.getElementById('category_select').value = ""; // Clear selected category
+    }
+
+    // Function to configure the form for editing an existing subcategory
+    function configureFormForEditSubcategory(subcategoryId, subcategoryName, categoryId) {
+        document.getElementById('subcategoryModalLabel').textContent = "Edit Subcategory";
+        document.getElementById('subcategorySubmitBtn').textContent = "Update Subcategory";
+        document.getElementById('subcategory_id').value = subcategoryId; // Set subcategory ID
+        document.getElementById('subcategory_name').value = subcategoryName; // Set subcategory name
+        document.getElementById('category_select').value = categoryId; // Set selected category
+    }
+
+    // Event listener for the 'Add Subcategory' button
+    document.getElementById('addSubcategoryBtn').addEventListener('click', function() {
+        configureFormForAddSubcategory(); // Configure the form for adding a new subcategory
+    });
+
+    // Event listeners for 'Edit' buttons
+    document.querySelectorAll('.edit-subcategory').forEach(function(editBtn) {
+        editBtn.addEventListener('click', function() {
+            var subcategoryId = this.getAttribute('data-id');
+            var subcategoryName = this.getAttribute('data-name');
+            var categoryId = this.getAttribute('data-category');
+            configureFormForEditSubcategory(subcategoryId, subcategoryName, categoryId); // Configure the form for editing a subcategory
+        });
+    });
+</script>
+
+{% endblock %}

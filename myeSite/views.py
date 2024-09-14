@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.db import IntegrityError
 import random
 from django.urls import reverse
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -508,7 +509,186 @@ def adminBase(request):
     return render(request, 'myeSite/admin/base.html')
 
 def adminLogin(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None and user.is_superuser:
+            login(request, user)
+            return redirect('adminDashboard')
+        else:
+            messages.error(request, "Invalid Credentials!")
+
     return render(request, 'myeSite/admin/adminLogin.html')
 
 def adminSignup(request):
     return render(request, 'myeSite/admin/adminSignup.html')
+
+def adminLogout(request):
+    logout(request)
+    return redirect('adminLogin')
+
+def adminDashboard(request):
+    if not request.user.is_authenticated:
+        return redirect('adminLogin')
+    return render(request, 'myeSite/admin/adminDashboard.html')
+
+def Brands(request):
+    brands = Brand.objects.all()
+    paginator = Paginator(brands, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+    
+    }
+
+    return render(request, 'myeSite/admin/brands.html', context)
+
+def brand_save(request):
+    if request.method == 'POST':
+        brand_id = request.POST.get('brand_id')
+        brand_name = request.POST.get('brand_name')
+
+        if brand_id:  # Update existing brand
+            brand = get_object_or_404(Brand, id=brand_id)
+            brand.name = brand_name
+            brand.save()
+        else:  # Add new brand
+            Brand.objects.create(name=brand_name)
+
+        return redirect('brands')
+    
+def delete_brand(request, pk):
+    brand = get_object_or_404(Brand, pk=pk)
+    if brand:
+        brand.delete()
+        return redirect('brands')
+
+def category_list_view(request):
+    categories = Category.objects.all()
+    paginator = Paginator(categories, 5)  # This will not work
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+    }
+    return render(request, 'myeSite/admin/category.html', context)
+
+def category_save(request):
+    if request.method == 'POST':
+        category_id = request.POST.get('category_id')
+        category_name = request.POST.get('category_name')
+
+        if category_id:  # Update existing brand
+            category = get_object_or_404(Category, id=category_id)
+            category.name = category_name
+            category.save()
+        else:  # Add new brand
+            Category.objects.create(name=category_name)
+
+        return redirect('category')
+
+def delete_category(request, pk):
+    category_item = get_object_or_404(Category, pk=pk)
+    if category_item:
+        category_item.delete()
+        return redirect('category')
+    
+def subCategory_list_view(request):
+    subcategories = Subcategory.objects.all()
+    paginator = Paginator(subcategories, 5)  # This will not work
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+    }
+    return render(request, 'myeSite/admin/subCategory.html', context)
+    
+def subcategory_save(request):
+    if request.method == 'POST':
+        subcategory_id = request.POST.get('subcategory_id')
+        subcategory_name = request.POST.get('subcategory_name')
+        category_id = request.POST.get('category_id')
+        
+        category = get_object_or_404(Category, id=category_id)
+
+        if subcategory_id:
+            # Update existing subcategory
+            subcategory = get_object_or_404(Subcategory, id=subcategory_id)
+            subcategory.name = subcategory_name
+            subcategory.category = category
+            subcategory.save()
+        else:
+            # Add new subcategory
+            Subcategory.objects.create(
+                name=subcategory_name,
+                category=category
+            )
+
+        return redirect('subcategory')
+
+def subcategory_delete(request, pk):
+    subcategory_item = get_object_or_404(Subcategory, pk=pk)
+    # Retrieve the current page number from the query parameters
+    page_number = request.GET.get('page', 1)  # Default to page 1 if 'page' is not present
+    
+    if subcategory_item:
+        subcategory_item.delete()
+
+        # Construct the redirect URL using reverse
+        redirect_url = reverse('subcategory') + f'?page={page_number}'
+
+        return redirect(redirect_url)
+        
+
+def Products(request):
+    return render(request, 'myeSite/admin/products.html')
+
+
+
+def Users(request):
+    # Fetch all users, excluding the admin user (is_superuser)
+    users = User.objects.filter(is_superuser=False)
+
+    # Set up pagination with 5 users per page
+    paginator = Paginator(users, 7)  # Show 5 users per page.
+
+    page_number = request.GET.get('page')  # Get the current page number from the URL
+    page_obj = paginator.get_page(page_number)  # Get the users for that page
+
+    return render(request, 'myeSite/admin/users.html', {'users':users, 'page_obj': page_obj})
+
+from django.contrib.auth.decorators import permission_required
+@permission_required('auth.delete_user', raise_exception=True)  
+def DeleteUser(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    if user.is_superuser:
+        # Optionally, handle the case for admin users
+        # Redirect or show an error message
+        return redirect('users')
+    
+    if request.method == 'POST':
+        user.delete()
+        return redirect('users')
+    return render(request, 'myeSite/admin/users.html', {'user': user})
+
+def Orders(request):
+    return render(request, 'myeSite/admin/orders.html')
+
+def UserMsg(request):
+    messages = ContactUs.objects.all().order_by('-created_at')
+    paginator = Paginator(messages, 4)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'myeSite/admin/userMsg.html', {'page_obj': page_obj})
+
+def deleteMessage(request, pk):
+    msg = get_object_or_404(ContactUs, pk=pk)
+    msg.delete()
+    return redirect('usermsg')

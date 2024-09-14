@@ -243,6 +243,14 @@ function selectSize(element) {
      element.classList.add('selected');
 }
 
+function showSection(section) {
+    // Hide all content sections
+    document.querySelectorAll('.content-section').forEach(function(content) {
+        content.style.display = 'none';
+    });
 
+    // Show the selected section
+    document.getElementById(section).style.display = 'block';
+}
     
     
