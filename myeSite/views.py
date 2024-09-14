@@ -532,7 +532,13 @@ def adminLogout(request):
 def adminDashboard(request):
     if not request.user.is_authenticated:
         return redirect('adminLogin')
-    return render(request, 'myeSite/admin/adminDashboard.html')
+    users = User.objects.all()
+    user_count = users.count()
+    context = {
+        'users':users,
+        'user_count':user_count,
+    }
+    return render(request, 'myeSite/admin/adminDashboard.html', context)
 
 def Brands(request):
     brands = Brand.objects.all()
@@ -645,10 +651,69 @@ def subcategory_delete(request, pk):
 
         return redirect(redirect_url)
         
-
+from .models import Size
 def Products(request):
-    return render(request, 'myeSite/admin/products.html')
+    products = Product.objects.all()
+    brands = Brand.objects.all()
+    categories = Category.objects.all()
+    subcategories = Subcategory.objects.all()
+    sizes = Size.objects.all()
 
+    paginator = Paginator(products, 4)  # This will not work
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+        'brands': brands,
+        'categories': categories,
+        'subcategories': subcategories,
+        'sizes': sizes,
+    }
+    return render(request, 'myeSite/admin/products.html', context)
+
+# import os
+# from django.core.files.uploadedfile import InMemoryUploadedFile
+# from .models import ProductImage
+
+# def allowed_image_format(file: InMemoryUploadedFile) -> bool:
+#     """Check if the uploaded file has an allowed image format."""
+#     valid_extensions = ['.jpg', '.jpeg', '.png', '.webp']
+#     ext = os.path.splitext(file.name)[1].lower()
+#     return ext in valid_extensions
+
+# def add_product(request):
+#     if request.method == "POST":
+#         # Create the product instance
+#         product = Product(
+#             name=request.POST.get('name'),
+#             description=request.POST.get('description'),
+#             stock_status=request.POST.get('stock_status'),
+#             old_price=request.POST.get('old_price'),
+#             new_price=request.POST.get('new_price'),
+#             discount_price=request.POST.get('discount_price'),
+#             brand_id=request.POST.get('brand'),
+#             category_id=request.POST.get('category'),
+#             subcategory_id=request.POST.get('subcategory'),
+#             isnew='isnew' in request.POST
+#         )
+#         product.save()
+
+#          # Handle image uploads
+#         images = request.FILES.getlist('images')
+#         for image in images:
+#             if not allowed_image_format(image):
+#                 # If the file format is not allowed, raise an error
+#                 return render(request, 'your_template.html', {
+#                     'error': 'Invalid file format. Only JPG, JPEG, PNG, and WEBP are allowed.',
+#                     'form': request.POST  # Optionally, re-render the form with previous data
+#                 })
+
+#             ProductImage.objects.create(product=product, image=image)
+#         return redirect('product_list')  # Redirect to product list or another page
+
+#     # If GET request, render the form
+#     return render(request, 'your_template.html', {'form': ProductForm()})
 
 
 def Users(request):
