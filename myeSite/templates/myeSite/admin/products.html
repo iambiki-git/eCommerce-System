@@ -56,7 +56,7 @@
                 </a>
               </td>
             <td>
-                <a href="#"><i class='bx bxs-trash-alt' style="color:red; margin-right:5px; font-size:1.2rem;"></i></a>
+                <a href="{% url 'delete_product' product.id %}?page={{ page_obj.number }}" style="display:inline;"><i class='bx bxs-trash-alt' style="color:red; margin-right:5px; font-size:1.2rem;"></i></a>
             </td>
         </tr>
         {% endfor %}
@@ -106,12 +106,16 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
-          <form id="productForm" method="POST" enctype="multipart/form-data">
+          <form id="productForm" action="{% url 'add_product' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="name" class="form-label">Name</label>
                 <input type="text" class="form-control" id="name" name="name" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="product_desc" class="form-label">Product Description</label>
+                <textarea class="form-control" id="product_desc" name="product_desc" rows="4" required></textarea>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="stock_status" class="form-label">Stock Status</label>
@@ -160,7 +164,11 @@
                 </select>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="image" class="form-label">Images (up to 3)</label>
+                <label for="primary_image" class="form-label">Primary Image</label>
+                <input type="file" class="form-control" id="primary_image" name="primary_image">
+            </div>
+              <div class="col-md-6 mb-3">
+                <label for="image" class="form-label">Images (up to 2)</label>
                 <input type="file" class="form-control" id="image" name="images" multiple required>
               </div>
               <div class="col-md-6 mb-3">
@@ -178,101 +186,12 @@
                 </div>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary">Save Product</button>
+            <button type="submit" class="btn btn-primary" style="width:8rem;">Save Product</button>
           </form>
         </div>
       </div>
     </div>
   </div>
-
-<!-- Modal -->
-{% comment %} <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="productModalLabel">Add Product</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
-          <form id="productForm" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="hidden" id="product_id" name="product_id">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" name="name" required>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="stock_status" class="form-label">Stock Status</label>
-                <select class="form-select" id="stock_status" name="stock_status" required>
-                  <option value="In Stock">In Stock</option>
-                  <option value="Out of Stock">Out of Stock</option>
-                </select>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="old_price" class="form-label">Old Price</label>
-                <input type="number" step="0.01" class="form-control" id="old_price" name="old_price">
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="new_price" class="form-label">New Price</label>
-                <input type="number" step="0.01" class="form-control" id="new_price" name="new_price" required>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="discount_price" class="form-label">Discount Price</label>
-                <input type="number" step="0.01" class="form-control" id="discount_price" name="discount_price">
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="brand" class="form-label">Brand</label>
-                <select class="form-select" id="brand" name="brand" required>
-                  <option value="">Select Brand</option>
-                  {% for brand in brands %}
-                    <option value="{{ brand.id }}">{{ brand.name }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="category" class="form-label">Category</label>
-                <select class="form-select" id="category" name="category" required>
-                  <option value="">Select Category</option>
-                  {% for category in categories %}
-                    <option value="{{ category.id }}">{{ category.name }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="subcategory" class="form-label">Subcategory</label>
-                <select class="form-select" id="subcategory" name="subcategory" required>
-                  <option value="">Select Subcategory</option>
-                  {% for subcategory in subcategories %}
-                    <option value="{{ subcategory.id }}">{{ subcategory.name }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="images" class="form-label">Images (up to 3)</label>
-                <input type="file" class="form-control" id="images" name="images" multiple accept="image/jpeg, image/png, image/webp">
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="sizes" class="form-label">Sizes</label>
-                <select class="form-select" id="sizes" name="sizes" multiple>
-                  {% for size in sizes %}
-                    <option value="{{ size.id }}">{{ size.name }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="col-md-12 mb-3">
-                <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="isnew" name="isnew">
-                  <label class="form-check-label" for="isnew">Is New</label>
-                </div>
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary" id="saveButton">Save Product</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div> {% endcomment %}
 
   
 

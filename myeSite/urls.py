@@ -57,7 +57,9 @@ urlpatterns = [
     
 
     path('adminDashboard/products/', views.Products, name='products'),
-    # path('adminDashboard/products/add', views.add_product, name='add_product'),
+    path('adminDashboard/products/add', views.add_product, name='add_product'),
+    path('adminDashboard/products/delete/<int:pk>', views.delete_product, name='delete_product'),
+
 
     path('adminDashboard/users/', views.Users, name='users'),
     path('adminDashboard/users/delete/<int:user_id>/', views.DeleteUser, name='delete_user'),

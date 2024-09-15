@@ -672,49 +672,78 @@ def Products(request):
     }
     return render(request, 'myeSite/admin/products.html', context)
 
-# import os
-# from django.core.files.uploadedfile import InMemoryUploadedFile
-# from .models import ProductImage
 
-# def allowed_image_format(file: InMemoryUploadedFile) -> bool:
-#     """Check if the uploaded file has an allowed image format."""
-#     valid_extensions = ['.jpg', '.jpeg', '.png', '.webp']
-#     ext = os.path.splitext(file.name)[1].lower()
-#     return ext in valid_extensions
+from .models import ProductImage
+def add_product(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        product_desc = request.POST.get('product_desc')
+        stock_status = request.POST.get('stock_status')
+        old_price = request.POST.get('old_price', '0.00')
+        new_price = request.POST.get('new_price')
+        discount_price = request.POST.get('discount_price', '0.00')
+        brand_id = request.POST.get('brand')
+        category_id = request.POST.get('category')
+        subcategory_id = request.POST.get('subcategory')
+        isnew = request.POST.get('isnew', False)
+        sizes = request.POST.getlist('sizes')
+        images = request.FILES.getlist('images')
+        primary_image = request.FILES.get('primary_image')
 
-# def add_product(request):
-#     if request.method == "POST":
-#         # Create the product instance
-#         product = Product(
-#             name=request.POST.get('name'),
-#             description=request.POST.get('description'),
-#             stock_status=request.POST.get('stock_status'),
-#             old_price=request.POST.get('old_price'),
-#             new_price=request.POST.get('new_price'),
-#             discount_price=request.POST.get('discount_price'),
-#             brand_id=request.POST.get('brand'),
-#             category_id=request.POST.get('category'),
-#             subcategory_id=request.POST.get('subcategory'),
-#             isnew='isnew' in request.POST
-#         )
-#         product.save()
+        # Fetch related brand, category, subcategory
+        brand = Brand.objects.get(id=brand_id)
+        category = Category.objects.get(id=category_id)
+        subcategory = Subcategory.objects.get(id=subcategory_id)
 
-#          # Handle image uploads
-#         images = request.FILES.getlist('images')
-#         for image in images:
-#             if not allowed_image_format(image):
-#                 # If the file format is not allowed, raise an error
-#                 return render(request, 'your_template.html', {
-#                     'error': 'Invalid file format. Only JPG, JPEG, PNG, and WEBP are allowed.',
-#                     'form': request.POST  # Optionally, re-render the form with previous data
-#                 })
+         # Create a new product
+        product = Product.objects.create(
+            name=name,
+            description=product_desc, 
+            stock_status=stock_status,
+            old_price=old_price,
+            new_price=new_price,
+            discount_price=discount_price,
+            brand=brand,
+            category=category,
+            subcategory=subcategory,
+            image=primary_image,
+            isnew=isnew,
+        )
 
-#             ProductImage.objects.create(product=product, image=image)
-#         return redirect('product_list')  # Redirect to product list or another page
+        # Add sizes to the product
+        for size_id in sizes:
+            size = Size.objects.get(id=size_id)
+            product.sizes.add(size)
 
-#     # If GET request, render the form
-#     return render(request, 'your_template.html', {'form': ProductForm()})
+        # Save product images (up to 3)
+        for image in images[:2]:
+            product_image = ProductImage.objects.create(product=product, image=image)
 
+        product.save()
+
+        # messages.success(request, "Product added successfully!")
+        return redirect('products')
+    # else:
+    #     brands = Brand.objects.all()
+    #     categories = Category.objects.all()
+    #     subcategories = Subcategory.objects.all()
+    #     sizes = Size.objects.all()
+    #     return render(request, 'your_template_path.html', {
+    #         'brands': brands,
+    #         'categories': categories,
+    #         'subcategories': subcategories,
+    #         'sizes': sizes
+    #     })
+
+def delete_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    page_no = request.GET.get('page', 1)
+    if product:
+        product.delete()
+
+        redirect_url = reverse('products') + f'?page={page_no}'
+
+        return redirect(redirect_url)
 
 def Users(request):
     # Fetch all users, excluding the admin user (is_superuser)
