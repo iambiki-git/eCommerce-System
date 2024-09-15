@@ -2,11 +2,22 @@
 {% load static %}
 {% block title %}admin | Products{% endblock %}
 {% block content %}
+
 <table class="table table-bordered table-hover">
     <div class="addBtn d-flex align-items-center justify-content-between">
         <h2 class="mb-0 mt-1 fs-3 fw-bold">Products</h2>
-        <button class="btn btn-success" style="width:8rem;" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
-    </div>
+        <div class="mybuttons">
+          <button class="btn btn-success" style="width:8rem;" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
+          <a href="#" data-bs-toggle="modal" data-bs-target="#editProductModal">
+            <button class="btn btn-secondary" style="width:9rem;">Edit Products</button>
+          </a>
+          <form action="{% url 'product_search' %}" method="GET">
+            {% csrf_token %}
+            <input type="text" name="searchPcode" id="searchPcode" placeholder="Search Product code ...." style="width:100%; height:2.5rem; border:1px solid #ccc; outline:none; border-radius:5px; padding-left:5px; margin-bottom:10px;">
+            {% comment %} <button type="submit">Search</button> {% endcomment %}
+          </form>
+        </div>
+      </div>
     <thead class="table-white">
         <tr>
             <th>Id</th>
@@ -14,6 +25,7 @@
             <th>Name</th>
             {% comment %} <th>Description</th> {% endcomment %}
             <th>Brand</th>
+            <th>P. Code</th>
             <th>Old Price</th> 
             <th>New Price</th>
             {% comment %} <th>Discount</th> {% endcomment %}
@@ -31,8 +43,8 @@
             <td>{{ product.id }}</td>
             <td><img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-thumbnail" style="max-width: 70px; max-height:70px;"></td>
             <td>{{ product.name }}</td>
-            {% comment %} <td>{{ product.description }}</td> {% endcomment %}
             <td>{{ product.brand.name }}</td>
+            <td>{{ product.code }}</td>
             <td><del>Rs.{{ product.old_price|default:"" }}</del></td> 
             <td><strong>Rs.{{ product.new_price }}</strong></td>
             {% comment %} <td>${{ product.discount_price }}</td> {% endcomment %}
@@ -50,11 +62,12 @@
             {% comment %} <td>
                 <a href="#"><i class='bx bx-edit' style="color:green; margin-right:5px; font-size:1.2rem;"></i></a>
             </td> {% endcomment %}
-            <td>
-                <a href="#" class="edit-btn" data-product-id="{{ product.id }}">
-                  <i class='bx bx-edit' style="color: green; margin-right: 5px; font-size: 1.2rem;"></i>
-                </a>
-              </td>
+            {% comment %} <td>
+              <a href="#" data-bs-toggle="modal" data-bs-target="#editProductModal" onclick="populateEditForm({{ product.id }})">
+                <i class='bx bx-edit' style="color:green; margin-right:5px; font-size:1.2rem;"></i>
+              </a>
+            </td> {% endcomment %}
+
             <td>
                 <a href="{% url 'delete_product' product.id %}?page={{ page_obj.number }}" style="display:inline;"><i class='bx bxs-trash-alt' style="color:red; margin-right:5px; font-size:1.2rem;"></i></a>
             </td>
@@ -97,7 +110,7 @@
 </nav>
 
 
-<!-- Modal -->
+<!-- Add Product Modal -->
 <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -114,8 +127,8 @@
                 <input type="text" class="form-control" id="name" name="name" required>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="product_desc" class="form-label">Product Description</label>
-                <textarea class="form-control" id="product_desc" name="product_desc" rows="4" required></textarea>
+                <label for="product_code" class="form-label">Product Code</label>
+                <input type="text" class="form-control" id="product_code" name="product_code" required></input>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="stock_status" class="form-label">Stock Status</label>
@@ -185,6 +198,10 @@
                   <label class="form-check-label" for="isnew">Is New</label>
                 </div>
               </div>
+              <div class="col-md-6 mb-3">
+                <label for="product_desc" class="form-label">Product Description</label>
+                <textarea class="form-control" id="product_desc" name="product_desc" rows="4" required></textarea>
+              </div>
             </div>
             <button type="submit" class="btn btn-primary" style="width:8rem;">Save Product</button>
           </form>
@@ -194,7 +211,112 @@
   </div>
 
   
+<!-- Edit Product Modal -->
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
 
-  
+          <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+            {% for product in page_obj %}
+            <form id="editProductForm" action="{% url 'edit_product' product.id %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="row">
+                      <div class="col-md-6 mb-3">
+                          <label for="name" class="form-label">Name</label>
+                          <input type="text" id="name" name="name" class="form-control" value="{{ product.name }}">
+                      </div>
+                      <div class="col-md-6 mb-3">
+                          <label for="code" class="form-label">P. Code</label>
+                          <input type="text" id="code" name="code" class="form-control" value="{{ product.code }}">
+                      </div>
+                      <div class="col-md-6 mb-3">
+                          <label for="product_desc" class="form-label">Product Description</label>
+                          <textarea id="product_desc" name="product_desc" class="form-control">{{ product.description }}</textarea>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                          <label for="stock_status" class="form-label">Stock Status</label>
+                          <input type="text" id="stock_status" name="stock_status" class="form-control" value="{{ product.stock_status }}">
+                      </div>
+                      <div class="col-md-6 mb-3">
+                          <label for="old_price" class="form-label">Old Price</label>
+                          <input type="number" id="old_price" name="old_price" class="form-control" value="{{ product.old_price }}">
+                      </div>
+                      <div class="col-md-6 mb-3">
+                          <label for="new_price" class="form-label">New Price</label>
+                          <input type="number" id="new_price" name="new_price" class="form-control" value="{{ product.new_price }}">
+                      </div>
+                      <div class="col-md-6 mb-3">
+                          <label for="discount_price" class="form-label">Discount Price</label>
+                          <input type="number" id="discount_price" name="discount_price" class="form-control" value="{{ product.discount_price }}">
+                      </div>
+                      <div class="col-md-6 mb-3">
+                          <label for="brand" class="form-label">Brand</label>
+                          <select id="brand" name="brand" class="form-select">
+                              {% for brand in brands %}
+                                  <option value="{{ brand.id }}" {% if product.brand.id == brand.id %}selected{% endif %}>{{ brand.name }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                          <label for="category" class="form-label">Category</label>
+                          <select id="category" name="category" class="form-select">
+                              {% for category in categories %}
+                                  <option value="{{ category.id }}" {% if product.category.id == category.id %}selected{% endif %}>{{ category.name }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                          <label for="subcategory" class="form-label">Subcategory</label>
+                          <select id="subcategory" name="subcategory" class="form-select">
+                              {% for subcategory in subcategories %}
+                                  <option value="{{ subcategory.id }}" {% if product.subcategory.id == subcategory.id %}selected{% endif %}>{{ subcategory.name }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                          <label for="primary_image" class="form-label">Primary Image</label>
+                          <input type="file" id="primary_image" name="primary_image" class="form-control">
+                          <img src="{{ product.image.url }}" alt="Primary Image" style="max-width: 100px; margin-top: 10px;"> 
+                      </div>
+                      <div class="col-md-6 mb-3">
+                          <label for="images" class="form-label">Images (up to 2)</label>
+                          <input type="file" id="images" name="images" class="form-control" multiple>
+                          {% for image in product.images.all %}
+                              <img src="{{ image.image.url }}" alt="Image" style="max-width: 100px; margin-top: 10px;">
+                          {% endfor %} 
+                      </div>
+                      <div class="col-md-6 mb-3">
+                          <label for="sizes" class="form-label">Sizes</label>
+                          <select id="sizes" name="sizes" class="form-select" multiple>
+                              {% for size in sizes %}
+                                  <option value="{{ size.id }}" {% if size in product.sizes.all %}selected{% endif %}>{{ size.name }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                      <div class="col-md-12 mb-3">
+                          <div class="form-check">
+                              <input type="checkbox" id="isnew" name="isnew" class="form-check-input" {% if product.isnew %}checked{% endif %}>
+                              <label class="form-check-label" for="isnew">Is New</label>
+                          </div>
+                      </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary" style="width:8rem;">Save Changes</button>
+                </form>
+                {% endfor %}
+              </div>
+      </div>
+  </div>
+</div>
+
+
+
+
  
 {% endblock %}
+
+
+

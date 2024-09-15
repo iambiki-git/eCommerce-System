@@ -57,8 +57,10 @@ urlpatterns = [
     
 
     path('adminDashboard/products/', views.Products, name='products'),
-    path('adminDashboard/products/add', views.add_product, name='add_product'),
-    path('adminDashboard/products/delete/<int:pk>', views.delete_product, name='delete_product'),
+    path('adminDashboard/products/add/', views.add_product, name='add_product'),
+    path('adminDashboard/products/delete/<int:pk>/', views.delete_product, name='delete_product'),
+    path('adminDashboard/products/edit/<int:product_id>/', views.edit_product, name='edit_product'),
+    path('adminDashboard/products/search/', views.product_search, name='product_search'),
 
 
     path('adminDashboard/users/', views.Users, name='users'),

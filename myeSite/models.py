@@ -30,6 +30,7 @@ class Size(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
+    code = models.CharField(max_length=8, default='361SVT', blank=True, null=True)
     description = models.TextField()
     stock_status = models.CharField(max_length=50, default='In Stock')
     old_price = models.DecimalField(max_digits=10, decimal_places=2, default=500,  null=True, blank=True)

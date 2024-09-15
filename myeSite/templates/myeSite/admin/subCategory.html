@@ -9,7 +9,7 @@
             <tr>
                 <th>ID</th>
                 <th>Subcategory Name</th>
-                <th>Category</th>
+                <th>Category Id</th>
                 <th colspan="2">Action</th>
             </tr>
         </thead>
@@ -19,7 +19,7 @@
                
                 <td>{{ subcategory.id }}</td>
                 <td>{{ subcategory.name }}</td>
-                <td>{{ subcategory.category.name }}</td>
+                <td>{{ subcategory.category.id }}</td>
                 <td>
                     <a href="javascript:void(0)" 
                        class="edit-subcategory" 
@@ -110,7 +110,7 @@
 
                     <!-- Modal Footer -->
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" style="width: 8rem;" id="subcategorySubmitBtn">Add Subcategory</button>
+                        <button type="submit" class="btn btn-primary" style="width: 10rem;" id="subcategorySubmitBtn">Add Subcategory</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>

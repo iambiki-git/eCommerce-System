@@ -530,6 +530,9 @@ def adminLogout(request):
     return redirect('adminLogin')
 
 def adminDashboard(request):
+    products = Product.objects.all()
+    products_count = products.count()
+
     if not request.user.is_authenticated:
         return redirect('adminLogin')
     users = User.objects.all()
@@ -537,6 +540,7 @@ def adminDashboard(request):
     context = {
         'users':users,
         'user_count':user_count,
+        'products_count':products_count,
     }
     return render(request, 'myeSite/admin/adminDashboard.html', context)
 
@@ -659,9 +663,10 @@ def Products(request):
     subcategories = Subcategory.objects.all()
     sizes = Size.objects.all()
 
-    paginator = Paginator(products, 4)  # This will not work
+    paginator = Paginator(products, 4) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
 
     context = {
         'page_obj': page_obj,
@@ -677,6 +682,7 @@ from .models import ProductImage
 def add_product(request):
     if request.method == 'POST':
         name = request.POST.get('name')
+        code = request.POST.get('product_code')
         product_desc = request.POST.get('product_desc')
         stock_status = request.POST.get('stock_status')
         old_price = request.POST.get('old_price', '0.00')
@@ -685,7 +691,7 @@ def add_product(request):
         brand_id = request.POST.get('brand')
         category_id = request.POST.get('category')
         subcategory_id = request.POST.get('subcategory')
-        isnew = request.POST.get('isnew', False)
+        isnew = request.POST.get('isnew') == 'on'
         sizes = request.POST.getlist('sizes')
         images = request.FILES.getlist('images')
         primary_image = request.FILES.get('primary_image')
@@ -698,6 +704,7 @@ def add_product(request):
          # Create a new product
         product = Product.objects.create(
             name=name,
+            code = code,
             description=product_desc, 
             stock_status=stock_status,
             old_price=old_price,
@@ -723,17 +730,6 @@ def add_product(request):
 
         # messages.success(request, "Product added successfully!")
         return redirect('products')
-    # else:
-    #     brands = Brand.objects.all()
-    #     categories = Category.objects.all()
-    #     subcategories = Subcategory.objects.all()
-    #     sizes = Size.objects.all()
-    #     return render(request, 'your_template_path.html', {
-    #         'brands': brands,
-    #         'categories': categories,
-    #         'subcategories': subcategories,
-    #         'sizes': sizes
-    #     })
 
 def delete_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
@@ -744,6 +740,101 @@ def delete_product(request, pk):
         redirect_url = reverse('products') + f'?page={page_no}'
 
         return redirect(redirect_url)
+    
+def edit_product(request, product_id):
+    products = get_object_or_404(Product, id=product_id)
+    brands = Brand.objects.all()
+    categories = Category.objects.all()
+    subcategories = Subcategory.objects.all()
+    sizes = Size.objects.all()
+
+    if request.method == 'POST':
+        products.name = request.POST.get('name')
+        products.code = request.POST.get('code')
+        products.product_desc = request.POST.get('product_desc')
+        products.stock_status = request.POST.get('stock_status')
+        products.old_price = request.POST.get('old_price')
+        products.new_price = request.POST.get('new_price')
+        products.discount_price = request.POST.get('discount_price')
+        products.brand_id = request.POST.get('brand')
+        products.category_id = request.POST.get('category')
+        products.subcategory_id = request.POST.get('subcategory')
+        products.isnew = 'isnew' in request.POST
+
+        # Handle primary image replacement
+        primary_image = request.FILES.get('primary_image')
+        if primary_image:
+            products.image = primary_image
+            products.save()
+
+        # Handle additional images
+        additional_images = request.FILES.getlist('images')
+        if additional_images:
+            # Delete existing images if you want to replace them
+            products.images.all().delete()
+            # Add new images
+            for image in additional_images:
+                ProductImage.objects.create(product=products, image=image)
+
+        # Handle sizes
+        sizes = request.POST.getlist('sizes')
+        products.sizes.set(sizes)
+
+        products.save()
+        return redirect('products')  # Replace with your redirect URL
+
+    context = {
+        'products': products,
+        'brands': brands,
+        'categories': categories,
+        'subcategories': subcategories,
+        'sizes': sizes,
+    }
+    return render(request, 'myeSite/admin/products.html', context)
+
+def product_search(request):
+    search_pcode = request.GET.get('searchPcode')
+    if search_pcode:
+        products = Product.objects.filter(code=search_pcode)
+        brands = Brand.objects.all()
+        categories = Category.objects.all()
+        subcategories = Subcategory.objects.all()
+        sizes = Size.objects.all()   
+
+        paginator = Paginator(products, 4) 
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        context = {
+            'page_obj': page_obj,
+            'brands': brands,
+            'categories': categories,
+            'subcategories': subcategories,
+            'sizes': sizes,
+        } 
+        return render(request, 'myeSite/admin/products.html', context)
+
+    else:
+        products = Product.objects.all() 
+        brands = Brand.objects.all()
+        categories = Category.objects.all()
+        subcategories = Subcategory.objects.all()
+        sizes = Size.objects.all()   
+
+        paginator = Paginator(products, 4) 
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        context = {
+            'page_obj': page_obj,
+            'brands': brands,
+            'categories': categories,
+            'subcategories': subcategories,
+            'sizes': sizes,
+        }
+
+    return render(request, 'myeSite/admin/products.html', context)
+
 
 def Users(request):
     # Fetch all users, excluding the admin user (is_superuser)
@@ -772,7 +863,15 @@ def DeleteUser(request, user_id):
     return render(request, 'myeSite/admin/users.html', {'user': user})
 
 def Orders(request):
-    return render(request, 'myeSite/admin/orders.html')
+    orders = UserOrder.objects.all()
+    
+    for order in orders:
+        order.total_price = order.quantity * order.price
+
+    context = {
+        'orders':orders,
+    }
+    return render(request, 'myeSite/admin/orders.html', context)
 
 def UserMsg(request):
     messages = ContactUs.objects.all().order_by('-created_at')
