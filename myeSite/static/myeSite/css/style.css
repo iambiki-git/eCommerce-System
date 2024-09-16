@@ -1741,6 +1741,6 @@ button i {
 }
 
 .card-custom-width {
-    max-width: 1000px; /* Adjust this value as needed */
+    width: 100%; /* Adjust this value as needed */
     margin: auto; /* Center the card horizontally */
 }

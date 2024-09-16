@@ -66,6 +66,8 @@ urlpatterns = [
     path('adminDashboard/users/', views.Users, name='users'),
     path('adminDashboard/users/delete/<int:user_id>/', views.DeleteUser, name='delete_user'),
     path('adminDashboard/orders/', views.Orders, name='orders'),
+    path('adminDashboard/orders/delete/<int:pk>/', views.delete_order, name='delete_order'),
+
     path('adminDashboard/userMessage/', views.UserMsg, name='usermsg'),
     path('adminDashboard/userMessage/deleteMessage/<int:pk>', views.deleteMessage, name='deleteMessage'),
 

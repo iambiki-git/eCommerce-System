@@ -60,7 +60,7 @@ class OrderItemInline(admin.TabularInline):
     extra = 0  # No extra blank fields by default
 
 class UserOrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'shipping_city', 'shipping_add', 'shipping_option', 'billing_add', 'contact_number', 'order_date', 'total_amount')
+    list_display = ('id', 'user', 'shipping_city', 'shipping_add', 'fullname_ship', 'shipping_option', 'billing_city', 'billing_add', 'fullname_bill', 'contact_number', 'order_date', 'total_amount')
 
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'order', 'product', 'quantity', 'price', 'size', 'brand',)

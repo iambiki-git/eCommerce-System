@@ -448,8 +448,8 @@ from .models import OrderItem
 def place_order(request):
     if request.method == 'POST':
         cart_items = CartSystem.objects.filter(user=request.user)
-        shipping_address = ShippingAddress.objects.filter(user=request.user).first()
-        billing_address = BillingAddress.objects.filter(user=request.user).first()
+        shipping_address = ShippingAddress.objects.filter(user=request.user).order_by('-id').first()
+        billing_address = BillingAddress.objects.filter(user=request.user).order_by('-id').first()
 
         if not shipping_address or not billing_address:
             return redirect('cart')
@@ -476,8 +476,11 @@ def place_order(request):
             user=request.user,
             shipping_city=shipping_address.city,
             shipping_add=shipping_address.address,
+            fullname_ship = shipping_address.fullname,
             shipping_option = shipping_address.shipping_option,
-            billing_add=billing_address.city,
+            billing_city=billing_address.city,
+            billing_add = billing_address.address,
+            fullname_bill = billing_address.fullname,
             contact_number=shipping_address.contact_number, 
             order_date=date.today(),
             total_amount=total_amount
@@ -553,6 +556,8 @@ def adminLogout(request):
     logout(request)
     return redirect('adminLogin')
 
+
+from django.db.models import Sum
 def adminDashboard(request):
     products = Product.objects.all()
     products_count = products.count()
@@ -564,11 +569,16 @@ def adminDashboard(request):
 
     user_orders = UserOrder.objects.all()
     user_order_count = user_orders.count()
+
+    total_sales = UserOrder.objects.aggregate(total_sales=Sum('total_amount'))['total_sales'] or 0
+
+
     context = {
         'users':users,
         'user_count':user_count,
         'products_count':products_count,
         'user_order_count':user_order_count,
+        'total_sales': total_sales,
     }
     return render(request, 'myeSite/admin/adminDashboard.html', context)
 
@@ -893,11 +903,21 @@ def DeleteUser(request, user_id):
 def Orders(request):
     orders = UserOrder.objects.all().prefetch_related('items__product')
 
+    # Paginate the orders
+    paginator = Paginator(orders, 3)  # Show 10 orders per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'orders': orders,
+        'orders': page_obj,
     }
     return render(request, 'myeSite/admin/orders.html', context)
+
+def delete_order(request, pk):
+    order = get_object_or_404(UserOrder, pk=pk)
+    if order:
+        order.delete()
+        return redirect('orders')
 
 def UserMsg(request):
     messages = ContactUs.objects.all().order_by('-created_at')

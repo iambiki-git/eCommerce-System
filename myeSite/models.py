@@ -103,8 +103,11 @@ class UserOrder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     shipping_add = models.CharField(max_length=100, default="drn")
     shipping_city = models.CharField(max_length=100, default="drn")
+    fullname_ship = models.CharField(max_length=100, default="ram")
     shipping_option = models.CharField(max_length=100, default="standard")
     billing_add = models.CharField(max_length=100, default="brt")
+    billing_city = models.CharField(max_length=100, default="brt")
+    fullname_bill = models.CharField(max_length=100, default="shyam")
     contact_number = models.CharField(max_length=14, blank=False, null=False, default="9898989898")  # Add contact_number field
     order_date = models.DateField(default=datetime.datetime.today)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
