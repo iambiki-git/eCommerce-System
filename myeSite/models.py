@@ -101,14 +101,22 @@ class BillingAddress(models.Model):
 
 class UserOrder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    shipping_add = models.CharField(max_length=100, default="drn")
+    shipping_city = models.CharField(max_length=100, default="drn")
+    shipping_option = models.CharField(max_length=100, default="standard")
+    billing_add = models.CharField(max_length=100, default="brt")
+    contact_number = models.CharField(max_length=14, blank=False, null=False, default="9898989898")  # Add contact_number field
+    order_date = models.DateField(default=datetime.datetime.today)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(UserOrder, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
-    price = models.IntegerField()
+    quantity = models.IntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     size = models.CharField(max_length=50, default="M")
     brand = models.CharField(max_length=50, default="Gucci")
-    shipping_add = models.CharField(max_length=100, default="drn")
-    billing_add = models.CharField(max_length=100, default="brt")
-    order_date = models.DateField(default=datetime.datetime.today)
 
 class ContactUs(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)

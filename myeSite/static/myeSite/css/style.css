@@ -1739,3 +1739,8 @@ button i {
     z-index: 100; /* Ensure it's above other content */
     overflow-y: auto;
 }
+
+.card-custom-width {
+    max-width: 1000px; /* Adjust this value as needed */
+    margin: auto; /* Center the card horizontally */
+}

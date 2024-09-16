@@ -406,9 +406,9 @@ def process_billing_info(request):
 
 
 SHIPPING_CHARGES = {
-    'standard': 0.00,
-    'express': 150.00,
-    'overnight': 250.00,
+    'standard': Decimal('0.00'),
+    'express': Decimal('150.00'),
+    'overnight': Decimal('250.00'),
 }
 
 def payment(request):
@@ -444,6 +444,7 @@ def order_confirmation(request):
 
 
 from datetime import date
+from .models import OrderItem
 def place_order(request):
     if request.method == 'POST':
         cart_items = CartSystem.objects.filter(user=request.user)
@@ -457,22 +458,45 @@ def place_order(request):
             # If there are no cart items, redirect to the cart page
             return redirect('cart')
         
-        # Create an order for each item in the cart
+        # Calculate subtotal
+        subtotal = sum(item.product.new_price * item.quantity for item in cart_items)
+
+        # Get shipping charge based on the selected shipping option
+        shipping_option = shipping_address.shipping_option
+        shipping_charge = SHIPPING_CHARGES.get(shipping_option, Decimal('0.00'))
+
+        # Calculate total amount including shipping cost
+        total_amount = subtotal + shipping_charge
+
+        # Fetch contact_number or use a default value if not available
+        contact_number = shipping_address.contact_number if shipping_address else "9898989898"
+
+        # Create a single UserOrder for the user
+        order = UserOrder.objects.create(
+            user=request.user,
+            shipping_city=shipping_address.city,
+            shipping_add=shipping_address.address,
+            shipping_option = shipping_address.shipping_option,
+            billing_add=billing_address.city,
+            contact_number=shipping_address.contact_number, 
+            order_date=date.today(),
+            total_amount=total_amount
+        )
+
+        # Create OrderItem for each product in the cart
         for item in cart_items:
-            UserOrder.objects.create(
-                user=request.user,
+            OrderItem.objects.create(
+                order=order,
                 product=item.product,
                 quantity=item.quantity,
-                price=item.product.new_price,  # Assuming price is stored in the Product model
-                size=item.size,
-                brand=item.brand,
-                shipping_add= shipping_address,
-                billing_add= billing_address,
-                order_date=date.today()
+                size = item.size,
+                brand = item.brand,
+                price=item.product.new_price  # Assuming price is stored in the Product model
             )
         
         # Clear the user's cart after placing the order
         cart_items.delete()  # This deletes all the cart items for the user
+
         if shipping_address:
             shipping_address.delete()
         if billing_address:
@@ -537,10 +561,14 @@ def adminDashboard(request):
         return redirect('adminLogin')
     users = User.objects.all()
     user_count = users.count()
+
+    user_orders = UserOrder.objects.all()
+    user_order_count = user_orders.count()
     context = {
         'users':users,
         'user_count':user_count,
         'products_count':products_count,
+        'user_order_count':user_order_count,
     }
     return render(request, 'myeSite/admin/adminDashboard.html', context)
 
@@ -863,13 +891,11 @@ def DeleteUser(request, user_id):
     return render(request, 'myeSite/admin/users.html', {'user': user})
 
 def Orders(request):
-    orders = UserOrder.objects.all()
-    
-    for order in orders:
-        order.total_price = order.quantity * order.price
+    orders = UserOrder.objects.all().prefetch_related('items__product')
+
 
     context = {
-        'orders':orders,
+        'orders': orders,
     }
     return render(request, 'myeSite/admin/orders.html', context)
 

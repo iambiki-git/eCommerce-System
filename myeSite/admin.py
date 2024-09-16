@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Product, Brand, Category, Subcategory, ProductImage, Review
-from .models import Wishlist, CartSystem, Size, ShippingAddress, BillingAddress, UserOrder, ContactUs
+from .models import Wishlist, CartSystem, Size, ShippingAddress, BillingAddress, UserOrder, OrderItem, ContactUs
 
  
 # # Register your models here.
@@ -54,8 +54,16 @@ class BillingAddressAdmin(admin.ModelAdmin):
 #     list_display = ('option_name',)
 
 
+# Inline model to display order items within the UserOrder admin page
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    extra = 0  # No extra blank fields by default
+
 class UserOrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'product', 'quantity', 'price', 'size', 'brand', 'shipping_add', 'billing_add', 'order_date')
+    list_display = ('id', 'user', 'shipping_city', 'shipping_add', 'shipping_option', 'billing_add', 'contact_number', 'order_date', 'total_amount')
+
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ('id', 'order', 'product', 'quantity', 'price', 'size', 'brand',)
 
 class ContactUsAdmin(admin.ModelAdmin):
     list_display = ('fullname', 'email', 'subject', 'created_at')  # Fields to display in the list view
@@ -79,5 +87,6 @@ admin.site.register(ShippingAddress, ShippingAddressAdmin)
 admin.site.register(BillingAddress, BillingAddressAdmin)
 # admin.site.register(ShippingOption, ShippingOptionAdmin)
 admin.site.register(UserOrder, UserOrderAdmin)
+admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(ContactUs, ContactUsAdmin)
 admin.site.register(Review, ReviewAdmin)

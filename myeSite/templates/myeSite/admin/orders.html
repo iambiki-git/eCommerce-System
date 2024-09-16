@@ -2,37 +2,67 @@
 {% load static %}
 {% block title %}admin | Orders{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <h2>Your Orders</h2>
-    <div class="list-group">
+<div class="container mt-4 mb-0">
+    <h2 class="text-center">All Orders</h2>
+    {% if orders %}
         {% for order in orders %}
-        <div class="list-group-item mb-2">
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="card mb-4 mt-4 shadow-sm card-custom-width">
+            <div class="card-header bg-primary text-white d-flex justify-content-between">
                 <div>
-                    <strong>Order #{{ order.id }}</strong> - {{ order.date }} <br>
+                    <h5>Order #{{ order.id }} - {{ order.order_date }}</h5>
+                    <p class="mt-0 mb-0">Shipping Address: {{ order.shipping_city }} , {{order.shipping_add}}</p>
+                    <p class="mt-0 mb-0">Billing Address: {{ order.billing_add }} {{billing_address.fullname}}</p>
+                    <p class="mt-0 mb-0">Contact No: {{ order.contact_number }}</p>
+                    <p class="mt-0 mb-0">Shipping Option: {{ order.shipping_option }}</p>
                 </div>
-                <!-- Use Bootstrap 5's data-bs-toggle and data-bs-target attributes -->
-                <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#orderDetails{{ forloop.counter }}" aria-expanded="false" aria-controls="orderDetails{{ forloop.counter }}">
+                {% comment %} <div>
+                    <h6>Shipping Options:</h6>
+                    <p class="mt-0 mb-0">Standard: Rs.0</p>
+                    <p class="mt-0 mb-0">Express: Rs.150</p>
+                    <p class="mt-0 mb-0">Overnight: Rs.250</p>
+                </div> {% endcomment %}
+                <button class="btn btn-info text-dark" style="width:9rem; height:auto;" type="button" data-bs-toggle="collapse" data-bs-target="#orderDetails{{ order.id }}" aria-expanded="false" aria-controls="orderDetails{{ order.id }}">
                     View Details
                 </button>
             </div>
-
-            <!-- Collapse panel for order details -->
-            <div id="orderDetails{{ forloop.counter }}" class="collapse mt-3">
-                <hr>
-                <p><strong>Total Items:</strong> {{ order.quantity }}</p>
-                <p><strong>Price Each:</strong> Rs.{{ order.price }}</p>
-                <p><strong>Total Price:</strong> Rs.{{ order.total_price }}</p>
-                <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
-                <p><strong>Items:</strong></p>
-                <ul>
-                    {% for item in order.items %}
-                    <li>{{ item.name }} - Rs.{{ item.price }}</li>
-                    {% endfor %}
-                </ul>
+            <div id="orderDetails{{ order.id }}" class="collapse">
+                <div class="card-body">
+                    <h6>Order Items:</h6>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                {% comment %} <th>Product</th> {% endcomment %}
+                                <th>Product Code</th>
+                                <th>Quantity</th>
+                                <th>Size</th>
+                                {% comment %} <th>Brand</th> {% endcomment %}
+                                <th>Unit Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.items.all %}
+                            <tr>
+                                {% comment %} <td>{{ item.product.name }}</td> {% endcomment %}
+                                <td>{{ item.product.code }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.size }}</td>
+                                {% comment %} <td>{{ item.brand }}</td> {% endcomment %}
+                                <td>Rs.{{ item.price }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-end">
+                        <strong>Total Amount: ${{ order.total_amount }}</strong>
+                    </div>
+                </div>
             </div>
         </div>
         {% endfor %}
-    </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <strong>No orders found.</strong>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
