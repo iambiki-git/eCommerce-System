@@ -34,6 +34,7 @@
             <th>Category</th>
             {% comment %} <th>Subcategory</th> {% endcomment %}
             <th>Is New</th>
+            <th>Search_keywords</th>
             <th colspan="2">Action</th>
         </tr>
     </thead>
@@ -67,6 +68,9 @@
                 <i class='bx bx-edit' style="color:green; margin-right:5px; font-size:1.2rem;"></i>
               </a>
             </td> {% endcomment %}
+            <td>
+              {{ product.search_keywords}}
+            </td>
 
             <td>
                 <a href="{% url 'delete_product' product.id %}?page={{ page_obj.number }}" style="display:inline;"><i class='bx bxs-trash-alt' style="color:red; margin-right:5px; font-size:1.2rem;"></i></a>
@@ -130,6 +134,12 @@
                 <label for="product_code" class="form-label">Product Code</label>
                 <input type="text" class="form-control" id="product_code" name="product_code" required></input>
               </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="search_keyword" class="form-label">Search_keyword</label>
+                <input type="text" class="form-control" id="search_keyword" name="search_keyword" required>
+              </div>
+
               <div class="col-md-6 mb-3">
                 <label for="stock_status" class="form-label">Stock Status</label>
                 <select class="form-select" id="stock_status" name="stock_status" required>
@@ -198,6 +208,7 @@
                   <label class="form-check-label" for="isnew">Is New</label>
                 </div>
               </div>
+
               <div class="col-md-6 mb-3">
                 <label for="product_desc" class="form-label">Product Description</label>
                 <textarea class="form-control" id="product_desc" name="product_desc" rows="4" required></textarea>
@@ -233,6 +244,11 @@
                           <label for="code" class="form-label">P. Code</label>
                           <input type="text" id="code" name="code" class="form-control" value="{{ product.code }}">
                       </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="search_keyword" class="form-label">Search Keyword</label>
+                        <input type="text" class="form-control" id="search_keyword" name="search_keyword" value="{{ product.search_keywords }}">
+                    </div>
+                    
                       <div class="col-md-6 mb-3">
                           <label for="product_desc" class="form-label">Product Description</label>
                           <textarea id="product_desc" name="product_desc" class="form-control">{{ product.description }}</textarea>

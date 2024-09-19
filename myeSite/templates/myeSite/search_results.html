@@ -1,0 +1,63 @@
+{% extends "main.html" %}
+{% load static %}
+{% block title %}SearchResults{% endblock %}
+{% block searchResults %}
+
+<div class="search_results mb-0" style="margin-top:10rem; width:90%; margin-left:5%; margin-right:5%;">
+    {% if results %}
+    <div class="text-center mb-5">
+        <h1>Search Results for "{{query}}"</h1>
+    </div>
+    {% else %}
+    <div class="text-center mb-0" style="height:10rem;">
+        <h1 class="text-danger">No Results for "{{query}}"</h1>
+    </div>
+    {% endif %}
+    <div class="results d-flex flex-wrap align-items-center justify-content-start">
+         <!-- Display messages -->
+         {% if messages %}
+         <div id="popupMessage" class="popupclass">
+             {% for message in messages %}
+                 <p>{{ message }}</p>
+             {% endfor %}
+         </div>
+     {% endif %}
+        {% if results %}
+        {% for result in results %}
+        <div class="product-card">
+            {% if result.discount_price %}
+            <div class="show-discount d-flex align-items-center" style="width:40%; margin-left:5%;"><p class="ms-2 mt-3">Rs. {{result.discount_price}} off</p></div>
+            {% endif %}
+            <div class="tshirt-img" style="width:90%; margin-left:5%; object-fit:cover;">
+                {% if result.image %}
+                <a href="{% url 'itemsDetail' result.pk %}"><img src="{{ result.image.url }}" alt="{{ result.name }}" style="width:100%; object-fit:cover;"></a>
+                {% else %}
+                <p>No image available</p>
+                {% endif %} 
+            </div>
+                
+            <form method="POST" action="#">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="wishlist">
+                <input type="hidden" name="productid" value="{{ result.id }}">
+                <button type="submit" class="addToWishlist" style="width:90%; margin-left:5%;"><i class='bx bx-heart' id="wishlist_hearticon"></i>WISHLIST</button>
+            </form>
+        
+            
+            <div class="infoaboutproduct" style="width:90%; margin-left:5%;">
+                <p>{{ result.name }}</p>
+                {% if result.old_price %}
+                <span id='old-price' class="fw-light">Rs {{ result.old_price }}</span>
+                {% endif %}
+                <span id='new-price' class="fw-semibold">Rs {{ result.new_price  }}</span>
+
+            </div> 
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>  
+
+
+
+{% endblock %}

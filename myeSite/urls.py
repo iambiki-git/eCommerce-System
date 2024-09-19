@@ -15,7 +15,7 @@ urlpatterns = [
 
     path('changePassword/', views.ChangePassword, name="changePassword"),
 
-
+    path('search/', views.user_search_view, name='search'),
     
 
     path('cart/', views.cart, name='cart'),

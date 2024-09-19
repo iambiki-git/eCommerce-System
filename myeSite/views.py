@@ -113,6 +113,36 @@ def logoutModule(request):
     messages.success(request, 'Thanks for visiting! We hope to see you again soon.☺️')
     return redirect('login')
 
+def user_search_view(request):
+    query = request.GET.get('search', '')
+    results = []
+    if query:
+        results = Product.objects.filter(
+            Q(search_keywords__icontains=query) | Q(name__icontains=query) | Q(description__icontains=query) | Q(code__icontains=query)
+        )
+    
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            return redirect('login')
+        
+        product_id = request.POST.get('productid')
+        product = Product.objects.get(id = product_id)
+
+        # Check if the product is already in the wishlist
+        if Wishlist.objects.filter(user=request.user, product=product).exists():
+            messages.info(request, 'This Item is already in wishlist!!!')
+        else:
+            Wishlist.objects.create(user=request.user, product=product)
+            messages.success(request, 'Item added to wishlist!')
+
+        return redirect(f'{request.path}?search={query}')
+    
+    context = {
+        'results':results,
+        'query':query
+    }
+    return render(request, 'myeSite/search_results.html', context)
+
 from .models import ContactUs
 def contactusPage(request):
     if request.method == "POST":
@@ -216,7 +246,8 @@ def itemsDetailsPage(request, pk):
     product = get_object_or_404(Product, id=pk)    
     reviews = Review.objects.filter(product=product)
 
-
+    # Get recommended products based on price similarity
+    recommended_products = price_based_recommendation(pk)
     
     if request.method == 'POST':
         if not request.user.is_authenticated:
@@ -288,7 +319,7 @@ def itemsDetailsPage(request, pk):
         
 
         return redirect(request.path)
-    return render(request, 'myeSite/productPages/items-details.html', {'item':item, 'related_images':related_image, 'reviews':reviews})
+    return render(request, 'myeSite/productPages/items-details.html', {'item':item, 'related_images':related_image, 'reviews':reviews, 'recommended_products':recommended_products})
 
 def delete_review(request, pk):
     review = get_object_or_404(Review, id=pk)
@@ -721,6 +752,7 @@ def add_product(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         code = request.POST.get('product_code')
+        search_keyword = request.POST.get('search_keyword')
         product_desc = request.POST.get('product_desc')
         stock_status = request.POST.get('stock_status')
         old_price = request.POST.get('old_price', '0.00')
@@ -743,6 +775,7 @@ def add_product(request):
         product = Product.objects.create(
             name=name,
             code = code,
+            search_keywords = search_keyword,
             description=product_desc, 
             stock_status=stock_status,
             old_price=old_price,
@@ -789,6 +822,7 @@ def edit_product(request, product_id):
     if request.method == 'POST':
         products.name = request.POST.get('name')
         products.code = request.POST.get('code')
+        products.search_keywords = request.POST.get('search_keyword')
         products.product_desc = request.POST.get('product_desc')
         products.stock_status = request.POST.get('stock_status')
         products.old_price = request.POST.get('old_price')
@@ -843,6 +877,7 @@ def product_search(request):
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
+       
         context = {
             'page_obj': page_obj,
             'brands': brands,
@@ -862,6 +897,7 @@ def product_search(request):
         paginator = Paginator(products, 4) 
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+           
 
         context = {
             'page_obj': page_obj,
@@ -931,3 +967,32 @@ def deleteMessage(request, pk):
     msg = get_object_or_404(ContactUs, pk=pk)
     msg.delete()
     return redirect('usermsg')
+
+
+#price-based algorithm
+
+def price_based_recommendation(product_id, threshold=0.2):
+    """
+    Recommend products based on price similarity.
+    :param product_id: ID of the current product
+    :param threshold: The percentage difference allowed between prices (default 20%)
+    :return: List of recommended products
+    """
+    # Get the current product
+    current_product = Product.objects.get(id=product_id)
+    
+    # Get the price of the current product
+    current_price = current_product.new_price
+    
+   # Convert threshold and other constants to Decimal
+    threshold_decimal = Decimal(str(threshold))  # Convert threshold to Decimal
+    one = Decimal('1')  # Use Decimal instead of float for 1
+    
+    # Define a price range based on the threshold using Decimal arithmetic
+    lower_bound = current_price * (one - threshold_decimal)
+    upper_bound = current_price * (one + threshold_decimal)
+    
+    # Find products within the price range (excluding the current product itself)
+    recommended_products = Product.objects.filter(new_price__gte=lower_bound, new_price__lte=upper_bound).exclude(id=product_id)
+    
+    return recommended_products

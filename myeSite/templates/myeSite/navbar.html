@@ -33,12 +33,9 @@
     </ul>
 
     <div class="nav-icon">
-        <form action="#" method="post" class='d-flex me-4'>
+        <form action="{% url 'search' %}" method="GET" class='d-flex me-4'>
             {% csrf_token %}
-            <input type="text" name="search" placeholder="Search">
-            <div class="search_icon">
-                <i class='bx bx-search' id="searchIcon"></i>
-            </div>
+            <input type="text" name="search" placeholder="Search" style="width:20rem;" autocomplete="off">
         </form> 
 
         {% if request.user.is_authenticated %}

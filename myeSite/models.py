@@ -42,6 +42,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='product_images/')
     sizes = models.ManyToManyField(Size)
     isnew = models.BooleanField(default=False)
+    search_keywords = models.CharField(max_length=100, blank=True, null=True, default="search_keyword_here")
 
     def __str__(self):
         return self.name
