@@ -246,8 +246,10 @@ def itemsDetailsPage(request, pk):
     product = get_object_or_404(Product, id=pk)    
     reviews = Review.objects.filter(product=product)
 
+    # Optionally get category_id from the product or a different source
+    category_id = item.category.id if item.category else None
     # Get recommended products based on price similarity
-    recommended_products = price_based_recommendation(pk)
+    recommended_products = price_based_recommendation(pk, category_id=category_id)
     
     if request.method == 'POST':
         if not request.user.is_authenticated:
@@ -971,7 +973,7 @@ def deleteMessage(request, pk):
 
 #price-based algorithm
 
-def price_based_recommendation(product_id, threshold=0.2):
+def price_based_recommendation(product_id, category_id=None, threshold=0.2):
     """
     Recommend products based on price similarity.
     :param product_id: ID of the current product
@@ -991,8 +993,19 @@ def price_based_recommendation(product_id, threshold=0.2):
     # Define a price range based on the threshold using Decimal arithmetic
     lower_bound = current_price * (one - threshold_decimal)
     upper_bound = current_price * (one + threshold_decimal)
+
+    # Filter products by price and optionally by category
+    filters = {
+        'new_price__gte': lower_bound,
+        'new_price__lte': upper_bound
+    }
+
+    if category_id:
+        filters['category_id'] = category_id  # Filter by category if provided
     
-    # Find products within the price range (excluding the current product itself)
-    recommended_products = Product.objects.filter(new_price__gte=lower_bound, new_price__lte=upper_bound).exclude(id=product_id)
-    
+   # Find products within the price range (excluding the current product itself)
+    recommended_products = Product.objects.filter(**filters).exclude(id=product_id)
+
     return recommended_products
+
+

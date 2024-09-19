@@ -168,6 +168,12 @@ header a img{
 .dropdown:hover .category-dropdownlist {
     display: block;
 }
+.disabled {
+    color: gray;
+    pointer-events: none; /* Prevents clicking */
+    cursor: not-allowed; /* Shows a not-allowed cursor */
+}
+
 /* signin|signout */
 .dropdownlist {
     position: absolute;
@@ -734,7 +740,8 @@ button i {
     height: auto;
     width: 90%;
     margin-left: 5%;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 3rem;
     background-color: #fff;
 }
@@ -791,6 +798,7 @@ button i {
     padding: 1rem;
     background-color: white;
     /* border: 1px solid #ccc; */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: space-between;
