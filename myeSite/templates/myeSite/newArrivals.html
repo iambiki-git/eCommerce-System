@@ -3,7 +3,7 @@
 <h2 class="text-center fs-2 arrivalTitle">New Winter Arrivals</h2> 
 <div class="new-arrivals">
    {% if newItems %}
-   {% for newItem in newItems %}
+   {% for newItem in newItems|slice:":4" %}
    <div class="new-arrival-card">
       <div class="for-image">
          <div class="arrival-tag d-flex align-items-center">

@@ -17,13 +17,33 @@ def index(request):
     newItem = list(Product.objects.filter(isnew=True))
     random.shuffle(newItem)
     newItem=newItem[:4]
+
+    # Filter to have only one product per subcategory in new items
+    unique_new_items = {}
+    for item in newItem:
+        if item.subcategory not in unique_new_items:
+            unique_new_items[item.subcategory] = item
+    newItem = list(unique_new_items.values())[:4]  # Limit to 4 items
+
+    #featured-products ko lagi 
     items = list(Product.objects.filter(isnew=False))
     random.shuffle(items)  # Shuffle the list
-    return render(request, 'myeSite/index.html', {'items':items, 'newItems':newItem})
 
-# def index(request):
-#     items = Items.objects.all()
-#     return render(request, 'myeSite/index.html', {'items':items})
+    #product-categories
+    category_items = Product.objects.all()
+    random.shuffle(items)  # Shuffle the list
+
+     # Filter to have only one product per subcategory in regular items
+    unique_items = {}
+    for cat_item in category_items:
+        if cat_item.subcategory not in unique_items:
+            unique_items[cat_item.subcategory] = cat_item
+
+    cat_items = list(unique_items.values())  # No limit on regular items
+
+    return render(request, 'myeSite/index.html', {'items':items, 'newItems':newItem, 'cat_items':cat_items})
+
+
 
 def loginModule(request):
     if not request.user.is_authenticated:
