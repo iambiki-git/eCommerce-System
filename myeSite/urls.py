@@ -41,6 +41,8 @@ urlpatterns = [
     path('admin-signup/', views.adminSignup, name='adminSignup'),
     path('adminDashboard/', views.adminDashboard, name='adminDashboard'),
 
+    path('adminDashboard/change-password/', views.change_AdminPassword, name='change_password'),
+
     path('adminDashboard/brands/', views.Brands, name='brands'),
     path('adminDashboard/brands/save/', views.brand_save, name='brand_save'),
     path('adminDashboard/brand/delete-brand/<int:pk>', views.delete_brand, name='delete_brand'),

@@ -623,17 +623,17 @@ def adminDashboard(request):
     
     if not request.user.is_authenticated:
         return redirect('adminLogin')
-    
+
     products = Product.objects.all()
     products_count = products.count()
 
     users = User.objects.all()
     user_count = users.count()
-
+    
     user_orders = UserOrder.objects.all()
     user_order_count = user_orders.count()
 
-    total_sales = UserOrder.objects.aggregate(total_sales=Sum('total_amount'))['total_sales'] or 0
+    total_sales = ProductSalesRecord.objects.aggregate(total_sales=Sum('total_sales'))['total_sales'] or 0
 
     # Retrieve product sales records
     product_sales_records = ProductSalesRecord.objects.select_related('product').all()
@@ -647,6 +647,26 @@ def adminDashboard(request):
         'product_sales_records': product_sales_records,
     }
     return render(request, 'myeSite/admin/adminDashboard.html', context)
+
+from django.contrib.auth.hashers import check_password, make_password
+@login_required
+def change_AdminPassword(request):
+    if request.method == 'POST':
+        new_password = request.POST.get('newPassword')
+        confirm_password = request.POST.get('confirmPassword')
+
+               
+        # Check if new password and confirm password match
+        if new_password == confirm_password:
+            request.user.set_password(new_password)  # Hash and save the new password
+            request.user.save()
+            messages.success(request, "Password changed successfully. Please login.")
+            return redirect('adminDashboard')  # Redirect to the dashboard or another page
+        else:
+            messages.error(request, "New passwords do not match")
+            return redirect('adminDashboard')
+
+    return render(request, 'myeSite/admin/adminDashboard.html')
 
 
 def totalProductSales(request):
@@ -776,6 +796,9 @@ def Products(request):
     categories = Category.objects.all()
     subcategories = Subcategory.objects.all()
     sizes = Size.objects.all()
+
+    products = Product.objects.annotate(sold_quantity=Sum('productsalesrecord__quantity_sold'))
+
 
     paginator = Paginator(products, 4) 
     page_number = request.GET.get('page')

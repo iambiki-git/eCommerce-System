@@ -34,7 +34,12 @@
             <th>Category</th>
             {% comment %} <th>Subcategory</th> {% endcomment %}
             <th>Is New</th>
-            <th>Search_keywords</th>
+            <th>
+              {% if request.GET.searchPcode %}
+              {% else %}
+              Sold Qty</th>
+              {% endif %}
+            {% comment %} <th>Search_keywords</th> {% endcomment %}
             <th colspan="2">Action</th>
         </tr>
     </thead>
@@ -68,9 +73,18 @@
                 <i class='bx bx-edit' style="color:green; margin-right:5px; font-size:1.2rem;"></i>
               </a>
             </td> {% endcomment %}
-            <td>
+            
+            {% comment %} <td>
               {{ product.search_keywords}}
-            </td>
+            </td> {% endcomment %}
+           
+            {% comment %} <td>{{ product.sold_quantity|default:0 }}</td> {% endcomment %}
+            <td>
+              {% if request.GET.searchPcode %}
+              {% else %}
+                  {{ product.sold_quantity|default:0 }} 
+              {% endif %}
+          </td>
 
             <td>
                 <a href="{% url 'delete_product' product.id %}?page={{ page_obj.number }}" style="display:inline;"><i class='bx bxs-trash-alt' style="color:red; margin-right:5px; font-size:1.2rem;"></i></a>

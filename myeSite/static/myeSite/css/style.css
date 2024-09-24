@@ -2033,7 +2033,7 @@ button i {
 .admin-login-form form button:hover{
     background: linear-gradient(360deg, #6157ff, #ee49fd);
 }
-
+/* Sidebar styles */
 #sidebarMenu {
     height: 100vh; /* Full height of viewport */
     position: fixed; /* Fixed position */
@@ -2049,16 +2049,25 @@ button i {
     margin: auto; /* Center the card horizontally */
 }
 
+/* Sidebar link styles */
 .sidebar .nav-link {
-    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+    padding: 10px 15px; /* Add some padding */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover and active */
+    color: #000; /* Default text color */
+    border-radius: 5px; /* Slightly rounded corners for a clean look */
 }
 
+/* Hover effect */
 .sidebar .nav-link:hover {
-    background-color: #e9ecef; /* Change this to your preferred hover color */
-    color: #007bff; /* Change this to your preferred text color */
+    background-color: #e9ecef; /* Change this to your preferred hover background color */
+    color: #007bff; /* Change this to your preferred text color on hover */
 }
 
+/* Active state for the current page */
 .sidebar .nav-link.active {
-    background-color: #007bff; /* Active link color */
-    color: white; /* Active link text color */
+    background-color: #007bff !important; /* Active link background color */
+    color: white !important; /* Active link text color */
+    font-weight: bold !important; /* Make active link text bold */
 }
+
+

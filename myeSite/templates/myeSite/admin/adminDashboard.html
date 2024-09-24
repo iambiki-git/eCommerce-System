@@ -2,7 +2,7 @@
 {% extends "myeSite/admin/base.html" %}
 
 {% block content %}
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-0 border-bottom">
   <h1 class="h2">Dashboard</h1>
 </div>
 
@@ -84,4 +84,46 @@
     </div>
   </div>
 </div>
+
+<!-- Error Message Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">Error</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="errorMessage">
+        <!-- Error message will be injected here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% if messages %}
+<script>
+  var errorMessage = '';
+  {% for message in messages %}
+    errorMessage += '{{ message }}\n';  // Collect error messages
+  {% endfor %}
+  
+  // Display the error modal if there are messages
+  if (errorMessage) {
+    document.getElementById('errorMessage').innerText = errorMessage;  // Set the error message
+    var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+    errorModal.show();
+    
+    // Automatically close the modal after 3 seconds
+    setTimeout(function() {
+      errorModal.hide();
+    }, 3000);
+  }
+</script>
+{% endif %}
+
 {% endblock %}
