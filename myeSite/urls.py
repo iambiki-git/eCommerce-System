@@ -71,4 +71,7 @@ urlpatterns = [
     path('adminDashboard/userMessage/', views.UserMsg, name='usermsg'),
     path('adminDashboard/userMessage/deleteMessage/<int:pk>', views.deleteMessage, name='deleteMessage'),
 
+    path('adminDashboard/totalProductSales/', views.totalProductSales, name='totalProductSales'),
+    
+
 ]

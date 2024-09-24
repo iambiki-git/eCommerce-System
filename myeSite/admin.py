@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Product, Brand, Category, Subcategory, ProductImage, Review
-from .models import Wishlist, CartSystem, Size, ShippingAddress, BillingAddress, UserOrder, OrderItem, ContactUs
+from .models import Wishlist, CartSystem, Size, ShippingAddress, BillingAddress, UserOrder, OrderItem, ContactUs, ProductSalesRecord
 
  
 # # Register your models here.
@@ -73,6 +73,13 @@ class ContactUsAdmin(admin.ModelAdmin):
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('user', 'review_text', 'created_at')
     
+class ProductSalesRecordAdmin(admin.ModelAdmin):
+    list_display = ('product', 'total_sales', 'quantity_sold', 'code')
+    search_fields = ('product__name',)
+    ordering = ('-total_sales',)
+    
+admin.site.register(ProductSalesRecord, ProductSalesRecordAdmin)
+
 admin.site.register(Brand, BrandAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Subcategory, SubcategoryAdmin)

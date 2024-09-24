@@ -145,16 +145,74 @@
 
                     </div> 
                     
-                   
                 </div>
                 {% endfor %}
             </div>
             {% else %}
             <h4 class="text-danger fw-bold">No Items Available</h4>
             {% endif %}
-  
+            
+
+            <div id="pagination-controls" class="d-flex align-items-center justify-content-center">
+                <button id="prev-btn" class="me-2">Previous</button>
+                <span id="page-info"></span>
+                <button id="next-btn">Next</button>
+              </div>
+
         </div>
+        
     </div>
+
    
 </div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const products = document.querySelectorAll(".product-card");
+      const itemsPerPage = 8;
+      let currentPage = 1;
+      const totalPages = Math.ceil(products.length / itemsPerPage);
+  
+      // Function to display items of the current page
+      function showPage(page) {
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+  
+        products.forEach((item, index) => {
+          if (index >= start && index < end) {
+            item.style.display = "block";
+          } else {
+            item.style.display = "none";
+          }
+        });
+  
+        // Update pagination info
+        document.getElementById("page-info").textContent = `Page ${page} of ${totalPages}`;
+      }
+  
+      // Handle next button
+      document.getElementById("next-btn").addEventListener("click", () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          showPage(currentPage);
+        }
+      });
+  
+      // Handle previous button
+      document.getElementById("prev-btn").addEventListener("click", () => {
+        if (currentPage > 1) {
+          currentPage--;
+          showPage(currentPage);
+        }
+      });
+  
+      // Initially show the first page
+      showPage(currentPage);
+    });
+</script>
+
 {% endblock %}
+
+
+  

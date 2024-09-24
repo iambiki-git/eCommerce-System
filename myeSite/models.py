@@ -143,3 +143,13 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Review by {self.user.username} for {self.product.name}"
+    
+class ProductSalesRecord(models.Model):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    total_sales = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    quantity_sold = models.PositiveIntegerField(default=0)  # New field to track quantity sold
+    code = models.CharField(max_length=8, default='361SVT', blank=True, null=True)
+    last_updated = models.DateTimeField(auto_now=True)  # To track when sales were last updated
+
+    def __str__(self):
+        return f'{self.product.name} - Total Sales: {self.total_sales}, Quantity Sold: {self.quantity_sold}'

@@ -1,0 +1,36 @@
+{% extends "myeSite/admin/base.html" %}
+{% load static %}
+{% block title %}admin | Total Product Sales{% endblock %}
+{% block content %}
+
+<h2 class="text-center mt-3">Total Product Sales</h2>
+<div class="container">
+    {% if product_sales_records %}
+    <table class="table table-bordered table-hover mt-4">
+        <thead class="table-light">
+            <tr>
+                <th>SN</th>
+                <th>Product Name</th>
+                <th>Product Code</th>
+                <th>Total Sales Amount</th>
+                <th>Quantity Sold</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in product_sales_records %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ record.product.name }}</td>  <!-- Display the product name -->
+                <td>{{ record.product.code }}</td>   <!-- Display the product code -->
+                <td>{{ record.total_sales }}</td>    <!-- Display total sales amount -->
+                <td>{{ record.quantity_sold }}</td>  <!-- Display quantity sold -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-info fw-bold text-center mt-4">No Product Sales Record</div>
+    {% endif %}
+</div>
+
+{% endblock %}

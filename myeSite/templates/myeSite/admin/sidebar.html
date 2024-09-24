@@ -51,11 +51,14 @@
             <i class="bi bi-chat me-2"></i> Users Message</a>
         </li>
 
-        {% comment %} <li class="nav-item">
-          <a class="nav-link" href="#">
-            <i class="bi bi-graph-up-arrow me-2"></i> Sales
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'totalProductSales' %}">
+              <i class="bi bi-bar-chart me-2"></i> Total Product Sales
           </a>
-        </li> {% endcomment %}
+      </li>
+      
+
+        
       </ul>
     </div>
   </nav>

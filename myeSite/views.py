@@ -497,7 +497,7 @@ def order_confirmation(request):
 
 
 from datetime import date
-from .models import OrderItem
+from .models import OrderItem, ProductSalesRecord
 def place_order(request):
     if request.method == 'POST':
         cart_items = CartSystem.objects.filter(user=request.user)
@@ -550,6 +550,12 @@ def place_order(request):
                 price=item.product.new_price  # Assuming price is stored in the Product model
             )
         
+            # Update ProductSalesRecord for the sold product
+            sales_record, created = ProductSalesRecord.objects.get_or_create(product=item.product)
+            sales_record.total_sales += item.product.new_price * item.quantity  # Update total sales amount
+            sales_record.quantity_sold += item.quantity  # Update quantity sold
+            sales_record.save()  # Save the updated sales record
+        
         # Clear the user's cart after placing the order
         cart_items.delete()  # This deletes all the cart items for the user
 
@@ -560,6 +566,8 @@ def place_order(request):
 
         return redirect('order_confirmation')
     return redirect('cart')
+
+
 
 from django.contrib.auth import update_session_auth_hash
 def ChangePassword(request):
@@ -612,11 +620,13 @@ def adminLogout(request):
 
 from django.db.models import Sum
 def adminDashboard(request):
+    
+    if not request.user.is_authenticated:
+        return redirect('adminLogin')
+    
     products = Product.objects.all()
     products_count = products.count()
 
-    if not request.user.is_authenticated:
-        return redirect('adminLogin')
     users = User.objects.all()
     user_count = users.count()
 
@@ -625,6 +635,8 @@ def adminDashboard(request):
 
     total_sales = UserOrder.objects.aggregate(total_sales=Sum('total_amount'))['total_sales'] or 0
 
+    # Retrieve product sales records
+    product_sales_records = ProductSalesRecord.objects.select_related('product').all()
 
     context = {
         'users':users,
@@ -632,8 +644,19 @@ def adminDashboard(request):
         'products_count':products_count,
         'user_order_count':user_order_count,
         'total_sales': total_sales,
+        'product_sales_records': product_sales_records,
     }
     return render(request, 'myeSite/admin/adminDashboard.html', context)
+
+
+def totalProductSales(request):
+    # Fetch all ProductSalesRecord instances
+    product_sales_records = ProductSalesRecord.objects.all()
+
+    context = {
+        'product_sales_records': product_sales_records,
+    }
+    return render(request, 'myeSite/admin/totalProductSales.html', context)
 
 def Brands(request):
     brands = Brand.objects.all()

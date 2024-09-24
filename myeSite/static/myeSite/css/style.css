@@ -118,12 +118,9 @@ header a img{
     margin-top: 12px;
     height: auto;
     width: 77rem;
-    background-color: whitesmoke;
-    padding: 5px 5px;
+    background-color: #fff;
     list-style-type: none;
     color: #000;
-    box-shadow: 0px 0px 5px rgb(8, 162, 131);
-    border-radius: 5px;
     overflow: hidden;
     z-index: 1;
     display: none;
@@ -135,6 +132,7 @@ header a img{
 .categories {
     height: auto;
     width: 200px;
+    margin-top: 1rem;
     text-align: center;
     transition: all .42s ease;
 }
@@ -297,11 +295,10 @@ header a img{
 /* Slideshow container */
 .slideshow-container {
   width: 90%;
-  height: 27rem;
+  height: auto;
   position: relative;
   margin-top: 7rem;
   margin-left: 5%;
-  /* border: 1px solid red; */
 }
 
 /* Hide the images by default */
@@ -1167,10 +1164,11 @@ button i {
     width: 13vw;
     cursor: pointer;
 }
+/* 
 .footer {
     height: 40vh;
     width: 100%;
-    background: linear-gradient(360deg, #0172AF, #74FEBD);
+    background-color: #fff;
     display: flex;
     align-items: flex-start;
     padding-top: 2rem;
@@ -1179,7 +1177,7 @@ button i {
 .content {
     height: auto;
     width: 12rem;
-    color: black;
+    color: #000;
     position: relative;
 }
 .content img{
@@ -1227,7 +1225,113 @@ button i {
 }
 .content2 a:hover {
     color: #fff;
+} */
+
+.footer {
+    background-color: #282c34;
+    color: white;
+    padding: 40px 0;
 }
+
+.footer-logo {
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+.footer-description {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.footer-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #f8b400;
+}
+
+.footer-link {
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-link:hover {
+    color: #f8b400;
+}
+
+.social-icons {
+    margin-top: 10px;
+}
+
+.icon {
+    color: white;
+    margin-right: 15px;
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.icon:hover {
+    color: #f8b400;
+}
+
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.newsletter-input {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 10px;
+}
+
+.newsletter-btn {
+    padding: 10px;
+    border: none;
+    background-color: #f8b400;
+    color: #282c34;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.newsletter-btn:hover {
+    background-color: #ffd166;
+}
+
+.footer-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    margin: 20px 0;
+}
+
+.footer-copy {
+    font-size: 14px;
+    margin-bottom: 0;
+}
+@media (max-width: 576px) {
+    .footer-title {
+        font-size: 16px;
+    }
+
+    .footer-description {
+        font-size: 12px;
+    }
+
+    .newsletter-input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .newsletter-btn {
+        width: 100%;
+    }
+}
+
+
+
+
 
 
 /* fashion-page CSS */
@@ -1943,4 +2047,18 @@ button i {
 .card-custom-width {
     width: 100%; /* Adjust this value as needed */
     margin: auto; /* Center the card horizontally */
+}
+
+.sidebar .nav-link {
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+}
+
+.sidebar .nav-link:hover {
+    background-color: #e9ecef; /* Change this to your preferred hover color */
+    color: #007bff; /* Change this to your preferred text color */
+}
+
+.sidebar .nav-link.active {
+    background-color: #007bff; /* Active link color */
+    color: white; /* Active link text color */
 }
