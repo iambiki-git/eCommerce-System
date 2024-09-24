@@ -13,7 +13,7 @@
                         <h6 id="cat-head">{{category.name}}</h6>
                         {% if category.subcategories.all %}
                             {% for subcategory in category.subcategories.all %}
-                                <p><a href="{% url 'product' subcategory.name %}">{{subcategory.name}}</a></p>
+                                <p style="font-size:medium;"><a href="{% url 'product' subcategory.name %}">{{subcategory.name}}</a></p>
                             {% endfor %}
                         {% else %}
                             <li>No subcategories</li>
@@ -146,12 +146,8 @@
         
 
          
-        <div class="bx bx-menu" id="menu-icon"></div>
+        
     </div>
-    {% comment %} {% if user.is_authenticated %}
-    <form action="{% url 'logoutModule' %}" method="GET">
-        <button><small class="me-2 mb-0"><i class='bx bx-log-out bx-flip-horizontal' ></i></small></button>
-    </form>
-    <p>{{user.username}}</p>
-    {% endif %} {% endcomment %}
+    
+
 </header>

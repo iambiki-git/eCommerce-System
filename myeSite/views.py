@@ -266,6 +266,8 @@ def itemsDetailsPage(request, pk):
     product = get_object_or_404(Product, id=pk)    
     reviews = Review.objects.filter(product=product)
 
+    sold_quantity = ProductSalesRecord.objects.filter(product=product).aggregate(total_sold=Sum('quantity_sold'))['total_sold'] or 0
+
     # Optionally get category_id from the product or a different source
     category_id = item.category.id if item.category else None
     # Get recommended products based on price similarity
@@ -341,7 +343,7 @@ def itemsDetailsPage(request, pk):
         
 
         return redirect(request.path)
-    return render(request, 'myeSite/productPages/items-details.html', {'item':item, 'related_images':related_image, 'reviews':reviews, 'recommended_products':recommended_products})
+    return render(request, 'myeSite/productPages/items-details.html', {'item':item, 'related_images':related_image, 'reviews':reviews, 'recommended_products':recommended_products, 'sold_quantity':sold_quantity, 'sold_quantity': sold_quantity})
 
 def delete_review(request, pk):
     review = get_object_or_404(Review, id=pk)

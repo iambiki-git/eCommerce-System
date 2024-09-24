@@ -43,6 +43,7 @@
             <p class="mt-0 mb-0 fw-bold">{{ item.description }}</p>
         </div>
         <p class="mt-0 mb-0 fw-bold">Brand: {{ item.brand.name }}</p>
+        <p class="mt-0 mb-0 fs-6">Total Sold: {{ sold_quantity }}</p>
 
         <div class="tshirtdetail-price h-auto mb-4">
             <p class="text-dark fs-3 mt-1 mb-0 fw-bold">Rs.{{ item.new_price }} {% if item.discount_price %}<span class='fw-light fs-5 ms-4 text-secondary'> Rs.{{item.discount_price}} off </span>{% endif %}</p>

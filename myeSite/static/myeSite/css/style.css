@@ -51,10 +51,11 @@ header a img{
 }
 .navmenu a {
     color: #2c2c2c;
-    font-size: 16px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    font-family: 'Courier New', Courier, monospace; 
     text-transform: capitalize;
     padding: 10px 15px;
-    font-weight: 400;
     transition: all .42s ease;
     text-decoration: none;
 }
@@ -88,29 +89,13 @@ header a img{
     transform: scale(1.1);
     color: #EE1C47;
 }
-.search_icon {
-    border: 1px solid #ccc;
-    outline: 1px solid #ccc;
-    background: purple;
-    margin-top: -11px;
-    border-radius: 0px 5px 5px 0px;
-    display: flex;
-    align-items: center;
-}
-.search_icon i {
-    display: flex;
-    margin-left: 1.3rem;
-    color: #fff;
-} 
-#menu-icon {
-    font-size: 25px;
-    color: #2c2c2c;
-    z-index: 10001;
-    cursor: pointer;
-    display: none;
-}
+
 .dropdown {
     position: relative;
+}
+.dropdown i {
+    font-weight: 600;
+    font-size: 18px;
 }
 .category-dropdownlist{
     position: absolute;
@@ -148,7 +133,7 @@ header a img{
     color: #EE1C47;
 }
 #cat-head {
-    font-size: small;
+    font-size: medium;
     border-bottom: 1px solid #ccc;
     text-align: center;
     font-weight: 500;
@@ -171,6 +156,7 @@ header a img{
     pointer-events: none; /* Prevents clicking */
     cursor: not-allowed; /* Shows a not-allowed cursor */
 }
+
 
 /* signin|signout */
 .dropdownlist {
