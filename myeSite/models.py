@@ -107,7 +107,6 @@ class UserOrder(models.Model):
         ('Pending', 'Pending'),
         ('Received', 'Received'),
         ('Completed', 'Completed'),
-        ('Cancelled', 'Cancelled'),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)

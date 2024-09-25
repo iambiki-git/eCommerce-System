@@ -102,7 +102,9 @@
                         <div>
                             <form action="{% url 'update_order_status' order.id %}" method="POST" class="d-flex justify-content-end mt-2">
                                 {% csrf_token %}
-                                <select name="status" class="form-select" aria-label="Order status" style="height:3rem;" {% if order.status in "Cancelled, Completed" %} disabled {% endif %}>
+                                <select name="status" class="form-select" aria-label="Order status" style="height:3rem;" 
+                                    {% if order.status in "Completed" %} disabled {% endif %}>
+                        
                                     {% if order.status == "Pending" %}
                                         <option value="Pending" disabled>Pending</option>
                                         <option value="Received">Received</option>
@@ -111,13 +113,17 @@
                                         <option value="Completed">Completed</option>
                                     {% elif order.status == "Completed" %}
                                         <option value="Completed" selected disabled>Completed</option>
-                                    {% elif order.status == "Cancelled" %}
-                                        <option value="Cancelled" selected disabled>Cancelled</option>
                                     {% endif %}
+                                    <!-- Removed Cancelled option -->
                                 </select>
-                                <button type="submit" class="btn btn-primary btn-sm mt-2" {% if order.status in "Cancelled, Completed" %} disabled {% endif %}>Update</button>
+                        
+                                <button type="submit" class="btn btn-primary btn-sm mt-2" 
+                                    {% if order.status in "Cancelled, Completed" %} disabled {% endif %}>
+                                    Update
+                                </button>
                             </form>
                         </div>
+                        
                         
                         
                                                 

@@ -414,16 +414,28 @@ def shipping_address(request):
         shipping_option = request.POST.get('shippingOptions')
         
 
-        shipping_address = ShippingAddress.objects.create(
+        shipping_address, created = ShippingAddress.objects.get_or_create(
             user=request.user,
-            fullname=fullname,
-            city=city,
-            address=address,
-            contact_number=contact_number,
-            shipping_option=shipping_option
+            defaults={
+                'fullname': fullname,
+                'city': city,
+                'address': address,
+                'contact_number': contact_number,
+                'shipping_option': shipping_option
+            }
         )
 
+        # If an existing address was found, update it with new data
+        if not created:
+            shipping_address.fullname = fullname
+            shipping_address.city = city
+            shipping_address.address = address
+            shipping_address.contact_number = contact_number
+            shipping_address.shipping_option = shipping_option
+            shipping_address.save()  # Save the updated shipping address
+
         return redirect('process_billing_info')
+    
     return render(request, 'myeSite/shippingAddress/shippingAddress.html')
 
 from django.http import JsonResponse
@@ -489,6 +501,10 @@ def payment(request):
         # Handle the case where no shipping address exists
         return redirect('shipping_address')  # Redirect to a page where the user can add a shipping address
 
+    # Handle the case where no address is returned
+    if shipping_address is None:
+        return redirect('shipping_address')
+    
     # Get the shipping charge based on the selected shipping option
     shipping_charge = SHIPPING_CHARGES.get(shipping_address.shipping_option, 0)
 
@@ -687,8 +703,14 @@ def totalProductSales(request):
     # Fetch all ProductSalesRecord instances
     product_sales_records = ProductSalesRecord.objects.all()
 
+    total_quantity_sold = sum(record.quantity_sold for record in product_sales_records)
+    total_sales_amount = sum(record.total_sales for record in product_sales_records)
+
+
     context = {
         'product_sales_records': product_sales_records,
+        'total_quantity_sold':total_quantity_sold,
+        'total_sales_amount':total_sales_amount,
     }
     return render(request, 'myeSite/admin/totalProductSales.html', context)
 

@@ -4,9 +4,17 @@
 {% block content %}
 
 <h2 class="text-start border-bottom mt-3">Total Product Sales</h2>
-<div class="container">
+<div class="container mb-0">
     {% if product_sales_records %}
-    <table class="table table-bordered table-hover mt-4">
+
+    <!-- Add a summary section for total quantity and total sales -->
+    <div class="d-flex justify-content-end mb-0 mt-0">
+        <p class="fw-bold me-3">Total Item Sold: {{ total_quantity_sold }}</p>
+        <p class="fw-bold">Total Sales Amount: {{ total_sales_amount }}</p>
+    </div>
+
+    <!-- Table with pagination -->
+    <table class="table table-bordered table-hover mt-0" id="salesTable">
         <thead class="table-light">
             <tr>
                 <th>SN</th>
@@ -16,7 +24,7 @@
                 <th>Quantity Sold</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="salesTableBody">
             {% for record in product_sales_records %}
             <tr>
                 <td>{{ forloop.counter }}</td>
@@ -28,9 +36,57 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <!-- Pagination controls -->
+    <div class="d-flex justify-content-end mt-2">
+        <button class="btn btn-secondary me-2" id="prevPageBtn" onclick="prevPage()">Previous</button>
+        <button class="btn btn-secondary" id="nextPageBtn" onclick="nextPage()">Next</button>
+    </div>
+
     {% else %}
     <div class="alert alert-info fw-bold text-center mt-4">No Product Sales Record</div>
     {% endif %}
 </div>
+
+<!-- JavaScript for pagination -->
+<script>
+    let currentPage = 1;
+    const recordsPerPage = 6    ;
+    const tableBody = document.getElementById("salesTableBody");
+    const rows = tableBody.querySelectorAll("tr");
+    const totalRows = rows.length;
+    const totalPages = Math.ceil(totalRows / recordsPerPage);
+
+    function showPage(page) {
+        const start = (page - 1) * recordsPerPage;
+        const end = start + recordsPerPage;
+
+        // Hide all rows
+        rows.forEach((row, index) => {
+            row.style.display = (index >= start && index < end) ? "" : "none";
+        });
+
+        // Disable buttons when necessary
+        document.getElementById("prevPageBtn").disabled = page === 1;
+        document.getElementById("nextPageBtn").disabled = page === totalPages;
+    }
+
+    function nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            showPage(currentPage);
+        }
+    }
+
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            showPage(currentPage);
+        }
+    }
+
+    // Initialize the first page
+    showPage(currentPage);
+</script>
 
 {% endblock %}
