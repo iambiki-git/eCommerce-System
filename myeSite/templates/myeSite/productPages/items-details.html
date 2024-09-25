@@ -43,7 +43,7 @@
             <p class="mt-0 mb-0 fw-bold">{{ item.description }}</p>
         </div>
         <p class="mt-0 mb-0 fw-bold">Brand: {{ item.brand.name }}</p>
-        <p class="mt-0 mb-0 fs-6">Total Sold: {{ sold_quantity }}</p>
+        
 
         <div class="tshirtdetail-price h-auto mb-4">
             <p class="text-dark fs-3 mt-1 mb-0 fw-bold">Rs.{{ item.new_price }} {% if item.discount_price %}<span class='fw-light fs-5 ms-4 text-secondary'> Rs.{{item.discount_price}} off </span>{% endif %}</p>
@@ -99,13 +99,16 @@
             <button class="bg bg-white w-50 text-dark fw-bold d-flex align-items-center justify-content-center wishlistbtn {% if item.discount_price %} has-discount {% else %}no-discount{% endif %}"><i class='bx bx-heart text-dark me-2' ></i>WISHLIST</button>
         </form>
 
-
+        
         <div class="delivery-option h-auto mt-1 mb-4">
             <p class="text-dark fs-5 fw-semibold d-flex mb-0">DELIVERY OPTIONS<i class='bx bxs-truck fs-4 ms-2'></i></p>
             <p class="mt-1 mb-0">We currently provide two payment options for your convenience: </p>
             <p class="mt-1 mb-0">1. COD (Cash On Delivery) &</p>
             <p class="mt-1 mb-0">2. Khalti</p>
         </div> 
+
+        <p class="mt-0 mb-0 fs-6">Total Sold: {{ sold_quantity }}</p>
+        <p class="mt-0 mb-0 fs-6">Product Code: {{ item.code }}</p>
 
         {% comment %} review-section {% endcomment %}
        
@@ -150,7 +153,7 @@
     {% if recommended_products %}
     <p class="text-dark fs-5 fw-bold mt-3">SIMILAR PRODUCTS</p>
     <div class="similarProducts-list">
-        <div class="similarProducts-row d-flex justify-content-between gap-2 mb-4">
+        <div class="similarProducts-row d-flex justify-content-between flex-wrap gap-2 mb-4">
             {% for product in recommended_products %}
             <div class="similarProduct-imageCard ms-1">
                 <a href="{% url 'itemsDetail' product.id %}">
@@ -163,7 +166,62 @@
             {% endfor %}
             {% endif %}
         </div>
+        <!-- Pagination Controls -->
+            <div id="pagination-controls" class="d-flex align-items-center justify-content-center">
+                <button id="prev-btn" class="me-2">Previous</button>
+                <span id="page-info"></span>
+                <button id="next-btn">Next</button>
+            </div>
+
     </div>
 </div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const products = document.querySelectorAll(".similarProduct-imageCard");
+      const itemsPerPage = 8;
+      let currentPage = 1;
+      const totalPages = Math.ceil(products.length / itemsPerPage);
+  
+      // Function to display items of the current page
+      function showPage(page) {
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+  
+        products.forEach((item, index) => {
+          if (index >= start && index < end) {
+            item.style.display = "block";
+          } else {
+            item.style.display = "none";
+          }
+        });
+  
+        // Update pagination info
+        document.getElementById("page-info").textContent = `Page ${page} of ${totalPages}`;
+      }
+  
+      // Handle next button
+      document.getElementById("next-btn").addEventListener("click", () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          showPage(currentPage);
+        }
+      });
+  
+      // Handle previous button
+      document.getElementById("prev-btn").addEventListener("click", () => {
+        if (currentPage > 1) {
+          currentPage--;
+          showPage(currentPage);
+        }
+      });
+  
+      // Initially show the first page
+      showPage(currentPage);
+    });
+</script>
+
 
 {% endblock %}

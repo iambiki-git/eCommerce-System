@@ -5,29 +5,31 @@
 <div class="container-fluid mt-2 mb-0">
     <h2 class="text-start border-bottom mb-3">All Orders</h2>
     {% if orders %}
-        {% for order in orders %}
-        <div class="main d-flex align-items-center justify-content-between">
-            <div class="card mb-4 mt-4 shadow-sm card-custom-width">
-                <div class="card-header bg-secondary text-white d-flex justify-content-between">
-                    <div>
-                        <h5>Order #{{ order.id }} - {{ order.order_date }}</h5>
-                    </div>
-                    <div class="buttons d-flex align-items-end justify-content-center">
-                        <button class="btn btn-info text-light" style="width:8rem; height:auto;" type="button" data-bs-toggle="modal" data-bs-target="#orderDetailsModal{{ order.id }}">
-                            View Details
+    {% for order in orders %}
+
+    <div class="main d-flex flex-column mb-4 mt-4">
+        <div class="card shadow-sm card-custom-width">
+            <div class="card-header bg-light text-dark d-flex justify-content-between align-items-center p-2"> <!-- Reduced padding -->
+                <h5 class="mb-0" style="font-size: 1rem;">Order #{{ order.id }} - {{ order.order_date }}</h5> <!-- Reduced font size -->
+                <div class="buttons d-flex flex-column align-items-end">
+                    <button class="btn btn-warning btn-sm mb-1 text-dark fw-bold" style="width: 7rem; font-size: 0.9rem;" type="button" data-bs-toggle="modal" data-bs-target="#orderDetailsModal{{ order.id }}">
+                        View Details
+                    </button>
+                    <form action="{% url 'delete_order' order.id %}" method="POST" class="mb-0">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm" style="font-size: 0.9rem;">
+                            <i class='bx bxs-trash-alt' style="font-size: 1rem; color:white;"></i> <!-- Reduced icon size -->
                         </button>
-                        <div>
-                            <form action="{% url 'delete_order' order.id %}" method="POST">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-light" style="height:2.8rem;"><i class='bx bxs-trash-alt' style="color:red; font-size:1.2rem;"></i></button>
-                            </form>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
+            <div class="card-body p-2"> <!-- Reduced padding -->
+                <p class="text-muted mb-1" style="font-size: 0.85rem;">Order Status: {{ order.status }}</p> <!-- Reduced font size -->
+            </div>
         </div>
-        
-        
+    </div>  
+         
+       
 
         <!-- Modal for Order Details -->
         <div class="modal fade" id="orderDetailsModal{{ order.id }}" tabindex="-1" aria-labelledby="orderDetailsModalLabel{{ order.id }}" aria-hidden="true">
@@ -95,6 +97,31 @@
                         <div class="d-flex justify-content-end">
                             <strong>Total Amount: Rs.{{ order.total_amount }}</strong>
                         </div>
+
+                        
+                        <div>
+                            <form action="{% url 'update_order_status' order.id %}" method="POST" class="d-flex justify-content-end mt-2">
+                                {% csrf_token %}
+                                <select name="status" class="form-select" aria-label="Order status" style="height:3rem;" {% if order.status in "Cancelled, Completed" %} disabled {% endif %}>
+                                    {% if order.status == "Pending" %}
+                                        <option value="Pending" disabled>Pending</option>
+                                        <option value="Received">Received</option>
+                                    {% elif order.status == "Received" %}
+                                        <option value="Received" disabled>Received</option>
+                                        <option value="Completed">Completed</option>
+                                    {% elif order.status == "Completed" %}
+                                        <option value="Completed" selected disabled>Completed</option>
+                                    {% elif order.status == "Cancelled" %}
+                                        <option value="Cancelled" selected disabled>Cancelled</option>
+                                    {% endif %}
+                                </select>
+                                <button type="submit" class="btn btn-primary btn-sm mt-2" {% if order.status in "Cancelled, Completed" %} disabled {% endif %}>Update</button>
+                            </form>
+                        </div>
+                        
+                        
+                                                
+
                     </div>
                 </div>
             </div>

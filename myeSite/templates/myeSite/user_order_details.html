@@ -1,0 +1,62 @@
+{% extends "main.html" %}
+{% block title %}User Order Details{% endblock %}
+
+{% block userOrderDetails %}
+    <section class="user-order-detail" style="margin-top:7rem; height:auto; width:90%; margin-left:5%; margin-bottom:3rem;">
+        <div class="outside-container" style="border:1px solid #ccc; width:100%;">
+            <h4 class="text-center alert alert-info text-dark fw-bold">Your Orders</h4>
+
+            {% if user_orders %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in user_orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.order_date }}</td>
+                        <td>Rs. {{ order.total_amount }}</td>
+                        <td>{{ order.status }}</td>
+                        <td>
+                            <button class="btn btn-primary" onclick="showOrderDetails('{{ order.id }}')">View Details</button>
+                            {% comment %} <button class="btn btn-danger text-light">Delete</button> {% endcomment %}
+                        </td>
+                    </tr>
+                    <tr id="order-details-{{ order.id }}" style="display:none;">
+                        <td colspan="5">
+                            <h4>Order Items:</h4>
+                            <ul>
+                                {% for item in order.items.all %}
+                                    <li>{{ item.product.name }} - Quantity: {{ item.quantity }} - Price: Rs. {{ item.price }} - Brand: {{ item.brand }} - Size: {{ item.size }}</li>
+                                {% endfor %}
+                            </ul>
+                            <p><strong>Shipping Address:</strong> {{ order.shipping_city }}, {{ order.shipping_add }}</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="text-center">You have no orders.</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <script>
+        function showOrderDetails(orderId) {
+            var detailsRow = document.getElementById('order-details-' + orderId);
+            if (detailsRow.style.display === "none") {
+                detailsRow.style.display = "table-row";
+            } else {
+                detailsRow.style.display = "none";
+            }
+        }
+    </script>
+{% endblock %}

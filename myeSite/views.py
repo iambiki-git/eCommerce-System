@@ -26,7 +26,7 @@ def index(request):
     newItem = list(unique_new_items.values())[:4]  # Limit to 4 items
 
     #featured-products ko lagi 
-    items = list(Product.objects.filter(isnew=False))
+    items = list(Product.objects.filter(isnew=False, is_featured=True))
     random.shuffle(items)  # Shuffle the list
 
     #product-categories
@@ -132,6 +132,16 @@ def logoutModule(request):
     logout(request)
     messages.success(request, 'Thanks for visiting! We hope to see you again soon.☺️')
     return redirect('login')
+
+def user_order_details(request):
+    # Fetch all orders for the logged-in user
+    user_orders = UserOrder.objects.filter(user=request.user).order_by('-id')
+
+    # Pass the orders to the template
+    context = {
+        'user_orders': user_orders,
+    }
+    return render(request, 'myeSite/user_order_details.html', context)
 
 def user_search_view(request):
     query = request.GET.get('search', '')
@@ -272,6 +282,7 @@ def itemsDetailsPage(request, pk):
     category_id = item.category.id if item.category else None
     # Get recommended products based on price similarity
     recommended_products = price_based_recommendation(pk, category_id=category_id)
+
     
     if request.method == 'POST':
         if not request.user.is_authenticated:
@@ -538,7 +549,8 @@ def place_order(request):
             fullname_bill = billing_address.fullname,
             contact_number=shipping_address.contact_number, 
             order_date=date.today(),
-            total_amount=total_amount
+            total_amount=total_amount,
+            status="Pending"
         )
 
         # Create OrderItem for each product in the cart
@@ -551,12 +563,12 @@ def place_order(request):
                 brand = item.brand,
                 price=item.product.new_price  # Assuming price is stored in the Product model
             )
-        
+
             # Update ProductSalesRecord for the sold product
-            sales_record, created = ProductSalesRecord.objects.get_or_create(product=item.product)
-            sales_record.total_sales += item.product.new_price * item.quantity  # Update total sales amount
-            sales_record.quantity_sold += item.quantity  # Update quantity sold
-            sales_record.save()  # Save the updated sales record
+            # sales_record, created = ProductSalesRecord.objects.get_or_create(product=item.product)
+            # sales_record.total_sales += item.product.new_price * item.quantity  # Update total sales amount
+            # sales_record.quantity_sold += item.quantity  # Update quantity sold
+            # sales_record.save()  # Save the updated sales record
         
         # Clear the user's cart after placing the order
         cart_items.delete()  # This deletes all the cart items for the user
@@ -832,6 +844,7 @@ def add_product(request):
         category_id = request.POST.get('category')
         subcategory_id = request.POST.get('subcategory')
         isnew = request.POST.get('isnew') == 'on'
+        is_featured = request.POST.get('isfeatured') == 'on'
         sizes = request.POST.getlist('sizes')
         images = request.FILES.getlist('images')
         primary_image = request.FILES.get('primary_image')
@@ -856,6 +869,7 @@ def add_product(request):
             subcategory=subcategory,
             image=primary_image,
             isnew=isnew,
+            is_featured=is_featured,
         )
 
         # Add sizes to the product
@@ -902,6 +916,7 @@ def edit_product(request, product_id):
         products.category_id = request.POST.get('category')
         products.subcategory_id = request.POST.get('subcategory')
         products.isnew = 'isnew' in request.POST
+        products.is_featured = 'isfeatured' in request.POST
 
         # Handle primary image replacement
         primary_image = request.FILES.get('primary_image')
@@ -1007,7 +1022,7 @@ def DeleteUser(request, user_id):
     return render(request, 'myeSite/admin/users.html', {'user': user})
 
 def Orders(request):
-    orders = UserOrder.objects.all().prefetch_related('items__product')
+    orders = UserOrder.objects.all().prefetch_related('items__product').order_by('-id')
 
     # Paginate the orders
     paginator = Paginator(orders, 3)  # Show 10 orders per page
@@ -1024,6 +1039,29 @@ def delete_order(request, pk):
     if order:
         order.delete()
         return redirect('orders')
+
+
+@permission_required('auth.change_order', raise_exception=True)
+def update_order_status(request, pk):
+    order = get_object_or_404(UserOrder, id=pk)
+    
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        if new_status in ['Pending', 'Received', 'Completed', 'Cancelled']:
+            order.status = new_status
+            order.save()
+
+            if new_status == "Completed":
+                 # Update TotalProductSales for each product in this order
+                for item in order.items.all():
+                    sales_record, created = ProductSalesRecord.objects.get_or_create(product=item.product)
+                    sales_record.total_sales += item.price * item.quantity  # Update total sales amount
+                    sales_record.quantity_sold += item.quantity  # Update quantity sold
+                    sales_record.save()  # Save the updated sales record
+
+        return redirect('orders')  # Redirect to the orders list or any page you want
+
+    return redirect('orders')  # Redirect back if not POST
 
 def UserMsg(request):
     messages = ContactUs.objects.all().order_by('-created_at')

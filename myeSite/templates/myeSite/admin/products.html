@@ -216,10 +216,16 @@
                   {% endfor %}
                 </select>
               </div>
-              <div class="col-md-12 mb-3">
+              <div class="col-md-6 mb-3">
                 <div class="form-check">
                   <input type="checkbox" class="form-check-input" id="isnew" name="isnew">
                   <label class="form-check-label" for="isnew">Is New</label>
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="isfeatured" name="isfeatured">
+                  <label class="form-check-label" for="isfeatured">Is Featured</label>
                 </div>
               </div>
 
@@ -331,6 +337,12 @@
                           <div class="form-check">
                               <input type="checkbox" id="isnew" name="isnew" class="form-check-input" {% if product.isnew %}checked{% endif %}>
                               <label class="form-check-label" for="isnew">Is New</label>
+                          </div>
+                      </div>
+                      <div class="col-md-12 mb-3">
+                          <div class="form-check">
+                              <input type="checkbox" id="isfeatured" name="isfeatured" class="form-check-input" {% if product.is_featured %}checked{% endif %}>
+                              <label class="form-check-label" for="isfeatured">Is Featured</label>
                           </div>
                       </div>
                   </div>

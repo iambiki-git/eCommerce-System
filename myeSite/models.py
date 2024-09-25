@@ -42,6 +42,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='product_images/')
     sizes = models.ManyToManyField(Size)
     isnew = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
     search_keywords = models.CharField(max_length=100, blank=True, null=True, default="search_keyword_here")
 
 
@@ -102,6 +103,13 @@ class BillingAddress(models.Model):
 
 
 class UserOrder(models.Model):
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Received', 'Received'),
+        ('Completed', 'Completed'),
+        ('Cancelled', 'Cancelled'),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     shipping_add = models.CharField(max_length=100, default="drn")
     shipping_city = models.CharField(max_length=100, default="drn")
@@ -113,6 +121,8 @@ class UserOrder(models.Model):
     contact_number = models.CharField(max_length=14, blank=False, null=False, default="9898989898")  # Add contact_number field
     order_date = models.DateField(default=datetime.datetime.today)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+
 
 
 class OrderItem(models.Model):

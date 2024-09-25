@@ -11,7 +11,7 @@
     <div class="cart-details">
         <div class="container mt-3">
             <div class="product_heading d-flex justify-content-between">
-                <h2 class="text-dark fs-2 fw-bold">MY BAG</h2>
+                <h2 class="text-dark fs-2 fw-bold">MY CART</h2>
                 <span class="fw-light">{{request.cart_items|length}} items</span>
             </div>
             {% if request.cart_items %}
@@ -73,7 +73,7 @@
                 </tbody>
             </table>
             {% else %}
-            <p class="text-danger fs-5 ms-0 fw-bold">Your Bag is Empty.</p>
+            <p class="text-danger fs-5 ms-0 fw-bold">Your Cart is Empty.</p>
             <p class="ms-0">Explore our collection and add items to your cart.</p>
             <button class='w-25 ms-0 bg bg-secondary'><a href="{% url 'index' %}" id="browseProduct" class="text-light fw-bold">Browse Products</a></button>
             {% endif %}
@@ -111,7 +111,6 @@
     {% endif %}
 
 </div>
-
 
 
 

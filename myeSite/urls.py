@@ -8,6 +8,9 @@ urlpatterns = [
     path('contactus/', views.contactusPage, name="contactus"),
     path('aboutus/', views.aboutusPage, name='aboutus'),
     path('login/', views.loginModule, name='login'),
+
+    path('orders/', views.user_order_details, name='user_order_details'),
+
     path('signup/', views.signupModule, name='signup'),
     path('subcategory/<str:subcategory_name>/', views.subcategory_details, name='product'),
     path('items-details/<int:pk>/', views.itemsDetailsPage, name='itemsDetail'),
@@ -16,6 +19,7 @@ urlpatterns = [
     path('changePassword/', views.ChangePassword, name="changePassword"),
 
     path('search/', views.user_search_view, name='search'),
+
     
 
     path('cart/', views.cart, name='cart'),
@@ -69,6 +73,8 @@ urlpatterns = [
     path('adminDashboard/users/delete/<int:user_id>/', views.DeleteUser, name='delete_user'),
     path('adminDashboard/orders/', views.Orders, name='orders'),
     path('adminDashboard/orders/delete/<int:pk>/', views.delete_order, name='delete_order'),
+    path('adminDashboard/orders/update-status/<int:pk>/', views.update_order_status, name='update_order_status'),
+
 
     path('adminDashboard/userMessage/', views.UserMsg, name='usermsg'),
     path('adminDashboard/userMessage/deleteMessage/<int:pk>', views.deleteMessage, name='deleteMessage'),

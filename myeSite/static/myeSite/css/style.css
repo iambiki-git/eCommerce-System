@@ -1643,9 +1643,11 @@ button i {
     height: auto;
     width: 20vw;
     cursor: pointer;
+    transition:all .42s ease;
 }
 .similarProduct-imageCard:hover {
-    box-shadow: 0px 0px 4px gray;
+    /* box-shadow: 0px 0px 4px gray; */
+    transform: scale(0.9);
 }
 .similarProduct-imageCard img {
     height: 40vh;
@@ -2055,5 +2057,6 @@ button i {
     color: white !important; /* Active link text color */
     font-weight: bold !important; /* Make active link text bold */
 }
+
 
 

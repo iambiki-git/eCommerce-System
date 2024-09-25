@@ -20,7 +20,7 @@ class ProductImageInline(admin.TabularInline):
     extra = 1
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'stock_status', 'old_price', 'new_price', 'discount_price', 'brand', 'category', 'subcategory', 'isnew')
+    list_display = ('id', 'name', 'stock_status', 'old_price', 'new_price', 'discount_price', 'brand', 'category', 'subcategory', 'isnew', 'is_featured')
     list_filter = ('brand', 'category', 'subcategory')
     search_fields = ('name', 'description')
     inlines = [ProductImageInline]
@@ -60,7 +60,7 @@ class OrderItemInline(admin.TabularInline):
     extra = 0  # No extra blank fields by default
 
 class UserOrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'shipping_city', 'shipping_add', 'fullname_ship', 'shipping_option', 'billing_city', 'billing_add', 'fullname_bill', 'contact_number', 'order_date', 'total_amount')
+    list_display = ('id', 'user', 'shipping_city', 'shipping_add', 'fullname_ship', 'shipping_option', 'billing_city', 'billing_add', 'fullname_bill', 'contact_number', 'order_date', 'total_amount', 'status')
 
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'order', 'product', 'quantity', 'price', 'size', 'brand',)
