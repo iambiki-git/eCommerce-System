@@ -11,7 +11,7 @@
     <div class="cart-details">
         <div class="container mt-3">
             <div class="product_heading d-flex justify-content-between">
-                <h2 class="text-dark fs-2 fw-bold">MY CART</h2>
+                <h2 class="text-dark fw-bold">MY CART</h2>
                 <span class="fw-light">{{request.cart_items|length}} items</span>
             </div>
             {% if request.cart_items %}
@@ -35,9 +35,9 @@
                             <div class="product_image d-flex align-items-center">
                                 <img src="{{item.product.image.url}}" alt="">
                                 <div class="image_info ms-2">
-                                    <p class="mb-0 m-0 fs-5 fw-bold">{{ item.product.name }} </p>
-                                    <p class="mb-0 m-0 fw-semibold">Size: {{ item.size }}</p>
-                                    <p class="mb-0 m-0 fw-semibold">Brand: {{ item.product.brand.name }}</p>
+                                    <p class="mb-0 m-0 fw-bold">{{ item.product.name }} </p>
+                                    <p class="mb-0 m-0 fw-semibold sizeBrand">Size: {{ item.size }}</p>
+                                    <p class="mb-0 m-0 fw-semibold sizeBrand">Brand: {{ item.product.brand.name }}</p>
                                 </div>
                             </div>
                         </td>
@@ -48,22 +48,17 @@
                         </td>
                         <td>
                             <div class="product_price">
-                                
-                               
                                 <p class="mb-0 mt-4 fw-bold ms-0">Rs.{{ item.total_price }}</p>
-                                
                                 <span class="mt-0 ms-0 fw-light">Rs.{{item.product.new_price}} each</span>
                             </div>
                         </td>
                         <td>
                             <div class="cart_action d-flex align-items-center justify-content-evenly">
-                                
-                                <button type="submit" class="btn btn-success ms-0 w-auto mt-4"><a href="{% url 'itemsDetail' item.product.id %}"><i class='bx bx-edit'></i></a></button>
-
+                                <button type="submit" class="btn btn-success ms-0 mt-4"><a href="{% url 'itemsDetail' item.product.id %}"><i class='bx bx-edit'></i></a></button>
                                 <form method="POST" action="{% url 'remove_from_cart' %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="item_id" value="{{ item.id }}">
-                                    <button type="submit" class="btn btn-danger ms-0 w-auto mt-4"><i class='bx bx-trash'></i></button>
+                                    <button type="submit" class="btn btn-danger ms-0 mt-4"><i class='bx bx-trash'></i></button>
                                 </form>
                                 {% comment %} <span class='d-flex align-items-center fs-3 mt-4 remove-cartItem'>&times;</span> {% endcomment %}
                             </div>
@@ -73,9 +68,9 @@
                 </tbody>
             </table>
             {% else %}
-            <p class="text-danger fs-5 ms-0 fw-bold">Your Cart is Empty.</p>
+            <p class="text-danger ms-0 fw-bold">Your Cart is Empty.</p>
             <p class="ms-0">Explore our collection and add items to your cart.</p>
-            <button class='w-25 ms-0 bg bg-secondary'><a href="{% url 'index' %}" id="browseProduct" class="text-light fw-bold">Browse Products</a></button>
+            <button class='ms-0 bg bg-secondary mb-2'><a href="{% url 'index' %}" id="browseProduct" class="text-light fw-bold">Browse Products</a></button>
             {% endif %}
         </div>
     </div>
@@ -85,34 +80,38 @@
         <h4 class="text-dark fw-bold text-center mb-4">Order Summary</h4>
         <div class="total_price">
             <div class="subtotal d-flex justify-content-between">
-                <p class="text-dark fw-light">Sub - Total :</p>
+                <p class="text-dark ms-1 fw-light">Sub - Total :</p>
                 <p class="text-dark fw-semibold me-3">Rs.{{request.cart_summary.subtotal}}</p>
             </div>
-            {% comment %} <div class="subtotal d-flex justify-content-between">
-                <p class="text-dark fw-light">Discount :</p>
-                <p class="text-dark fw-semibold me-3">Rs.{{request.cart_summary.discount}}</p>
-            </div> {% endcomment %}
-            {% comment %} <div class="subtotal d-flex justify-content-between">
-                <p class="text-dark fw-light">Standard Delivery Charge :</p>
-                <p class="text-dark fw-semibold me-3">Rs.{{request.cart_summary.shipping}}</p>
-            </div> {% endcomment %}
             <div class="subtotal d-flex justify-content-between">
-                <p class="text-secondary fw-semibold fs-5">Total:</p>
+                <p class="text-secondary ms-1 fw-semibold fs-5">Total:</p>
                 <p class="text-dark fw-semibold me-3">Rs.{{request.cart_summary.total}}</p>
             </div>
         </div>
-        {% comment %} {% if request.user.is_authenticated %} {% endcomment %}
             <button class="mb-2 bg-primary"><a href="{% url 'shipping_address' %}">CHECKOUT</a></button><br>
-            {% comment %} {% else %} {% endcomment %}
-            {% comment %} <button class="mb-2 bg-primary"><a href="{% url 'login' %}">LOGIN TO CHECKOUT</a></button><br> {% endcomment %}
-        {% comment %} {% endif %} {% endcomment %}
-        <button class="mt-0 bg-success"><a href="/">CONTINUE SHOPPING</a></button>
+            <button class="mt-0 mb-2 bg-success"><a href="/">CONTINUE SHOPPING</a></button>
     </div>
     {% endif %}
-
 </div>
 
 
-
-
+<div class="responsive-cart-summary">
+    {% if request.cart_items %}
+    <div class="cart_summarys h-50">
+        <h4 class="text-dark fw-bold text-center mb-4">Order Summary</h4>
+        <div class="total_price">
+            <div class="subtotal d-flex justify-content-between">
+                <p class="text-dark ms-1 fw-light">Sub - Total :</p>
+                <p class="text-dark fw-semibold me-3">Rs.{{request.cart_summary.subtotal}}</p>
+            </div>
+            <div class="subtotal d-flex justify-content-between">
+                <p class="text-secondary ms-1 fw-semibold fs-5">Total:</p>
+                <p class="text-dark fw-semibold me-3">Rs.{{request.cart_summary.total}}</p>
+            </div>
+        </div>
+            <button class="mb-2 bg-primary"><a href="{% url 'shipping_address' %}">CHECKOUT</a></button><br>
+            <button class="mt-0 mb-2 bg-success"><a href="/">CONTINUE SHOPPING</a></button>
+    </div>
+    {% endif %}
+</div>
 {% endblock %} 

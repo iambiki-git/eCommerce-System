@@ -1,6 +1,7 @@
 {% load static %}
 
 <header>
+    <div class="header-1">
     <a href="/"><img src="{% static './myeSite/images/fashion.png' %}" alt="logo"></a>
     <ul class="navmenu">
         <li><a href="/">Home</a></li>
@@ -19,24 +20,26 @@
                             <li>No subcategories</li>
                         {% endif %}
                     </div>
-                    {% endfor %}
-                   
+                    {% endfor %}  
                 </div>
-             
             </div>
         </div>
-
-
         <li><a href="#" class="disabled">Men's Wear</a></li>
         <li><a href="#" class="disabled">Kid's Wear</a></li>
-        {% comment %} <li><a href="#" class="disabled">Blog</a></li> {% endcomment %}
     </ul>
 
     <div class="nav-icon">
-        <form action="{% url 'search' %}" method="GET" class='d-flex me-4'>
-            {% csrf_token %}
-            <input type="text" name="search" placeholder="Search" style="width:20rem;" autocomplete="off">
-        </form> 
+        <div class="search" id="searchDiv">
+            <form action="{% url 'search' %}" method="GET" class='d-flex me-4'>
+                {% csrf_token %}
+                <input type="text" name="search" placeholder="Search" autocomplete="off">
+            </form>
+        </div> 
+
+        <div class="two-icons">
+            <i class='bx bx-search-alt searchIcon fs-2' onclick="toggleSearch()"></i>
+            <i class='bx bx-menu menu-icon fs-1' onclick="showMenu()"></i>
+        </div>
 
         {% if request.user.is_authenticated %}
         <div class="dropdown">
@@ -75,8 +78,6 @@
         </div> 
         {% endif %}
         
-
-
         {% comment %} <a href="{% url 'cart' %}"><i class='bx bx-shopping-bag' ><sup class="text-success fw-bold">2</sup></i></a> {% endcomment %}
         <div class="dropdown">
             {% if request.user.is_authenticated %}
@@ -84,63 +85,119 @@
                 {% comment %} <i class='bx bx-shopping-bag' id="bagicon" onclick="showcart()" ><sup class="text-success fw-bold">{{request.cart_items|length}}</sup></i> {% endcomment %}
                 <i class='bx bx-shopping-bag' id="bagicon"><sup class="text-success fw-bold">{{request.cart_items|length}}</sup></i>
             </a>
-
-            {% comment %} <div class="dropdownlist_cart" id="mydropdown_cart">
-                <li><p class="m-0 p-0 text-dark fs-5 fw-semibold text-center title">Your recent cart products</p></li>
-               {% if request.cart_items %}
-                <div class="scrollable-div">
-                    {% for item in request.cart_items %}
-                    <div class="myrow">
-                        <li>
-                            <div class="short-cartDetail">
-                                <div class="first-container d-flex align-items-center justify-content-between">
-                                    <div class="image-div ms-0">
-                                        <img class="mt-2 mb-1" src="{{ item.product.image.url }}" alt="" style="height:90px; width:90px; object-fit:contain;">
-                                        <div class="show-quantity d-flex align-items-center justify-content-center text-dark fw-semibold">{{ item.quantity }}</div>
-                                    </div>
-                                    <div class="image-infor ms-0 w-100">
-                                        <p class="mt-0 ms-1 mb-0 fw-semibold">{{ item.product.name }}</p>
-                                        <p class="mt-0 ms-1 mb-0">Size: {{ item.size }}</p>
-                                        <p class="mt-0 ms-1 mb-0">Brand: {{ item.brand.name }}</p>
-                                    </div>
-                                    <div class="cartitemprice ms-4">
-                                        <p>Rs. {{ item.product.new_price }} each</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <p>No products in the cart.</p>
-                {% endif %}
-                {% if request.cart_items %}
-                <div class="sub-total_section">
-                    <div class="mydiv1 d-flex justify-content-between">
-                        <p class="fw-light mb-0">Subtotal</p>
-                        <p class="me-3 fw-semibold mb-0">Rs. {{ request.cart_summary.subtotal }}</p>
-                    </div>
-                </div>
-                <div class="grandTotal d-flex justify-content-between">
-                    <p class="fw-bold">Total</p>
-                    <p class="fw-bold me-3">Rs. {{ request.cart_summary.total }}</p>
-                </div>
-                <div class="mybuttons d-flex justify-content-center">
-                    <button class="bg bg-primary text-white w-100 mb-0 fw-semibold">Place Order</button>
-                    <button class="bg bg-primary w-100 mb-0"><a href="{% url 'cart' %}" class='text-white fw-semibold'>View Cart</a></button>
-                </div>
-                {% endif %}
-            </div> {% endcomment %}
             {% else %}
                 <a href="{% url 'login' %}"><i class='bx bx-shopping-bag' id="bagicon" ><sup class="text-success fw-bold">{{request.cart_items|length}}</sup></i></a>
             {% endif %}
-        </div> 
-        
-
-         
-        
+        </div>     
     </div>
     
+
+    </div>
+
+    <div class="responsive-navbar" id="navbar">
+        <div class="three-icons d-flex justify-content-end gap-4">
+            {% if request.user.is_authenticated %}
+            <div class="dropdown">
+                <i class='bx bx-user'></i>
+                <div class="dropdownlist" id="mydropdown">
+                    <li><p class="m-0 p-0 text-dark fw-semibold text-center mb-2 title">Welcome <span class="fw-bold">{{ user.username }} !</span></p></li>
+                    {% comment %} <li><p class="m-0 p-0 text-dark fw-light text-justify">Welcome <span class="fw-bold">{{ user.username }} !</span></p></li> {% endcomment %}
+                    <li class="text-center"><button class="h-25 mb-0 w-75 bg-light border-1"><a href="{% url 'user_order_details' %}" class="text-dark fw-medium">Order Details</a></button></li>
+                    <li class='text-center'><button class="h-25 mb-0 w-75 bg-light border-1"><a href="{% url 'changePassword' %}" class="text-dark fw-medium">Change Password</a></button></li>
+                    <li class='text-center'><button class="h-25 mb-0 w-75 bg-light border-1"><a href="{% url 'logoutModule' %}" class="text-dark fw-medium">LOGOUT</a></button></li>
+                </div>
+            </div>
+            {% else %}
+            <div class="dropdown">
+                <i class='bx bx-user'></i>
+                <div class="dropdownlist" id="mydropdown">
+                    <li><p class="m-0 p-0 text-dark fw-semibold text-center mb-2 title">Sing In to FashionMart</p></li>
+                    <li><p class="m-0 p-0 text-dark fw-light text-justify">Become a FashionMart member and enjoy easy order tracking, rewards, offers and more.</p></li>
+                    <li class='text-center'><button class="h-25 mb-0 w-50 bg-light"><a href="{% url 'login' %}" class="text-danger fw-medium">LOGIN/SIGNUP</a></button></li>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if request.user.is_authenticated %}
+            <div class="dropdown">   
+                <a href="{% url 'wishlistdetail' %}"><i class='bx bx-heart'><sup class="text-warning fw-bold">{{wishlist_item_count}}</sup></i></a>
+            </div>
+            {% else %}
+            <div class="dropdown">           
+                <i class='bx bx-heart'></i>
+                <div class="dropdownlist" id="mydropdown">
+                    <li><p class="m-0 p-0 text-center text-dark fw-semibold title">Unlock Your Wish List</p></li>
+                    <li><p class="m-0 p-0 text-dark fw-light text-center text-justify">Sign in to unlock your personalized wishlist. Enjoy easier checkouts, exclusive deals, and a tailored shopping experience!</p></li>
+                    <li class="text-center"><button class="h-25 mb-0 w-50 bg-primary"><a href="{% url 'login' %}" class="text-white fw-medium">Sign In</a></button></li>
+                </div>
+            </div> 
+            {% endif %}
+            
+            <div class="dropdown">
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'cart' %}">
+                    {% comment %} <i class='bx bx-shopping-bag' id="bagicon" onclick="showcart()" ><sup class="text-success fw-bold">{{request.cart_items|length}}</sup></i> {% endcomment %}
+                    <i class='bx bx-shopping-bag' id="cart"><sup class="text-success fw-bold">{{request.cart_items|length}}</sup></i>
+                </a>
+                {% else %}
+                    <a href="{% url 'login' %}"><i class='bx bx-shopping-bag' id="cart"><sup class="text-success fw-bold">{{request.cart_items|length}}</sup></i></a>
+                {% endif %}
+            </div> 
+
+        </div>
+
+
+
+        <ul>
+            <li><a href="/">Home</a></li>
+
+            <div class="dropdown">
+                <li><a href="#">Women's Wear</a></li>
+                <div class="women-dropdownlist">
+                    <div class="mycatcontainer">
+                        {% for category in categories %}
+                        <div class="categories">
+                            <h6 id="cat-head">{{category.name}}</h6>
+                            {% if category.subcategories.all %}
+                                {% for subcategory in category.subcategories.all %}
+                                    <p style="font-size:medium;"><a href="{% url 'product' subcategory.name %}">{{subcategory.name}}</a></p>
+                                {% endfor %}
+                            {% else %}
+                                <li>No subcategories</li>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                       
+                    </div>
+                 
+                </div>
+            </div>
+
+            <li><a href="#" class="disabled">Men's Wear</a></li>
+            <li><a href="#" class="disabled">Kid's Wear</a></li>
+        </ul>
+    </div>
+   
+
+    <script>
+        function showMenu() {
+            const navbar = document.getElementById('navbar');
+            // Check the current display style and toggle it
+            if (navbar.style.display === "none" || navbar.style.display === "") {
+                navbar.style.display = "block"; // Show the menu
+            } else {
+                navbar.style.display = "none"; // Hide the menu
+            }
+        }
+
+        function toggleSearch() {
+            var searchDiv = document.getElementById('searchDiv');
+            if (searchDiv.style.display === 'none' || searchDiv.style.display === '') {
+                searchDiv.style.display = 'block';  // Show the search form
+            } else {
+                searchDiv.style.display = 'none';    // Hide the search form
+            }
+        }
+    </script>
 
 </header>
