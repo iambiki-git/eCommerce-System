@@ -5,9 +5,9 @@
 <div class="container mt-4">
     <h2 class="text-start border-bottom text-dark mb-4">User Messages</h2>
 
+    {% if page_obj %}
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">
-            {% for message in page_obj %}
             <tr>
                 <th>Id</th>
                 {% comment %} <th>Name</th> {% endcomment %}
@@ -19,7 +19,7 @@
             </tr>
         </thead>
         <tbody>
-            
+            {% for message in page_obj %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     {% comment %} <td>{{ message.fullname }}</td> {% endcomment %}
@@ -35,7 +35,10 @@
                     </td>
                 </tr>
         </tbody>
+        {% endfor %}
     </table>
+    
+    
 
      <!-- Pagination controls -->
      <nav aria-label="Page navigation">
@@ -68,11 +71,13 @@
                 </li>
             {% endif %}
         </ul>
-    </nav>
-    {% empty %}
-                <tr>
-                    <p class="text-center fw-bold alert alert-info">No messages found !</p>
-                </tr>
-            {% endfor %}
+    </nav>    
+
+    {% else %}
+        <tr>
+            <p class="text-center fw-bold alert alert-info">No messages found !</p>
+        </tr>
+    {% endif %} 
+   
 </div>
 {% endblock %}

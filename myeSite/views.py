@@ -367,7 +367,7 @@ def delete_review(request, pk):
 #cart views
 def cart(request): 
     if request.user.is_authenticated:
-        cart_items = CartSystem.objects.filter(user=request.user)
+        cart_items = CartSystem.objects.filter(user=request.user).order_by('-id')
         for item in cart_items:
             item.total_price = item.quantity * item.product.new_price
     else:

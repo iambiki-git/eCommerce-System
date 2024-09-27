@@ -1008,6 +1008,7 @@ button i {
     display: flex;
     align-items: center;
     justify-content: space-around;
+    margin-top: 1rem;
 }
 .aboutSystem img {
     height: 18vh;
@@ -1500,7 +1501,7 @@ button i {
     width: 75%;
 }
 .products-review form input[type='submit'] {
-    width: 50%;
+    width: 25%;
 }
 @media (max-width:768px){
     .products-review{

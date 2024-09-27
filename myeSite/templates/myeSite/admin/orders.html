@@ -117,8 +117,8 @@
                                     <!-- Removed Cancelled option -->
                                 </select>
                         
-                                <button type="submit" class="btn btn-primary btn-sm mt-2" 
-                                    {% if order.status in "Cancelled, Completed" %} disabled {% endif %}>
+                                <button type="submit" class="btn btn-primary btn-sm fw-bold" 
+                                    {% if order.status in "Completed" %} disabled {% endif %}>
                                     Update
                                 </button>
                             </form>
